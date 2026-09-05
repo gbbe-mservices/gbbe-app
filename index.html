@@ -69,7 +69,7 @@
       margin: 0 auto 12px;
     }
 
-    /* Fixation et visibilité des fenêtres modales */
+    /* Styles d'affichage des fenêtres modales */
     .modal-backdrop {
       z-index: 1040 !important;
     }
@@ -174,7 +174,7 @@
   <nav class="navbar navbar-expand-lg sticky-top py-3">
     <div class="container">
       <a class="navbar-brand brand-title" href="#">GBBE MULTI-SERVICES</a>
-      <span id="network-status" class="badge bg-success border border-success px-3 py-2 rounded-pill">🔒 Connexion Sécurisée</span>
+      <span id="network-status" class="badge bg-success border border-success px-3 py-2 rounded-pill">⚡ Réseau Stable</span>
     </div>
   </nav>
 
@@ -232,7 +232,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE TRANSACTIONS (FICHE CORRIGÉE) -->
+  <!-- MODAL DE TRANSACTIONS (FICHE D'OPÉRATION) -->
   <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-3">
@@ -273,6 +273,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       actionModal = new bootstrap.Modal(document.getElementById('actionModal'));
+      initNetworkMonitoring();
     });
 
     function openTransferModal(title) {
@@ -287,11 +288,10 @@
     function processTransaction(e) {
       e.preventDefault();
       
-      // Sécurisation et nettoyage des données saisies
       const phone = sanitizeInput(document.getElementById('phoneInput').value);
       const amount = sanitizeInput(document.getElementById('amountInput').value);
       
-      alert("Demande sécurisée enregistrée pour " + phone + " (" + amount + " FCFA). Initialisation du paiement...");
+      alert("Demande sécurisée enregistrée pour " + phone + " (" + amount + " FCFA). Initialisation du traitement...");
       actionModal.hide();
     }
 
@@ -339,6 +339,22 @@
       }
 
       addMessage(reply, 'msg-bot');
+    }
+
+    /* --- SURVEILLANCE DU RÉSEAU ET AUTO-RAFRAÎCHISSEMENT --- */
+    function initNetworkMonitoring() {
+      const badge = document.getElementById('network-status');
+
+      window.addEventListener('offline', () => {
+        badge.className = "badge bg-danger border border-danger px-3 py-2 rounded-pill";
+        badge.innerText = "⚠️ Connexion perdue";
+      });
+
+      window.addEventListener('online', () => {
+        badge.className = "badge bg-success border border-success px-3 py-2 rounded-pill";
+        badge.innerText = "⚡ Réseau rétabli";
+        setTimeout(() => location.reload(), 1500);
+      });
     }
   </script>
 </body>
