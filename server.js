@@ -79,6 +79,7 @@ app.post('/webhook/paydunya', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log('Serveur demarre sur le port ' + PORT);
+// Route d'accueil
+app.get('/', (req, res) => {
+  res.send('Serveur Backend GBBE en cours d’exécution.');
 });
