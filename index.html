@@ -3,107 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GBBE MULTI-SERVICES — Plateforme Officielle</title>
+  <title>GBBE MULTI-SERVICES — Guichet Officiel</title>
   
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <style>
     :root {
-      --bg-main: #0B0F19;
-      --card-bg: #151C2C;
-      --accent-blue: #2563EB;
-      --accent-cyan: #06B6D4;
+      --bg-dark: #0A0E17;
+      --card-bg: #121824;
+      --accent-orange: #FF6B00;
+      --accent-wave: #00C3F8;
+      --accent-mtn: #FFCC00;
+      --accent-moov: #008751;
+      --text-main: #F8FAFC;
     }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-main);
-      color: #F8FAFC;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
       min-height: 100vh;
-      padding-bottom: 100px;
+      padding-bottom: 110px;
     }
 
-    .navbar {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .brand-title {
-      font-weight: 800;
-      font-size: 1.4rem;
-      background: linear-gradient(135deg, #38BDF8, #818CF8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-box {
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 28px;
-    }
-
-    .service-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 24px 20px;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .service-card:hover, .service-card:active {
-      transform: translateY(-4px);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 12px 30px rgba(6, 182, 212, 0.3);
-    }
-
-    .icon-wrapper {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      background: rgba(6, 182, 212, 0.15);
+    /* En-tête / Header */
+    header {
+      background: rgba(18, 24, 36, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: var(--accent-cyan);
+    }
+
+    .brand-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-gbbe { color: #2563EB; text-shadow: 0 0 12px rgba(37, 99, 235, 0.6); }
+    .brand-ms { color: #F59E0B; }
+
+    .status-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10B981;
+      color: #10B981;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    /* Conteneur principal */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Bannière Hero */
+    .hero-banner {
+      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .hero-banner h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
+    .hero-banner p { font-size: 0.85rem; color: #94A3B8; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #38BDF8;
       margin-bottom: 16px;
     }
 
-    /* Modal Styling */
-    .modal-content {
-      background: #1E293B !important;
-      color: #F8FAFC !important;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    /* Grille des Cartes */
+    .grid-services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
     }
 
-    .form-control, .form-select {
-      background: #0F172A !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      color: #FFF !important;
+    .card-service {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .card-service:hover, .card-service:active {
+      transform: translateY(-4px);
+      border-color: #38BDF8;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+    }
+
+    .card-header-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .icon-transfer { background: rgba(37, 99, 235, 0.2); color: #3B82F6; }
+    .icon-pass { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+    .icon-units { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+
+    .card-service h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .card-service p { font-size: 0.8rem; color: #94A3B8; margin-bottom: 14px; }
+
+    /* Puces des Opérateurs */
+    .operator-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .op-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #FFF;
+    }
+
+    .tag-orange { background: var(--accent-orange); }
+    .tag-wave { background: var(--accent-wave); color: #000; }
+    .tag-mtn { background: var(--accent-mtn); color: #000; }
+    .tag-moov { background: var(--accent-moov); }
+
+    /* Modal Sur-Mesure Natif (Infaillible) */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .custom-modal-card {
+      background: #1E293B;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #FFF;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; color: #94A3B8; margin-bottom: 6px; font-weight: 600; }
+    
+    .form-control-custom {
+      width: 100%;
+      background: #0F172A;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
       padding: 12px;
+      color: #FFF;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-control-custom:focus {
+      border-color: #38BDF8;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #2563EB, #06B6D4);
+      border: none;
+      color: #FFF;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
     }
 
     /* Widget Assistance 24h/24 */
     .chat-btn-float {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 20px;
+      right: 20px;
       background: linear-gradient(135deg, #2563EB, #06B6D4);
-      color: white;
+      color: #FFF;
       border-radius: 50px;
-      padding: 14px 24px;
+      padding: 14px 22px;
       font-weight: 700;
-      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
-      z-index: 1030;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.5);
+      z-index: 1000;
       border: none;
       display: flex;
       align-items: center;
@@ -113,53 +240,55 @@
 
     .chat-box {
       position: fixed;
-      bottom: 90px;
-      right: 24px;
-      width: 360px;
-      max-width: 90vw;
-      height: 480px;
+      bottom: 85px;
+      right: 20px;
+      width: 350px;
+      max-width: 88vw;
+      height: 450px;
       background: #1E293B;
-      color: #FFF;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      z-index: 1040;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      z-index: 1001;
       display: none;
       flex-direction: column;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       overflow: hidden;
     }
 
     .chat-header {
       background: #0F172A;
-      padding: 16px;
+      padding: 14px 18px;
       font-weight: 700;
+      font-size: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .chat-body {
       flex: 1;
-      padding: 16px;
+      padding: 14px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      background: #151C2C;
+      gap: 10px;
+      background: #121824;
     }
 
     .chat-msg {
-      max-width: 82%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 13.5px;
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
-    .msg-bot { background: #334155; color: #F8FAFC; align-self: flex-start; }
-    .msg-user { background: var(--accent-blue); color: white; align-self: flex-end; }
+    .msg-bot { background: #334155; color: #FFF; align-self: flex-start; }
+    .msg-user { background: #2563EB; color: #FFF; align-self: flex-end; }
 
     .chat-footer {
-      padding: 12px;
+      padding: 10px;
       background: #0F172A;
       display: flex;
       gap: 8px;
@@ -168,46 +297,59 @@
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand sticky-top py-3">
-    <div class="container">
-      <a class="navbar-brand brand-title" href="#">GBBE MULTI-SERVICES</a>
-      <span id="network-status" class="badge bg-success border border-success px-3 py-2 rounded-pill">⚡ Réseau Stable</span>
+  <!-- En-tête -->
+  <header>
+    <div class="brand-logo">
+      <span class="brand-gbbe">GBBE</span> <span class="brand-ms">MULTI-SERVICES</span>
     </div>
-  </nav>
+    <div class="status-badge">⚡ Service Actif</div>
+  </header>
 
-  <div class="container mt-4">
-    <!-- Banner -->
-    <div class="hero-box mb-4">
-      <h4 class="fw-bold mb-1">Guichet Automatique de Paiement</h4>
-      <p class="text-white-50 small mb-0">Plateforme sécurisée de transactions financières et recharges directes.</p>
+  <!-- Contenu Principal -->
+  <div class="container">
+    <div class="hero-banner">
+      <h1>Guichet Automatique de Paiement</h1>
+      <p>Plateforme sécurisée de recharges directes et transferts d'argent instantanés.</p>
     </div>
 
-    <!-- Grille des Services -->
-    <h6 class="fw-bold mb-3 text-uppercase tracking-wider" style="color: var(--accent-cyan); font-size: 12px;">Nos Prestations</h6>
-    
-    <div class="row g-3">
-      <div class="col-12 col-md-4">
-        <div class="service-card" onclick="openModalDirect('Transferts Money', ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'])">
-          <div class="icon-wrapper"><i class="bi bi-wallet2"></i></div>
-          <h5 class="fw-bold mb-1">Transferts Money</h5>
-          <p class="text-white-50 small mb-0">Orange, Wave, MTN, Moov — Envois & Dépôts sécurisés.</p>
+    <div class="section-title">Sélectionnez une prestation</div>
+
+    <div class="grid-services">
+      <!-- Carte 1 -->
+      <div class="card-service" onclick="openModal('Transferts Money', ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'])">
+        <div class="card-header-icon icon-transfer"><i class="bi bi-wallet2"></i></div>
+        <h3>Transferts Money</h3>
+        <p>Envois et dépôts d'argent sécurisés sur tous les réseaux.</p>
+        <div class="operator-badges">
+          <span class="op-tag tag-orange">Orange</span>
+          <span class="op-tag tag-wave">Wave</span>
+          <span class="op-tag tag-mtn">MTN</span>
+          <span class="op-tag tag-moov">Moov</span>
         </div>
       </div>
 
-      <div class="col-12 col-md-4">
-        <div class="service-card" onclick="openModalDirect('Pass & Internet', ['Pass Orange', 'Pass MTN', 'Pass Moov', 'Wave Internet'])">
-          <div class="icon-wrapper"><i class="bi bi-wifi"></i></div>
-          <h5 class="fw-bold mb-1">Pass & Internet</h5>
-          <p class="text-white-50 small mb-0">Souscription instantanée aux forfaits internet.</p>
+      <!-- Carte 2 -->
+      <div class="card-service" onclick="openModal('Pass & Internet', ['Pass Orange Internet', 'Pass MTN Data', 'Pass Moov Web', 'Wave Internet'])">
+        <div class="card-header-icon icon-pass"><i class="bi bi-wifi"></i></div>
+        <h3>Pass & Internet</h3>
+        <p>Souscription directe aux forfaits et volumes de données.</p>
+        <div class="operator-badges">
+          <span class="op-tag tag-orange">Orange</span>
+          <span class="op-tag tag-wave">Wave</span>
+          <span class="op-tag tag-mtn">MTN</span>
+          <span class="op-tag tag-moov">Moov</span>
         </div>
       </div>
 
-      <div class="col-12 col-md-4">
-        <div class="service-card" onclick="openModalDirect('Achat d\'Unités', ['Recharge Orange', 'Recharge MTN', 'Recharge Moov'])">
-          <div class="icon-wrapper"><i class="bi bi-phone"></i></div>
-          <h5 class="fw-bold mb-1">Achat d'Unités</h5>
-          <p class="text-white-50 small mb-0">Recharge de crédit d'appel réseau direct.</p>
+      <!-- Carte 3 -->
+      <div class="card-service" onclick="openModal('Achat d\'Unités', ['Crédit Orange', 'Crédit MTN', 'Crédit Moov'])">
+        <div class="card-header-icon icon-units"><i class="bi bi-phone"></i></div>
+        <h3>Achat d'Unités</h3>
+        <p>Recharge de crédit de communication téléphonique direct.</p>
+        <div class="operator-badges">
+          <span class="op-tag tag-orange">Orange</span>
+          <span class="op-tag tag-mtn">MTN</span>
+          <span class="op-tag tag-moov">Moov</span>
         </div>
       </div>
     </div>
@@ -220,90 +362,79 @@
 
   <div class="chat-box" id="chatBox">
     <div class="chat-header">
-      <span class="d-flex align-items-center gap-2">
-        <i class="bi bi-headset text-info"></i> Support Client GBBE
-      </span>
-      <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:18px;">✕</button>
+      <span><i class="bi bi-headset" style="color: #38BDF8;"></i> Support GBBE</span>
+      <button onclick="toggleChat()" style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">✕</button>
     </div>
     <div class="chat-body" id="chatBody">
       <div class="chat-msg msg-bot">
-        Bonjour ! Bienvenue au service d'Assistance GBBE 24h/24. Comment pouvons-nous vous aider ?
+        Bonjour ! Bienvenue sur l'assistance GBBE 24h/24. En quoi pouvons-nous vous aider ?
       </div>
     </div>
     <div class="chat-footer">
-      <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez votre question..." onkeypress="handleKeyPress(event)">
-      <button class="btn btn-sm btn-info text-white fw-bold px-3" onclick="sendMessage()">Envoyer</button>
+      <input type="text" id="chatInput" class="form-control-custom" placeholder="Posez votre question..." onkeypress="if(event.key==='Enter') sendMessage()">
+      <button onclick="sendMessage()" style="background:#2563EB; color:#FFF; border:none; padding:0 14px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
     </div>
   </div>
 
-  <!-- MODAL DE TRANSACTION -->
-  <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content p-3">
-        <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fw-bold" id="modalServiceTitle">Formulaire d'Opération</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- FENÊTRE MODALE NATIF (OUVERTURE GARANTIE A 100%) -->
+  <div class="custom-modal-overlay" id="modalOverlay">
+    <div class="custom-modal-card">
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; color: #FFF;"></h3>
+      
+      <form onsubmit="submitTransaction(event)">
+        <div class="form-group">
+          <label>Choisissez le réseau / opérateur</label>
+          <select id="modalSelect" class="form-control-custom" required></select>
         </div>
-        <div class="modal-body">
-          <form id="paymentForm" onsubmit="processTransaction(event)">
-            <div class="mb-3">
-              <label class="form-label small text-white-50">Sélectionner l'Opérateur</label>
-              <select class="form-select" id="operatorSelect" required></select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label small text-white-50">Numéro de téléphone</label>
-              <input type="tel" class="form-control" id="phoneInput" placeholder="ex: 0700000000" maxlength="10" pattern="[0-9]{10}" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label small text-white-50">Montant (FCFA)</label>
-              <input type="number" class="form-control" id="amountInput" placeholder="Montant en FCFA" min="100" max="500000" required>
-            </div>
-            <button type="submit" class="btn btn-info w-100 fw-bold text-white py-2" style="border-radius: 12px;">Confirmer la transaction</button>
-          </form>
+        <div class="form-group">
+          <label>Numéro de téléphone</label>
+          <input type="tel" id="modalPhone" class="form-control-custom" placeholder="ex: 0700000000" maxlength="10" pattern="[0-9]{10}" required>
         </div>
-      </div>
+        <div class="form-group">
+          <label>Montant de l'opération (FCFA)</label>
+          <input type="number" id="modalAmount" class="form-control-custom" placeholder="ex: 2000" min="100" max="500000" required>
+        </div>
+        <button type="submit" class="btn-submit">Valider l'opération</button>
+      </form>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    function openModalDirect(title, options) {
-      document.getElementById('modalServiceTitle').innerText = title;
-      const select = document.getElementById('operatorSelect');
-      select.innerHTML = '<option value="">Choisir une option...</option>';
+    /* Ouverture/Fermeture Garantie de la Fenêtre Modale */
+    function openModal(title, options) {
+      document.getElementById('modalTitle').innerText = title;
+      const select = document.getElementById('modalSelect');
+      select.innerHTML = '<option value="">-- Sélectionner l\'option --</option>';
       
       options.forEach(opt => {
-        const el = document.createElement('option');
-        el.value = opt.toLowerCase().replace(/\s+/g, '_');
-        el.textContent = opt;
-        select.appendChild(el);
+        const optionEl = document.createElement('option');
+        optionEl.value = opt;
+        optionEl.textContent = opt;
+        select.appendChild(optionEl);
       });
 
-      const modalEl = document.getElementById('actionModal');
-      const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
-      modalInstance.show();
+      document.getElementById('modalOverlay').style.display = 'flex';
     }
 
-    function processTransaction(e) {
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function submitTransaction(e) {
       e.preventDefault();
-      const phone = document.getElementById('phoneInput').value;
-      const amount = document.getElementById('amountInput').value;
+      const phone = document.getElementById('modalPhone').value;
+      const amount = document.getElementById('modalAmount').value;
+      const service = document.getElementById('modalTitle').innerText;
       
-      alert("Demande enregistrée avec succès pour le " + phone + " (" + amount + " FCFA). Traitement sécurisé en cours...");
-      
-      const modalEl = document.getElementById('actionModal');
-      const modalInstance = bootstrap.Modal.getInstance(modalEl);
-      if (modalInstance) modalInstance.hide();
+      alert("✅ Demande reçue !\n\nService: " + service + "\nNuméro: " + phone + "\nMontant: " + amount + " FCFA\n\nTraitement en cours...");
+      closeModal();
     }
 
+    /* Gestion Chat Support */
     function toggleChat() {
       const chat = document.getElementById('chatBox');
       chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function handleKeyPress(e) {
-      if (e.key === 'Enter') sendMessage();
     }
 
     function sendMessage() {
@@ -311,18 +442,18 @@
       const text = input.value.trim();
       if (!text) return;
 
-      addMessage(text, 'msg-user');
+      addMsg(text, 'msg-user');
       input.value = '';
 
       setTimeout(() => {
-        addMessage("Pour toute assistance immédiate, contactez directement le support WhatsApp au : 0767709102.", 'msg-bot');
-      }, 600);
+        addMsg("Pour une assistance directe, veuillez contacter le support WhatsApp au : 0767709102.", 'msg-bot');
+      }, 500);
     }
 
-    function addMessage(text, className) {
+    function addMsg(text, className) {
       const body = document.getElementById('chatBody');
       const msg = document.createElement('div');
-      msg.className = chat-msg ${className};
+      msg.className = `chat-msg ${className}`;
       msg.innerText = text;
       body.appendChild(msg);
       body.scrollTop = body.scrollHeight;
