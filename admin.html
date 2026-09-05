@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBBE MULTI-SERVICES - Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f9; }
+        .container { max-width: 1000px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #1a365d; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #1a365d; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .login-box { margin-bottom: 20px; }
+        input[type="password"] { padding: 8px; width: 200px; }
+        button { padding: 8px 15px; background-color: #1a365d; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Espace d'Administration GBBE</h1>
+        
+        <div class="login-box" id="loginBox">
+            <input type="password" id="adminPass" placeholder="Mot de passe admin">
+            <button onclick="chargerDashboard()">Connexion</button>
+        </div>
+
+        <div id="content" style="display:none;">
+            <button onclick="chargerDashboard()" style="margin-bottom: 15px;">Rafraîchir les données</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Émetteur</th>
+                        <th>Destinataire</th>
+                        <th>Montant</th>
+                        <th>Frais GBBE</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function chargerDashboard() {
+            const password = document.getElementById('adminPass').value;
+            const res = await fetch('/api/admin/transactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+                const list = document.getElementById('transactionList');
+                list.innerHTML = '';
+                
+                data.transactions.forEach(t => {
+                    list.innerHTML += `
+                        <tr>
+                            <td>${t.id}</td>
+                            <td>${t.date}</td>
+                            <td>${t.phoneEmetteur} (${t.reseauEmetteur})</td>
+                            <td>${t.phoneDestinataire} (${t.reseauDestinataire})</td>
+                            <td>${t.montantEnvoye.toLocaleString('fr-FR')} FCFA</td>
+                            <td>${t.commissionGBBE.toLocaleString('fr-FR')} FCFA</td>
+                            <td><strong>${t.statut}</strong></td>
+                        </tr>
+                    `;
+                });
+            } else {
+                alert(data.message);
+            }
+        }
+    </script>
+</body>
+</html>
