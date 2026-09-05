@@ -3,12 +3,17 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const crypto = require('crypto');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 
-app.use(helmet());
+// 1. Protection avec Helmet
+app.use(helmet({
+  contentSecurityPolicy: false // Permet de charger les scripts Bootstrap / Fonts sans blocage
+}));
 
+// 2. Gestion des accès CORS
 const allowedOrigins = [process.env.FRONTEND_URL || 'https://gbbe-app.onrender.com'];
 app.use(cors({
   origin: (origin, callback) => {
@@ -20,6 +25,7 @@ app.use(cors({
   }
 }));
 
+// 3. Limitation du débit (Rate Limiting)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -27,20 +33,27 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// 4. Capture du rawBody pour la signature Webhook
 app.use(express.json({
   verify: (req, res, buf) => {
     req.rawBody = buf;
   }
 }));
 
+// 5. Servir les fichiers statiques (index.html, styles, scripts)
+app.use(express.static(path.join(__dirname)));
+
+// 6. Route principale : Affiche le site web (index.html)
 app.get('/', (req, res) => {
-  res.send('Serveur Backend GBBE en cours d execution.');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Route de diagnostic
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+// 7. Endpoint Webhook PayDunya
 app.post('/webhook/paydunya', (req, res) => {
   try {
     const signature = req.headers['x-paydunya-signature'] || req.headers['signature'];
@@ -65,7 +78,7 @@ app.post('/webhook/paydunya', (req, res) => {
     }
 
     const payload = req.body;
-    console.log("Webhook valide recu :", payload.status);
+    console.log("✅ Webhook valide recu :", payload.status);
 
     res.status(200).json({ status: "success" });
 
@@ -75,7 +88,8 @@ app.post('/webhook/paydunya', (req, res) => {
   }
 });
 
+// Lancement du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('Serveur demarre sur le port ' + PORT);
+  console.log('Serveur GBBE demarre sur le port ' + PORT);
 });
