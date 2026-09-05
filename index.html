@@ -11,7 +11,7 @@
   <style>
     :root {
       --bg-dark: #07090E;
-      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-bg: rgba(15, 23, 42, 0.82);
       --accent-blue: #3B82F6;
       --accent-cyan: #06B6D4;
       --accent-orange: #FF6B00;
@@ -30,36 +30,27 @@
       position: relative;
     }
 
-    /* Arrière-plan Aurora Futuriste Animé */
-    .aurora-bg {
+    /* Arrière-plan d'images dynamiques */
+    .bg-slideshow {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: -2;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1.5s ease-in-out;
+    }
+
+    /* Calque sombre pour lisibilité du contenu */
+    .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -1;
-      overflow: hidden;
-      background: radial-gradient(circle at 50% 50%, #0D1322 0%, #05070A 100%);
-    }
-
-    .aurora-blob {
-      position: absolute;
-      filter: blur(80px);
-      opacity: 0.45;
-      border-radius: 50%;
-      animation: float 12s infinite alternate ease-in-out;
-    }
-
-    .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #1E3A8A; }
-    .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #0891B2; animation-delay: -4s; }
-    .blob-3 { top: 40%; left: 30%; width: 400px; height: 400px; background: #4F46E5; animation-delay: -8s; }
-
-    @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(60px, 40px) scale(1.1); }
-      100% { transform: translate(-40px, 80px) scale(0.9); }
+      background: radial-gradient(circle at center, rgba(7, 9, 14, 0.75) 0%, rgba(5, 7, 10, 0.92) 100%);
     }
 
     /* En-tête Glassmorphism */
     header {
-      background: rgba(10, 14, 23, 0.7);
+      background: rgba(10, 14, 23, 0.85);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding: 16px 24px;
@@ -93,17 +84,17 @@
     }
 
     .hero-banner {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 24px;
       padding: 28px;
       margin-bottom: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .hero-banner h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-    .hero-banner p { font-size: 0.88rem; color: #94A3B8; }
+    .hero-banner p { font-size: 0.88rem; color: #CBD5E1; }
 
     .section-title {
       font-size: 12px;
@@ -114,7 +105,7 @@
       margin-bottom: 16px;
     }
 
-    /* Cards */
+    /* Cards interactives */
     .grid-services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -124,17 +115,18 @@
     .card-service {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
       padding: 22px;
       cursor: pointer;
       transition: all 0.3s ease;
+      user-select: none;
     }
 
     .card-service:hover {
       transform: translateY(-6px);
       border-color: #38BDF8;
-      box-shadow: 0 15px 35px rgba(6, 182, 212, 0.25);
+      box-shadow: 0 15px 35px rgba(6, 182, 212, 0.3);
     }
 
     .card-header-icon {
@@ -148,9 +140,9 @@
       margin-bottom: 14px;
     }
 
-    .icon-transfer { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
-    .icon-pass { background: rgba(16, 185, 129, 0.2); color: #34D399; }
-    .icon-units { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
+    .icon-transfer { background: rgba(59, 130, 246, 0.25); color: #60A5FA; }
+    .icon-pass { background: rgba(16, 185, 129, 0.25); color: #34D399; }
+    .icon-units { background: rgba(245, 158, 11, 0.25); color: #FBBF24; }
 
     .card-service h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
     .card-service p { font-size: 0.8rem; color: #94A3B8; margin-bottom: 14px; }
@@ -175,9 +167,13 @@
       padding: 16px;
     }
 
+    .custom-modal-overlay.active {
+      display: flex !important;
+    }
+
     .custom-modal-card {
       background: #151C2C;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 24px;
       width: 100%;
       max-width: 450px;
@@ -333,12 +329,9 @@
 </head>
 <body>
 
-  <!-- Arrière-plan Aurora -->
-  <div class="aurora-bg">
-    <div class="aurora-blob blob-1"></div>
-    <div class="aurora-blob blob-2"></div>
-    <div class="aurora-blob blob-3"></div>
-  </div>
+  <!-- Arrière-plan dynamique d'images -->
+  <div class="bg-slideshow" id="bgSlideshow"></div>
+  <div class="bg-overlay"></div>
 
   <!-- Header -->
   <header>
@@ -359,7 +352,7 @@
 
     <div class="grid-services">
       <!-- Carte 1 : Transfert -->
-      <div class="card-service" onclick="openTransferModal()">
+      <div class="card-service" id="btnTransfert">
         <div class="card-header-icon icon-transfer"><i class="bi bi-wallet2"></i></div>
         <h3>Transferts Money</h3>
         <p>Envoi d'un réseau vers un autre (Orange, Wave, MTN, Moov).</p>
@@ -372,7 +365,7 @@
       </div>
 
       <!-- Carte 2 : Pass -->
-      <div class="card-service" onclick="openSimpleModal('Pass & Internet', ['Pass Orange Internet', 'Pass MTN Data', 'Pass Moov Web', 'Wave Internet'])">
+      <div class="card-service" id="btnPass">
         <div class="card-header-icon icon-pass"><i class="bi bi-wifi"></i></div>
         <h3>Pass & Internet</h3>
         <p>Souscription directe aux forfaits et volumes de données.</p>
@@ -385,7 +378,7 @@
       </div>
 
       <!-- Carte 3 : Unités -->
-      <div class="card-service" onclick="openSimpleModal('Achat d\'Unités', ['Crédit Orange', 'Crédit MTN', 'Crédit Moov'])">
+      <div class="card-service" id="btnUnites">
         <div class="card-header-icon icon-units"><i class="bi bi-phone"></i></div>
         <h3>Achat d'Unités</h3>
         <p>Recharge de crédit de communication téléphonique direct.</p>
@@ -410,14 +403,14 @@
   </footer>
 
   <!-- ASSISTANCE 24H/24 -->
-  <button class="chat-btn-float" onclick="toggleChat()">
+  <button class="chat-btn-float" id="btnChatToggle">
     <i class="bi bi-headset fs-5"></i> Assistance 24h/24
   </button>
 
   <div class="chat-box" id="chatBox">
     <div class="chat-header">
       <span><i class="bi bi-headset" style="color: #38BDF8;"></i> Support GBBE</span>
-      <button onclick="toggleChat()" style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">✕</button>
+      <button id="btnCloseChat" style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">✕</button>
     </div>
     <div class="chat-body" id="chatBody">
       <div class="chat-msg msg-bot">
@@ -425,24 +418,23 @@
       </div>
     </div>
     <div class="chat-footer">
-      <input type="text" id="chatInput" class="form-control-custom" placeholder="Posez votre question..." onkeypress="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" style="background:#2563EB; color:#FFF; border:none; padding:0 14px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
+      <input type="text" id="chatInput" class="form-control-custom" placeholder="Posez votre question...">
+      <button id="btnSendChat" style="background:#2563EB; color:#FFF; border:none; padding:0 14px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
     </div>
   </div>
 
   <!-- FENÊTRE MODALE -->
   <div class="custom-modal-overlay" id="modalOverlay">
     <div class="custom-modal-card">
-      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      <button class="modal-close-btn" id="btnCloseModal">✕</button>
       <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; color: #FFF;"></h3>
       
-      <form onsubmit="submitTransaction(event)">
-        <!-- Formulaire dynamique -->
+      <form id="transactionForm">
         <div id="dynamicFormContent"></div>
 
         <div class="form-group">
           <label>Numéro de téléphone</label>
-          <input type="tel" id="modalPhone" class="form-control-custom" placeholder="ex: 0700000000" maxlength="10" pattern="[0-9]{10}" required>
+          <input type="tel" id="modalPhone" class="form-control-custom" placeholder="ex: 0700000000" maxlength="10" required>
         </div>
         <div class="form-group">
           <label>Montant de l'opération (FCFA)</label>
@@ -454,100 +446,142 @@
   </div>
 
   <script>
+    // Images d'arrière-plan alternant enfants africains et professionnels
+    const imagesList = [
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop", // Enfants qui jouent
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop", // Équipe professionnelle au travail
+      "https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1600&auto=format&fit=crop", // Enfants souriants en Afrique
+      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1600&auto=format&fit=crop"  // Consultation/Services informatiques
+    ];
+
+    let currentImgIndex = 0;
+    const bgElement = document.getElementById('bgSlideshow');
+
+    function updateBackground() {
+      bgElement.style.backgroundImage = `url('${imagesList[currentImgIndex]}');
+      currentImgIndex = (currentImgIndex + 1) % imagesList.length;
+    }
+    updateBackground();
+    setInterval(updateBackground, 7000); // Change toutes les 7 secondes
+
+    // Gestion de l'ouverture des Modales
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const dynamicFormContent = document.getElementById('dynamicFormContent');
+
     const operators = ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'];
 
-    function openTransferModal() {
-      document.getElementById('modalTitle').innerText = 'Transferts Money';
-      
-      const container = document.getElementById('dynamicFormContent');
-      container.innerHTML = `
+    document.getElementById('btnTransfert').addEventListener('click', function() {
+      modalTitle.innerText = 'Transferts Money';
+      dynamicFormContent.innerHTML = `
         <div class="form-group">
           <label>Réseau d'Origine (D'où provient l'argent ?)</label>
           <select id="sourceSelect" class="form-control-custom" required>
             <option value="">-- Choisir la source --</option>
-            ${operators.map(op => <option value="${op}">${op}</option>).join('')}
+            ${operators.map(op => `<option value="${op}">${op}</option>).join('')}
           </select>
         </div>
         <div class="form-group">
           <label>Réseau de Destination (Où envoyer l'argent ?)</label>
           <select id="destSelect" class="form-control-custom" required>
             <option value="">-- Choisir la destination --</option>
-            ${operators.map(op => <option value="${op}">${op}</option>).join('')}
+            ${operators.map(op => `<option value="${op}">${op}</option>').join('')}
           </select>
         </div>
       `;
+      modalOverlay.classList.add('active');
+    });
 
-      document.getElementById('modalOverlay').style.display = 'flex';
-    }
-
-    function openSimpleModal(title, options) {
-      document.getElementById('modalTitle').innerText = title;
-      
-      const container = document.getElementById('dynamicFormContent');
-      container.innerHTML = `
+    document.getElementById('btnPass').addEventListener('click', function() {
+      modalTitle.innerText = 'Pass & Internet';
+      const passOptions = ['Pass Orange Internet', 'Pass MTN Data', 'Pass Moov Web', 'Wave Internet'];
+      dynamicFormContent.innerHTML = `
         <div class="form-group">
-          <label>Choisissez l'option / opérateur</label>
+          <label>Choisissez le Pass</label>
           <select id="simpleSelect" class="form-control-custom" required>
             <option value="">-- Sélectionner --</option>
-            ${options.map(opt => <option value="${opt}">${opt}</option>).join('')}
+            ${passOptions.map(opt => `<option value="${opt}">${opt}</option>').join('')}
           </select>
         </div>
       `;
+      modalOverlay.classList.add('active');
+    });
 
-      document.getElementById('modalOverlay').style.display = 'flex';
-    }
+    document.getElementById('btnUnites').addEventListener('click', function() {
+      modalTitle.innerText = 'Achat d\'Unités';
+      const unitOptions = ['Crédit Orange', 'Crédit MTN', 'Crédit Moov'];
+      dynamicFormContent.innerHTML = `
+        <div class="form-group">
+          <label>Choisissez l'opérateur</label>
+          <select id="simpleSelect" class="form-control-custom" required>
+            <option value="">-- Sélectionner --</option>
+            ${unitOptions.map(opt => `<option value="${opt}">${opt}</option>').join('')}
+          </select>
+        </div>
+      `;
+      modalOverlay.classList.add('active');
+    });
 
-    function closeModal() {
-      document.getElementById('modalOverlay').style.display = 'none';
-    }
+    document.getElementById('btnCloseModal').addEventListener('click', function() {
+      modalOverlay.classList.remove('active');
+    });
 
-    function submitTransaction(e) {
+    document.getElementById('transactionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const phone = document.getElementById('modalPhone').value;
       const amount = document.getElementById('modalAmount').value;
-      const title = document.getElementById('modalTitle').innerText;
+      const title = modalTitle.innerText;
 
       let detail = "";
       if (title === 'Transferts Money') {
         const src = document.getElementById('sourceSelect').value;
         const dest = document.getElementById('destSelect').value;
-        detail = De: ${src}\nVers: ${dest};
+        detail = `De: ${src}\nVers: ${dest}';
       } else {
         const opt = document.getElementById('simpleSelect').value;
-        detail = Option: ${opt};
+        detail = `Option: ${opt}';
       }
 
-      alert(✅ Transaction Reçue !\n\nPrestation: ${title}\n${detail}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nTraitement en cours...);
-      closeModal();
-    }
+      alert(`✅ Demande enregistrée !\n\nPrestation: ${title}\n${detail}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nTraitement en cours...);
+      modalOverlay.classList.remove('active')';
+    });
 
-    /* Support Client Chat */
-    function toggleChat() {
-      const chat = document.getElementById('chatBox');
-      chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
-    }
+    // Assistance Chat
+    const chatBox = document.getElementById('chatBox');
+    document.getElementById('btnChatToggle').addEventListener('click', function() {
+      chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+    });
 
-    function sendMessage() {
+    document.getElementById('btnCloseChat').addEventListener('click', function() {
+      chatBox.style.display = 'none';
+    });
+
+    function sendChatMessage() {
       const input = document.getElementById('chatInput');
       const text = input.value.trim();
       if (!text) return;
 
-      addMsg(text, 'msg-user');
+      const body = document.getElementById('chatBody');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-msg msg-user';
+      userMsg.innerText = text;
+      body.appendChild(userMsg);
       input.value = '';
+      body.scrollTop = body.scrollHeight;
 
       setTimeout(() => {
-        addMsg("Pour une assistance immédiate, contactez notre support officiel WhatsApp au : 0767709102.", 'msg-bot');
+        const botMsg = document.createElement('div');
+        botMsg.className = 'chat-msg msg-bot';
+        botMsg.innerText = "Pour une assistance immédiate, contactez notre support officiel WhatsApp au : 0767709102.";
+        body.appendChild(botMsg);
+        body.scrollTop = body.scrollHeight;
       }, 500);
     }
 
-    function addMsg(text, className) {
-      const body = document.getElementById('chatBody');
-      const msg = document.createElement('div');
-      msg.className = `chat-msg ${className};
-      msg.innerText = text;
-      body.appendChild(msg);
-      body.scrollTop = body.scrollHeight;
-    }
+    document.getElementById('btnSendChat').addEventListener('click', sendChatMessage);
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendChatMessage();
+    });
   </script>
 </body>
 </html>
