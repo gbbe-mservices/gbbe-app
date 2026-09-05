@@ -11,19 +11,17 @@
   <p style="margin: 5px 0; color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
 </div>
 
-<script>
-<!-- Champ Montant avec Calculateur -->
-<div class="form-group">
-  <label for="montant">Montant à envoyer (FCFA) :</label>
-  <input type="number" id="montant" placeholder="Ex: 10000" oninput="calculerFrais()" required>
-</div>
+function calculerFrais() {
+  const montantInput = document.getElementById('montant').value;
+  const recap = document.getElementById('recap-frais');
+  
+  const montant = parseFloat(montantInput);
+  const TAUX_COMMISSION = 0.015;
 
-<!-- Bloc d'affichage dynamique des frais -->
-<div id="recap-frais" style="background-color: #f0f4f8; padding: 12px; border-radius: 6px; margin: 15px 0; display: none; border-left: 4px solid #1a365d;">
-  <p style="margin: 5px 0; font-size: 14px; color: #333;">Frais de service GBBE (1.5%) : <strong><span id="frais-valeur">0</span> FCFA</strong></p>
-  <p style="margin: 5px 0; font-size: 14px; color: #333;">Total à débiter sur votre compte : <strong><span id="total-valeur">0</span> FCFA</strong></p>
-  <p style="margin: 5px 0; font-size: 14px; color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
-</div>
+  if (!isNaN(montant) && montant > 0) {
+    const frais = montant * TAUX_COMMISSION;
+    const total = montant + frais;
+
     document.getElementById('frais-valeur').innerText = frais.toLocaleString('fr-FR');
     document.getElementById('total-valeur').innerText = total.toLocaleString('fr-FR');
     document.getElementById('net-valeur').innerText = montant.toLocaleString('fr-FR');
@@ -33,4 +31,3 @@
     recap.style.display = 'none';
   }
 }
-</script>
