@@ -1,69 +1,35 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
+<!-- Champ Montant -->
+<div class="form-group">
+  <label for="montant">Montant à envoyer (FCFA) :</label>
+  <input type="number" id="montant" placeholder="Ex: 10000" oninput="calculerFrais()" required>
+</div>
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+<!-- Bloc d'affichage dynamique des frais -->
+<div id="recap-frais" style="background-color: #f0f4f8; padding: 12px; border-radius: 6px; margin: 15px 0; display: none;">
+  <p style="margin: 5px 0;">Frais de service GBBE (1.5%) : <strong><span id="frais-valeur">0</span> FCFA</strong></p>
+  <p style="margin: 5px 0;">Total à débiter sur votre compte : <strong><span id="total-valeur">0</span> FCFA</strong></p>
+  <p style="margin: 5px 0; color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
+</div>
 
-// Service des fichiers statiques
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(__dirname));
+<script>
+function calculerFrais() {
+  const montantInput = document.getElementById('montant').value;
+  const recap = document.getElementById('recap-frais');
+  
+  const montant = parseFloat(montantInput);
+  const TAUX_COMMISSION = 0.015; // 1.5%
 
-// Base de données temporaire GBBE MULTI-SERVICES
-const gbbeTransactions = {};
-const TAUX_COMMISSION = 0.015;
+  if (!isNaN(montant) && montant > 0) {
+    const frais = montant * TAUX_COMMISSION;
+    const total = montant + frais;
 
-// Route API
-app.post('/api/gbbe/transfert', async (req, res) => {
-    const { phoneEmetteur, reseauEmetteur, phoneDestinataire, reseauDestinataire, montant } = req.body;
-
-    if (!phoneEmetteur || !reseauEmetteur || !phoneDestinataire || !reseauDestinataire || !montant) {
-        return res.status(400).json({ success: false, message: "Tous les champs sont obligatoires." });
-    }
-
-    const montantEnvoye = parseFloat(montant);
-    const commissionGBBE = montantEnvoye * TAUX_COMMISSION;
-    const montantTotalADebiter = montantEnvoye + commissionGBBE;
-
-    const transactionId = "GBBE_" + Date.now();
-
-    gbbeTransactions[transactionId] = {
-        phoneEmetteur,
-        reseauEmetteur,
-        phoneDestinataire,
-        reseauDestinataire,
-        montantEnvoye,
-        commissionGBBE,
-        montantTotalADebiter,
-        statut: "EN_ATTENTE_DEBIT_CLIENT"
-    };
-
-    res.json({
-        success: true,
-        message: "Opération initialisée par GBBE MULTI-SERVICES. Veuillez valider le retrait sur votre téléphone.",
-        transactionId: transactionId,
-        details: {
-            montant: montantEnvoye,
-            frais: commissionGBBE,
-            totalDebite: montantTotalADebiter
-        }
-    });
-});
-
-// Route principale : renvoie index.html (dans public/ ou à la racine)
-app.get('*', (req, res) => {
-    const publicPath = path.join(__dirname, 'public', 'index.html');
-    if (fs.existsSync(publicPath)) {
-        res.sendFile(publicPath);
-    } else {
-        res.sendFile(path.join(__dirname, 'index.html'));
-    }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`--- Serveur GBBE MULTI-SERVICES prêt sur le port ${PORT} ---`);
-});
+    document.getElementById('frais-valeur').innerText = frais.toLocaleString('fr-FR');
+    document.getElementById('total-valeur').innerText = total.toLocaleString('fr-FR');
+    document.getElementById('net-valeur').innerText = montant.toLocaleString('fr-FR');
+    
+    recap.style.display = 'block';
+  } else {
+    recap.style.display = 'none';
+  }
+}
+</script>
