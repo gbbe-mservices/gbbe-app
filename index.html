@@ -3,290 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GBBE MULTI-SERVICES - Transfert d'argent</title>
-
-  <!-- SDK KKIAPAY -->
-  <script src="https://cdn.kkiapay.me/k.js"></script>
-  
-  <!-- FontAwesome pour les icônes -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <title>GBBE MULTI-SERVICES — Transfert & Recharges</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --card-bg: rgba(255, 255, 255, 0.95);
-      --text: #0f172a;
-      --subtext: #64748b;
-      --border: #e2e8f0;
+      --primary: #4F46E5;
+      --primary-dark: #3730A3;
+      --accent: #10B981;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      /* Arrière-plan aléatoire haute définition via Unsplash */
-      background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), 
-                  url('https://picsum.photos/1920/1080') no-repeat center center fixed;
-      background-size: cover;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
     }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      padding: 35px 30px;
+    /* Navbar Premium */
+    .navbar {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E2E8F0;
+    }
+    .brand-logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      background: linear-gradient(135deg, #4F46E5, #06B6D4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Status Banner */
+    .status-card {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
       border-radius: 16px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-      max-width: 440px;
-      width: 100%;
+      padding: 16px;
     }
 
-    .header {
+    /* Grid Services */
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid #F1F5F9;
+      border-radius: 20px;
+      padding: 20px;
       text-align: center;
-      margin-bottom: 25px;
-    }
-
-    /* Style du Logo */
-    .brand-logo-container {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 12px auto;
-      border-radius: 50%;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #eff6ff;
-      border: 2px solid var(--primary);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .brand-logo-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .header h2 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--text);
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .header p {
-      margin: 6px 0 0;
-      font-size: 13px;
-      color: var(--subtext);
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper i.input-icon {
-      position: absolute;
-      left: 14px;
-      color: #94a3b8;
-      font-size: 15px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px 14px 12px 40px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 14px;
-      color: var(--text);
-      background-color: #ffffff;
       transition: all 0.2s ease;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    button {
-      width: 100%;
-      background-color: var(--primary);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.2s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -5px rgba(79, 70, 229, 0.15);
+      border-color: #C7D2FE;
+    }
+    .service-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: #EEF2FF;
+      color: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      font-size: 24px;
+      margin: 0 auto 12px;
     }
 
-    button:hover {
-      background-color: var(--primary-dark);
-    }
-
-    .network-badges {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0 10px 0;
-      padding-top: 15px;
-      border-top: 1px solid var(--border);
-    }
-
-    .badge {
-      font-size: 11px;
+    /* Support Button */
+    .btn-support-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+    .btn-support-float:hover {
+      transform: scale(1.05);
       color: white;
     }
-    .badge-orange { background: #ff6600; }
-    .badge-wave { background: #1dc4e9; }
-    .badge-mtn { background: #ffcc00; color: #000; }
-    .badge-moov { background: #008751; }
 
-    .security-note {
-      text-align: center;
-      font-size: 12px;
-      color: var(--subtext);
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+    /* Modal Support */
+    .modal-content {
+      border-radius: 24px;
+      border: none;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="header">
-    <div class="brand-logo-container">
-      <!-- Remplacez le lien de l'image src ci-dessous par l'URL de votre propre logo -->
-      <img src="https://via.placeholder.com/150?text=GBBE" alt="Logo GBBE">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand brand-logo" href="#">GBBE MULTI-SERVICES</a>
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">⚡ Opérationnel</span>
     </div>
-    <h2>GBBE MULTI-SERVICES</h2>
-    <p>Transfert d'argent instantané inter-réseaux</p>
+  </nav>
+
+  <div class="container mt-4">
+    
+    <!-- Message de bienvenue / Info -->
+    <div class="status-card mb-4 d-flex align-items-center gap-3">
+      <div style="font-size: 24px;">💡</div>
+      <div>
+        <h6 class="fw-bold mb-1">Bienvenue sur GBBE MULTI-SERVICES</h6>
+        <p class="text-muted small mb-0">Effectuez vos recharges d'unités, souscriptions et transferts Mobile Money en toute sécurité.</p>
+      </div>
+    </div>
+
+    <!-- Grille de Services -->
+    <h5 class="fw-bold mb-3">Nos Services</h5>
+    <div class="row g-3">
+      <div class="col-6 col-md-4">
+        <div class="service-card">
+          <div class="service-icon">📲</div>
+          <h6 class="fw-bold mb-1">Pass & Internet</h6>
+          <small class="text-muted">Orange, MTN, Moov</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="service-card">
+          <div class="service-icon">💳</div>
+          <h6 class="fw-bold mb-1">Achat d'unités</h6>
+          <small class="text-muted">Recharge directe</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="service-card">
+          <div class="service-icon">💸</div>
+          <h6 class="fw-bold mb-1">Transferts</h6>
+          <small class="text-muted">Wave & Mobile Money</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="service-card">
+          <div class="service-icon">📦</div>
+          <h6 class="fw-bold mb-1">Livraison & Colis</h6>
+          <small class="text-muted">Suivi de coursier</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="service-card">
+          <div class="service-icon">🎟️</div>
+          <h6 class="fw-bold mb-1">Billetterie</h6>
+          <small class="text-muted">Événements & Pass</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="service-card" onclick="openSupportModal()">
+          <div class="service-icon" style="background:#FEE2E2; color:#EF4444;">🎧</div>
+          <h6 class="fw-bold mb-1">Assistance</h6>
+          <small class="text-muted">Support client 24/7</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Historique -->
+    <div class="mt-5">
+      <h5 class="fw-bold mb-3">Dernières transactions</h5>
+      <div class="bg-white p-4 text-center rounded-4 border">
+        <p class="text-muted mb-0">Connectez-vous pour consulter votre historique d'opérations.</p>
+      </div>
+    </div>
+
   </div>
 
-  <form id="transfertForm">
-    <div class="form-group">
-      <label for="montant">Montant à envoyer (FCFA) :</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-coins input-icon"></i>
-        <input type="number" id="montant" placeholder="Ex: 10000" required>
+  <!-- Bouton Flottant Support WhatsApp -->
+  <a href="#" class="btn-support-float" onclick="openSupportModal(); return false;">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+    Besoin d'aide ?
+  </a>
+
+  <!-- Modal Support Client -->
+  <div class="modal fade" id="supportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-3">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="service-icon mb-3" style="width:70px; height:70px; font-size:32px; background:#DCFCE7; color:#166534;">💬</div>
+          <h4 class="fw-bold">Assistance GBBE MULTI-SERVICES</h4>
+          <p class="text-muted small">Notre équipe est à votre disposition pour débloquer toute transaction ou répondre à vos questions.</p>
+          
+          <div class="d-grid gap-2 my-4">
+            <a href="https://wa.me/2250767709102?text=Bonjour%20GBBE%20MULTI-SERVICES,%20j'ai%20besoin%20d'aide" target="_blank" class="btn btn-success btn-lg fw-bold rounded-3">
+              Discuter sur WhatsApp
+            </a>
+            <a href="tel:+2250767709102" class="btn btn-light btn-lg fw-bold rounded-3 border">
+              Appeler le 0767709102
+            </a>
+          </div>
+
+          <div class="text-start bg-light p-3 rounded-3 small">
+            <p class="fw-bold mb-1">Délai moyen de réponse :</p>
+            <p class="text-muted mb-0">Moins de 5 minutes par WhatsApp.</p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="form-group">
-      <label>Réseau d'origine (Vous payez par) :</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-wallet input-icon"></i>
-        <select>
-          <option>Orange Money</option>
-          <option>Wave</option>
-          <option>MTN MoMo</option>
-          <option>Moov Money</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Votre numéro de téléphone :</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-phone input-icon"></i>
-        <input type="tel" placeholder="Ex: 0700000000" required>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Réseau de destination (Le destinataire reçoit sur) :</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-building-columns input-icon"></i>
-        <select>
-          <option>Wave</option>
-          <option>Orange Money</option>
-          <option>MTN MoMo</option>
-          <option>Moov Money</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Numéro du destinataire :</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-user-check input-icon"></i>
-        <input type="tel" placeholder="Ex: 0500000000" required>
-      </div>
-    </div>
-
-    <button type="submit">
-      <i class="fa-solid fa-lock"></i> Valider le transfert
-    </button>
-  </form>
-
-  <div class="network-badges">
-    <span class="badge badge-orange">Orange</span>
-    <span class="badge badge-wave">Wave</span>
-    <span class="badge badge-mtn">MTN</span>
-    <span class="badge badge-moov">Moov</span>
   </div>
 
-  <div class="security-note">
-    <i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> Paiement 100% sécurisé via Kkiapay
-  </div>
-</div>
-
-<script>
-  document.getElementById("transfertForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const montantSaisi = document.getElementById("montant").value;
-
-    if (!montantSaisi || montantSaisi <= 0) {
-      alert("Veuillez saisir un montant valide.");
-      return;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function openSupportModal() {
+      var myModal = new bootstrap.Modal(document.getElementById('supportModal'));
+      myModal.show();
     }
-
-    if (typeof openKkiapayWidget !== "function") {
-      alert("Le script Kkiapay n'a pas pu s'initialiser. Vérifiez votre connexion internet.");
-      return;
-    }
-
-    openKkiapayWidget({
-      amount: parseInt(montantSaisi),
-      key: "4d5ffb66fe492b03076b0a2b1a1720d4de243401",
-      sandbox: true, // Repassez à false une fois le compte Kkiapay activé
-      callback: "https://gbbe-app.onrender.com"
-    });
-  });
-</script>
-
+  </script>
 </body>
 </html>
