@@ -1,121 +1,35 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GBBE MULTI-SERVICES - Transfert d'Argent</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 480px; margin: 20px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background-color: #0d47a1; color: #ffffff; text-align: center; padding: 20px; }
-        .header h1 { margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
-        .header p { margin: 5px 0 0; font-size: 13px; opacity: 0.8; }
-        .content { padding: 25px; }
-        label { font-weight: 600; color: #333; display: block; margin-top: 15px; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; margin-top: 6px; border-radius: 6px; border: 1px solid #cccccc; box-sizing: border-box; font-size: 15px; }
-        .recap { background-color: #f8f9fa; border: 1px dashed #0d47a1; padding: 12px; border-radius: 6px; margin-top: 15px; font-size: 13px; }
-        .recap div { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .btn-submit { width: 100%; background-color: #0d47a1; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 20px; transition: background 0.3s; }
-        .btn-submit:hover { background-color: #002171; }
-        #statusMessage { margin-top: 15px; text-align: center; font-weight: bold; font-size: 14px; }
-    </style>
-</head>
-<body>
+<!-- Champ Montant -->
+<div class="form-group">
+  <label for="montant">Montant à envoyer (FCFA) :</label>
+  <input type="number" id="montant" placeholder="Ex: 10000" oninput="calculerFrais()" required>
+</div>
 
-<div class="container">
-    <div class="header">
-        <h1>GBBE MULTI-SERVICES</h1>
-        <p>Transfert d'argent instantané inter-réseaux</p>
-    </div>
-
-    <div class="content">
-        <form id="gbbeForm">
-            <label for="montant">Montant à envoyer (FCFA) :</label>
-            <input type="number" id="montant" placeholder="Ex: 10000" required min="100">
-
-            <label for="reseauEmetteur">Réseau d'origine (Vous payez par) :</label>
-            <select id="reseauEmetteur">
-                <option value="OM">Orange Money</option>
-                <option value="MOMO">MTN MoMo</option>
-                <option value="WAVE">Wave</option>
-                <option value="MOOV">Moov Money</option>
-            </select>
-
-            <label for="phoneEmetteur">Votre numéro de téléphone :</label>
-            <input type="tel" id="phoneEmetteur" placeholder="Ex: 0700000000" required>
-
-            <label for="reseauDestinataire">Réseau de destination (Le destinataire reçoit sur) :</label>
-            <select id="reseauDestinataire">
-                <option value="WAVE">Wave</option>
-                <option value="MOMO">MTN MoMo</option>
-                <option value="OM">Orange Money</option>
-                <option value="MOOV">Moov Money</option>
-            </select>
-
-            <label for="phoneDestinataire">Numéro du destinataire :</label>
-            <input type="tel" id="phoneDestinataire" placeholder="Ex: 0500000000" required>
-
-            <div class="recap">
-                <div><span>Frais de service GBBE (1.5%) :</span> <strong id="txtFrais">0 FCFA</strong></div>
-                <div><span>Total à débiter :</span> <strong id="txtTotal">0 FCFA</strong></div>
-            </div>
-
-            <button type="submit" class="btn-submit">Valider le transfert</button>
-        </form>
-
-        <div id="statusMessage"></div>
-    </div>
+<!-- Bloc d'affichage dynamique des frais -->
+<div id="recap-frais" style="background-color: #f0f4f8; padding: 12px; border-radius: 6px; margin: 15px 0; display: none;">
+  <p style="margin: 5px 0;">Frais de service GBBE (1.5%) : <strong><span id="frais-valeur">0</span> FCFA</strong></p>
+  <p style="margin: 5px 0;">Total à débiter sur votre compte : <strong><span id="total-valeur">0</span> FCFA</strong></p>
+  <p style="margin: 5px 0; color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
 </div>
 
 <script>
-    const inputMontant = document.getElementById('montant');
-    const txtFrais = document.getElementById('txtFrais');
-    const txtTotal = document.getElementById('txtTotal');
+function calculerFrais() {
+  const montantInput = document.getElementById('montant').value;
+  const recap = document.getElementById('recap-frais');
+  
+  const montant = parseFloat(montantInput);
+  const TAUX_COMMISSION = 0.015; // 1.5%
 
-    inputMontant.addEventListener('input', () => {
-        const val = parseFloat(inputMontant.value) || 0;
-        const frais = Math.round(val * 0.015);
-        const total = val + frais;
+  if (!isNaN(montant) && montant > 0) {
+    const frais = montant * TAUX_COMMISSION;
+    const total = montant + frais;
 
-        txtFrais.innerText = frais + " FCFA";
-        txtTotal.innerText = total + " FCFA";
-    });
-
-    document.getElementById('gbbeForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const msgDiv = document.getElementById('statusMessage');
-        msgDiv.style.color = "#333";
-        msgDiv.innerText = "Traitement en cours par GBBE MULTI-SERVICES...";
-
-        const payload = {
-            montant: inputMontant.value,
-            reseauEmetteur: document.getElementById('reseauEmetteur').value,
-            phoneEmetteur: document.getElementById('phoneEmetteur').value,
-            reseauDestinataire: document.getElementById('reseauDestinataire').value,
-            phoneDestinataire: document.getElementById('phoneDestinataire').value
-        };
-
-        try {
-            const res = await fetch('/api/gbbe/transfert', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                msgDiv.style.color = "green";
-                msgDiv.innerHTML = data.message + "<br><small>Réf : " + data.transactionId + "</small>";
-            } else {
-                msgDiv.style.color = "red";
-                msgDiv.innerText = data.message;
-            }
-        } catch (err) {
-            msgDiv.style.color = "red";
-            msgDiv.innerText = "Erreur de connexion au serveur GBBE.";
-        }
-    });
+    document.getElementById('frais-valeur').innerText = frais.toLocaleString('fr-FR');
+    document.getElementById('total-valeur').innerText = total.toLocaleString('fr-FR');
+    document.getElementById('net-valeur').innerText = montant.toLocaleString('fr-FR');
+    
+    recap.style.display = 'block';
+  } else {
+    recap.style.display = 'none';
+  }
+}
 </script>
-
-</body>
-</html>
