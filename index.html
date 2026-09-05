@@ -132,19 +132,10 @@
     
     const montantSaisi = document.getElementById("montant").value;
     
-    if (!montantSaisi || montantSaisi <= 0) {
-      alert("Veuillez saisir un montant valide.");
-      return;
-    }
-
-    openKkiapayWidget({
-      amount: parseInt(montantSaisi),
-      key: "cf3dbe50a91a11f18b8da3db3b2ae52d",
-      sandbox: true,
-      callback: "https://gbbe-app.onrender.com"
-    });
-  });
-</script>
+    <script>
+  document.getElementById("transfertForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
     const montantSaisi = document.getElementById("montant").value;
     
     if (!montantSaisi || montantSaisi <= 0) {
