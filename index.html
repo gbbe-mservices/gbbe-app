@@ -30,7 +30,6 @@
       position: relative;
     }
 
-    /* Arrière-plan avec UNE SEULE image fixe + calque sombre */
     .bg-fixed {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -48,7 +47,6 @@
       background: rgba(7, 9, 14, 0.85);
     }
 
-    /* En-tête */
     header {
       background: rgba(10, 14, 23, 0.9);
       backdrop-filter: blur(16px);
@@ -103,7 +101,6 @@
       margin-bottom: 16px;
     }
 
-    /* Cartes de service */
     .grid-services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -118,6 +115,10 @@
       padding: 22px;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+
+    .card-service * {
+      pointer-events: none; /* Empêche les éléments enfants de bloquer le clic parent */
     }
 
     .card-service:hover {
@@ -150,7 +151,6 @@
     .tag-mtn { background: var(--accent-mtn); color: #000; }
     .tag-moov { background: var(--accent-moov); }
 
-    /* Fenêtre modale */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -212,7 +212,6 @@
       margin-top: 10px;
     }
 
-    /* Widget Chat */
     .chat-btn-float {
       position: fixed;
       bottom: 24px; right: 24px;
@@ -265,7 +264,6 @@
 
     .chat-footer { padding: 10px; background: #0B0F19; display: flex; gap: 8px; }
 
-    /* Footer */
     footer {
       margin-top: 50px;
       background: rgba(10, 14, 23, 0.9);
@@ -306,7 +304,6 @@
     <div class="section-title">Sélectionnez une prestation</div>
 
     <div class="grid-services">
-      <!-- Carte 1 -->
       <div class="card-service" onclick="openModal('transfert')">
         <div class="card-header-icon icon-transfer"><i class="bi bi-wallet2"></i></div>
         <h3>Transferts Money</h3>
@@ -319,7 +316,6 @@
         </div>
       </div>
 
-      <!-- Carte 2 -->
       <div class="card-service" onclick="openModal('pass')">
         <div class="card-header-icon icon-pass"><i class="bi bi-wifi"></i></div>
         <h3>Pass & Internet</h3>
@@ -332,7 +328,6 @@
         </div>
       </div>
 
-      <!-- Carte 3 -->
       <div class="card-service" onclick="openModal('unites')">
         <div class="card-header-icon icon-units"><i class="bi bi-phone"></i></div>
         <h3>Achat d'Unités</h3>
@@ -356,7 +351,6 @@
     </div>
   </footer>
 
-  <!-- Chat -->
   <button class="chat-btn-float" onclick="toggleChat()">
     <i class="bi bi-headset fs-5"></i> Assistance 24h/24
   </button>
@@ -375,7 +369,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-card">
       <button class="modal-close-btn" onclick="closeModal()">✕</button>
@@ -398,14 +391,13 @@
   </div>
 
   <script>
-    const modal = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const dynamicFields = document.getElementById('dynamicFields');
-    const chatBox = document.getElementById('chatBox');
-
     const ops = ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'];
 
     function openModal(type) {
+      const modal = document.getElementById('modalOverlay');
+      const modalTitle = document.getElementById('modalTitle');
+      const dynamicFields = document.getElementById('dynamicFields');
+
       if (type === 'transfert') {
         modalTitle.innerText = 'Transferts Money';
         dynamicFields.innerHTML = `
@@ -413,7 +405,7 @@
             <label>Réseau Source (D'où vient l'argent)</label>
             <select id="srcNet" class="form-control-custom" required>
               <option value="">-- Choisir --</option>
-              ${ops.map(o => `<option value="${o}">${o}</option>).join('')}
+              ${ops.map(o => <option value="${o}">${o}</option>).join('')}
             </select>
           </div>
           <div class="form-group">
@@ -453,7 +445,7 @@
     }
 
     function closeModal() {
-      modal.style.display = 'none';
+      document.getElementById('modalOverlay').style.display = 'none';
     }
 
     function handleFormSubmit(e) {
@@ -461,11 +453,12 @@
       const phone = document.getElementById('modalPhone').value;
       const amount = document.getElementById('modalAmount').value;
       
-      alert('✅ Demande bien prise en compte !\nNuméro : ' + phone + '\nMontant : ' + amount + ' FCFA');
+      alert('✅ Demande enregistrée !\nNuméro : ' + phone + '\nMontant : ' + amount + ' FCFA');
       closeModal();
     }
 
     function toggleChat() {
+      const chatBox = document.getElementById('chatBox');
       chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
     }
 
@@ -474,7 +467,7 @@
       if (!input.value.trim()) return;
       
       const body = document.getElementById('chatBody');
-      body.innerHTML += `<div class="chat-msg msg-user">${input.value}</div>;
+      body.innerHTML += <div class="chat-msg msg-user">${input.value}</div>;
       input.value = '';
       
       setTimeout(() => {
