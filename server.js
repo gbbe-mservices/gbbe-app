@@ -1,47 +1,45 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
+
+// Service des fichiers statiques
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 // Base de données temporaire GBBE MULTI-SERVICES
 const gbbeTransactions = {};
-
-// TAUX DE COMMISSION GBBE MULTI-SERVICES (Exemple : 1.5%)
 const TAUX_COMMISSION = 0.015;
 
-// 1. ROUTE : Initialiser une opération de transfert GBBE
+// Route API
 app.post('/api/gbbe/transfert', async (req, res) => {
     const { phoneEmetteur, reseauEmetteur, phoneDestinataire, reseauDestinataire, montant } = req.body;
-    
-    const montantEnvoye = parseFloat(montant);
-    if (isNaN(montantEnvoye) || montantEnvoye <= 0) {
-        return res.status(400).json({ success: false, message: "Montant invalide." });
+
+    if (!phoneEmetteur || !reseauEmetteur || !phoneDestinataire || !reseauDestinataire || !montant) {
+        return res.status(400).json({ success: false, message: "Tous les champs sont obligatoires." });
     }
 
-    // Calcul des frais et du montant net
-    const commissionGBBE = Math.round(montantEnvoye * TAUX_COMMISSION);
+    const montantEnvoye = parseFloat(montant);
+    const commissionGBBE = montantEnvoye * TAUX_COMMISSION;
     const montantTotalADebiter = montantEnvoye + commissionGBBE;
 
-    // Référence unique enregistrée sous la marque GBBE
-    const transactionId = 'GBBE_' + Date.now();
+    const transactionId = "GBBE_" + Date.now();
 
     gbbeTransactions[transactionId] = {
-        id: transactionId,
         phoneEmetteur,
         reseauEmetteur,
         phoneDestinataire,
         reseauDestinataire,
-        montantBrut: montantEnvoye,
-        fraisGBBE: commissionGBBE,
-        statut: 'EN_ATTENTE_DEBIT',
-        date: new Date().toISOString()
+        montantEnvoye,
+        commissionGBBE,
+        montantTotalADebiter,
+        statut: "EN_ATTENTE_DEBIT_CLIENT"
     };
-
-    console.log('[GBBE MULTI-SERVICES] Nouvelle transaction créée : ' + transactionId);
 
     res.json({
         success: true,
@@ -55,7 +53,17 @@ app.post('/api/gbbe/transfert', async (req, res) => {
     });
 });
 
+// Route principale : renvoie index.html (dans public/ ou à la racine)
+app.get('*', (req, res) => {
+    const publicPath = path.join(__dirname, 'public', 'index.html');
+    if (fs.existsSync(publicPath)) {
+        res.sendFile(publicPath);
+    } else {
+        res.sendFile(path.join(__dirname, 'index.html'));
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(` --- Serveur GBBE MULTI-SERVICES prêt sur le port ${PORT} ---`);
+    console.log(`--- Serveur GBBE MULTI-SERVICES prêt sur le port ${PORT} ---`);
 });
