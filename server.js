@@ -14,7 +14,7 @@ app.use(express.static(__dirname));
 // Base de données temporaire GBBE MULTI-SERVICES
 const gbbeTransactions = [];
 const TAUX_COMMISSION = 0.015;
-const ADMIN_PASSWORD = "admin123";
+const ADMIN_PASSWORD = "Maman@@@2028"; // Nouveau mot de passe mis à jour
 
 // Route API : Enregistrer un transfert
 app.post('/api/gbbe/transfert', async (req, res) => {
@@ -77,5 +77,5 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`--- Serveur GBBE MULTI-SERVICES prêt sur le port ${PORT} ---`);
+    console.log(--- Serveur GBBE MULTI-SERVICES prêt sur le port ${PORT} ---`);
 });
