@@ -485,7 +485,7 @@
           <label>Réseau de Destination (Où envoyer l'argent ?)</label>
           <select id="destSelect" class="form-control-custom" required>
             <option value="">-- Choisir la destination --</option>
-            ${operators.map(op => `<option value="${op}">${op}</option>').join('')}
+            ${operators.map(op => `<option value="${op}">${op}</option>).join('')}
           </select>
         </div>
       `;
@@ -500,7 +500,7 @@
           <label>Choisissez le Pass</label>
           <select id="simpleSelect" class="form-control-custom" required>
             <option value="">-- Sélectionner --</option>
-            ${passOptions.map(opt => `<option value="${opt}">${opt}</option>').join('')}
+            ${passOptions.map(opt => `<option value="${opt}">${opt}</option>).join('')}
           </select>
         </div>
       `;
@@ -515,7 +515,7 @@
           <label>Choisissez l'opérateur</label>
           <select id="simpleSelect" class="form-control-custom" required>
             <option value="">-- Sélectionner --</option>
-            ${unitOptions.map(opt => `<option value="${opt}">${opt}</option>').join('')}
+            ${unitOptions.map(opt => `<option value="${opt}">${opt}</option>).join('')}
           </select>
         </div>
       `;
@@ -536,14 +536,14 @@
       if (title === 'Transferts Money') {
         const src = document.getElementById('sourceSelect').value;
         const dest = document.getElementById('destSelect').value;
-        detail = `De: ${src}\nVers: ${dest}';
+        detail = `De: ${src}\nVers: ${dest};
       } else {
         const opt = document.getElementById('simpleSelect').value;
-        detail = `Option: ${opt}';
+        detail = `Option: ${opt};
       }
 
       alert(`✅ Demande enregistrée !\n\nPrestation: ${title}\n${detail}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nTraitement en cours...);
-      modalOverlay.classList.remove('active')';
+      modalOverlay.classList.remove('active');
     });
 
     // Assistance Chat
