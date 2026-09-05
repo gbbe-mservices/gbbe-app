@@ -1,33 +1,149 @@
-<!-- Champ Montant -->
-<div class="form-group">
-  <label for="montant">Montant à envoyer (FCFA) :</label>
-  <input type="number" id="montant" placeholder="Ex: 10000" oninput="calculerFrais()" required>
-</div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBBE MULTI-SERVICES - Transfert d'argent</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #eef2f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 480px; }
+        .header { text-align: center; background: #1a365d; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px; }
+        .header h2 { margin: 0; font-size: 22px; }
+        .header p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 6px; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; outline: none; }
+        input:focus, select:focus { border-color: #1a365d; }
+        #recap-frais { background-color: #f0f4f8; padding: 14px; border-radius: 6px; margin: 15px 0; display: none; border-left: 4px solid #1a365d; }
+        #recap-frais p { margin: 4px 0; font-size: 14px; color: #333; }
+        .btn-submit { width: 100%; padding: 12px; background: #1a365d; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: #132a4a; }
+        #resultat { margin-top: 15px; padding: 10px; border-radius: 6px; text-align: center; display: none; font-size: 14px; }
+    </style>
+</head>
+<body>
 
-<!-- Bloc d'affichage dynamique des frais -->
-<div id="recap-frais" style="background-color: #f0f4f8; padding: 12px; border-radius: 6px; margin: 15px 0; display: none;">
-  <p style="margin: 5px 0;">Frais de service GBBE (1.5%) : <strong><span id="frais-valeur">0</span> FCFA</strong></p>
-  <p style="margin: 5px 0;">Total à débiter sur votre compte : <strong><span id="total-valeur">0</span> FCFA</strong></p>
-  <p style="margin: 5px 0; color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
-</div>
+    <div class="card">
+        <div class="header">
+            <h2>GBBE MULTI-SERVICES</h2>
+            <p>Transfert d'argent instantané inter-réseaux</p>
+        </div>
 
-function calculerFrais() {
-  const montantInput = document.getElementById('montant').value;
-  const recap = document.getElementById('recap-frais');
-  
-  const montant = parseFloat(montantInput);
-  const TAUX_COMMISSION = 0.015;
+        <form id="transfertForm">
+            <div class="form-group">
+                <label for="montant">Montant à envoyer (FCFA) :</label>
+                <input type="number" id="montant" placeholder="Ex: 10000" oninput="calculerFrais()" required>
+            </div>
 
-  if (!isNaN(montant) && montant > 0) {
-    const frais = montant * TAUX_COMMISSION;
-    const total = montant + frais;
+            <!-- Calculateur de frais en temps réel -->
+            <div id="recap-frais">
+                <p>Frais de service GBBE (1.5%) : <strong><span id="frais-valeur">0</span> FCFA</strong></p>
+                <p>Total à débiter sur votre compte : <strong><span id="total-valeur">0</span> FCFA</strong></p>
+                <p style="color: #2e7d32;">Le destinataire recevra : <strong><span id="net-valeur">0</span> FCFA</strong></p>
+            </div>
 
-    document.getElementById('frais-valeur').innerText = frais.toLocaleString('fr-FR');
-    document.getElementById('total-valeur').innerText = total.toLocaleString('fr-FR');
-    document.getElementById('net-valeur').innerText = montant.toLocaleString('fr-FR');
-    
-    recap.style.display = 'block';
-  } else {
-    recap.style.display = 'none';
-  }
-}
+            <div class="form-group">
+                <label for="reseauEmetteur">Réseau d'origine (Vous payez par) :</label>
+                <select id="reseauEmetteur" required>
+                    <option value="Orange Money">Orange Money</option>
+                    <option value="Wave">Wave</option>
+                    <option value="MTN Mobile Money">MTN Mobile Money</option>
+                    <option value="Moov Money">Moov Money</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneEmetteur">Votre numéro de téléphone :</label>
+                <input type="tel" id="phoneEmetteur" placeholder="Ex: 0700000000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="reseauDestinataire">Réseau de destination (Le destinataire reçoit sur) :</label>
+                <select id="reseauDestinataire" required>
+                    <option value="Wave">Wave</option>
+                    <option value="Orange Money">Orange Money</option>
+                    <option value="MTN Mobile Money">MTN Mobile Money</option>
+                    <option value="Moov Money">Moov Money</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneDestinataire">Numéro du destinataire :</label>
+                <input type="tel" id="phoneDestinataire" placeholder="Ex: 0500000000" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Valider le transfert</button>
+        </form>
+
+        <div id="resultat"></div>
+    </div>
+
+    <script>
+        // Fonction du calculateur de frais
+        function calculerFrais() {
+            const montantInput = document.getElementById('montant').value;
+            const recap = document.getElementById('recap-frais');
+            
+            const montant = parseFloat(montantInput);
+            const TAUX_COMMISSION = 0.015; // 1.5%
+
+            if (!isNaN(montant) && montant > 0) {
+                const frais = montant * TAUX_COMMISSION;
+                const total = montant + frais;
+
+                document.getElementById('frais-valeur').innerText = frais.toLocaleString('fr-FR');
+                document.getElementById('total-valeur').innerText = total.toLocaleString('fr-FR');
+                document.getElementById('net-valeur').innerText = montant.toLocaleString('fr-FR');
+                
+                recap.style.display = 'block';
+            } else {
+                recap.style.display = 'none';
+            }
+        }
+
+        // Soumission du formulaire
+        document.getElementById('transfertForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const payload = {
+                montant: document.getElementById('montant').value,
+                reseauEmetteur: document.getElementById('reseauEmetteur').value,
+                phoneEmetteur: document.getElementById('phoneEmetteur').value,
+                reseauDestinataire: document.getElementById('reseauDestinataire').value,
+                phoneDestinataire: document.getElementById('phoneDestinataire').value
+            };
+
+            const resDiv = document.getElementById('resultat');
+            resDiv.style.display = 'block';
+            resDiv.style.backgroundColor = '#e3f2fd';
+            resDiv.style.color = '#0d47a1';
+            resDiv.innerText = "Traitement en cours...";
+
+            try {
+                const response = await fetch('/api/gbbe/transfert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resDiv.style.backgroundColor = '#e8f5e9';
+                    resDiv.style.color = '#1b5e20';
+                    resDiv.innerHTML = <strong>Réf : ${data.transactionId}</strong><br>${data.message};
+                } else {
+                    resDiv.style.backgroundColor = '#ffebee';
+                    resDiv.style.color = '#c62828';
+                    resDiv.innerText = data.message || "Une erreur est survenue.";
+                }
+            } catch (err) {
+                resDiv.style.backgroundColor = '#ffebee';
+                resDiv.style.color = '#c62828';
+                resDiv.innerText = "Impossible d'accéder au serveur.";
+            }
+        });
+    </script>
+</body>
+</html>
