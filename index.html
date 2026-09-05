@@ -11,7 +11,7 @@
   <style>
     :root {
       --bg-dark: #07090E;
-      --card-bg: rgba(15, 23, 42, 0.82);
+      --card-bg: rgba(15, 23, 42, 0.88);
       --accent-blue: #3B82F6;
       --accent-cyan: #06B6D4;
       --accent-orange: #FF6B00;
@@ -30,27 +30,27 @@
       position: relative;
     }
 
-    /* Arrière-plan d'images dynamiques */
-    .bg-slideshow {
+    /* Arrière-plan avec UNE SEULE image fixe + calque sombre */
+    .bg-fixed {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -2;
+      background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
-      transition: background-image 1.5s ease-in-out;
+      background-repeat: no-repeat;
     }
 
-    /* Calque sombre pour lisibilité du contenu */
     .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -1;
-      background: radial-gradient(circle at center, rgba(7, 9, 14, 0.75) 0%, rgba(5, 7, 10, 0.92) 100%);
+      background: rgba(7, 9, 14, 0.85);
     }
 
-    /* En-tête Glassmorphism */
+    /* En-tête */
     header {
-      background: rgba(10, 14, 23, 0.85);
+      background: rgba(10, 14, 23, 0.9);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding: 16px 24px;
@@ -63,7 +63,7 @@
     }
 
     .brand-logo { font-size: 1.3rem; font-weight: 800; }
-    .brand-gbbe { color: #38BDF8; text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+    .brand-gbbe { color: #38BDF8; }
     .brand-ms { color: #F59E0B; }
 
     .status-badge {
@@ -76,7 +76,6 @@
       border-radius: 20px;
     }
 
-    /* Conteneur principal */
     .container {
       max-width: 900px;
       margin: 0 auto;
@@ -90,7 +89,6 @@
       border-radius: 24px;
       padding: 28px;
       margin-bottom: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .hero-banner h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
@@ -105,7 +103,7 @@
       margin-bottom: 16px;
     }
 
-    /* Cards interactives */
+    /* Cartes de service */
     .grid-services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -119,14 +117,12 @@
       border-radius: 20px;
       padding: 22px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      user-select: none;
+      transition: all 0.2s ease;
     }
 
     .card-service:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       border-color: #38BDF8;
-      box-shadow: 0 15px 35px rgba(6, 182, 212, 0.3);
     }
 
     .card-header-icon {
@@ -154,12 +150,12 @@
     .tag-mtn { background: var(--accent-mtn); color: #000; }
     .tag-moov { background: var(--accent-moov); }
 
-    /* Modal Formulaire */
-    .custom-modal-overlay {
+    /* Fenêtre modale */
+    .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -167,18 +163,13 @@
       padding: 16px;
     }
 
-    .custom-modal-overlay.active {
-      display: flex !important;
-    }
-
-    .custom-modal-card {
+    .modal-card {
       background: #151C2C;
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 24px;
       width: 100%;
       max-width: 450px;
       padding: 26px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
       position: relative;
     }
 
@@ -208,8 +199,6 @@
       outline: none;
     }
 
-    .form-control-custom:focus { border-color: #38BDF8; }
-
     .btn-submit {
       width: 100%;
       background: linear-gradient(135deg, #2563EB, #06B6D4);
@@ -223,18 +212,16 @@
       margin-top: 10px;
     }
 
-    /* Widget Assistance 24h/24 */
+    /* Widget Chat */
     .chat-btn-float {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 24px; right: 24px;
       background: linear-gradient(135deg, #2563EB, #06B6D4);
       color: #FFF;
       border-radius: 50px;
       padding: 14px 22px;
       font-weight: 700;
       font-size: 14px;
-      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.5);
       z-index: 1000;
       border: none;
       display: flex;
@@ -245,14 +232,10 @@
 
     .chat-box {
       position: fixed;
-      bottom: 90px;
-      right: 24px;
-      width: 350px;
-      max-width: 88vw;
-      height: 440px;
+      bottom: 90px; right: 24px;
+      width: 350px; max-width: 88vw; height: 400px;
       background: #151C2C;
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
       z-index: 1001;
       display: none;
       flex-direction: column;
@@ -262,78 +245,51 @@
 
     .chat-header {
       background: #0B0F19;
-      padding: 14px 18px;
+      padding: 14px;
       font-weight: 700;
       font-size: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .chat-body {
-      flex: 1;
-      padding: 14px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      flex: 1; padding: 14px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 10px;
       background: #0D1322;
     }
 
-    .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
+    .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; }
     .msg-bot { background: #1E293B; color: #FFF; align-self: flex-start; }
     .msg-user { background: #2563EB; color: #FFF; align-self: flex-end; }
 
     .chat-footer { padding: 10px; background: #0B0F19; display: flex; gap: 8px; }
 
-    /* Pied de Page / Nos Réseaux */
+    /* Footer */
     footer {
       margin-top: 50px;
-      background: rgba(10, 14, 23, 0.85);
+      background: rgba(10, 14, 23, 0.9);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding: 30px 20px;
       text-align: center;
     }
 
-    .social-title { font-size: 13px; font-weight: 700; color: #94A3B8; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
+    .social-title { font-size: 13px; font-weight: 700; color: #94A3B8; margin-bottom: 16px; }
+    .social-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
     .social-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #FFF;
-      text-decoration: none;
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.25s ease;
-    }
-
-    .social-btn:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: #38BDF8;
-      transform: translateY(-3px);
+      color: #FFF; text-decoration: none;
+      padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600;
     }
   </style>
 </head>
 <body>
 
-  <!-- Arrière-plan dynamique d'images -->
-  <div class="bg-slideshow" id="bgSlideshow"></div>
+  <div class="bg-fixed"></div>
   <div class="bg-overlay"></div>
 
-  <!-- Header -->
   <header>
     <div class="brand-logo">
       <span class="brand-gbbe">GBBE</span> <span class="brand-ms">MULTI-SERVICES</span>
@@ -341,7 +297,6 @@
     <div class="status-badge">⚡ Service Actif</div>
   </header>
 
-  <!-- Contenu Principal -->
   <div class="container">
     <div class="hero-banner">
       <h1>Guichet Automatique de Paiement</h1>
@@ -351,8 +306,8 @@
     <div class="section-title">Sélectionnez une prestation</div>
 
     <div class="grid-services">
-      <!-- Carte 1 : Transfert -->
-      <div class="card-service" id="btnTransfert">
+      <!-- Carte 1 -->
+      <div class="card-service" onclick="openModal('transfert')">
         <div class="card-header-icon icon-transfer"><i class="bi bi-wallet2"></i></div>
         <h3>Transferts Money</h3>
         <p>Envoi d'un réseau vers un autre (Orange, Wave, MTN, Moov).</p>
@@ -364,8 +319,8 @@
         </div>
       </div>
 
-      <!-- Carte 2 : Pass -->
-      <div class="card-service" id="btnPass">
+      <!-- Carte 2 -->
+      <div class="card-service" onclick="openModal('pass')">
         <div class="card-header-icon icon-pass"><i class="bi bi-wifi"></i></div>
         <h3>Pass & Internet</h3>
         <p>Souscription directe aux forfaits et volumes de données.</p>
@@ -377,8 +332,8 @@
         </div>
       </div>
 
-      <!-- Carte 3 : Unités -->
-      <div class="card-service" id="btnUnites">
+      <!-- Carte 3 -->
+      <div class="card-service" onclick="openModal('unites')">
         <div class="card-header-icon icon-units"><i class="bi bi-phone"></i></div>
         <h3>Achat d'Unités</h3>
         <p>Recharge de crédit de communication téléphonique direct.</p>
@@ -391,7 +346,6 @@
     </div>
   </div>
 
-  <!-- Pied de page avec liens Réseaux Sociaux -->
   <footer>
     <div class="social-title">Rejoignez-nous sur nos réseaux</div>
     <div class="social-links">
@@ -402,43 +356,41 @@
     </div>
   </footer>
 
-  <!-- ASSISTANCE 24H/24 -->
-  <button class="chat-btn-float" id="btnChatToggle">
+  <!-- Chat -->
+  <button class="chat-btn-float" onclick="toggleChat()">
     <i class="bi bi-headset fs-5"></i> Assistance 24h/24
   </button>
 
   <div class="chat-box" id="chatBox">
     <div class="chat-header">
       <span><i class="bi bi-headset" style="color: #38BDF8;"></i> Support GBBE</span>
-      <button id="btnCloseChat" style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">✕</button>
+      <button onclick="toggleChat()" style="background:none; border:none; color:#FFF; cursor:pointer;">✕</button>
     </div>
     <div class="chat-body" id="chatBody">
-      <div class="chat-msg msg-bot">
-        Bonjour ! Bienvenue sur l'assistance GBBE 24h/24. En quoi pouvons-nous vous aider ?
-      </div>
+      <div class="chat-msg msg-bot">Bonjour ! En quoi pouvons-nous vous aider ?</div>
     </div>
     <div class="chat-footer">
-      <input type="text" id="chatInput" class="form-control-custom" placeholder="Posez votre question...">
-      <button id="btnSendChat" style="background:#2563EB; color:#FFF; border:none; padding:0 14px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
+      <input type="text" id="chatInput" class="form-control-custom" placeholder="Votre message...">
+      <button onclick="sendChat()" style="background:#2563EB; color:#FFF; border:none; padding:0 12px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
     </div>
   </div>
 
-  <!-- FENÊTRE MODALE -->
-  <div class="custom-modal-overlay" id="modalOverlay">
-    <div class="custom-modal-card">
-      <button class="modal-close-btn" id="btnCloseModal">✕</button>
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
       <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; color: #FFF;"></h3>
       
-      <form id="transactionForm">
-        <div id="dynamicFormContent"></div>
+      <form onsubmit="handleFormSubmit(event)">
+        <div id="dynamicFields"></div>
 
         <div class="form-group">
           <label>Numéro de téléphone</label>
           <input type="tel" id="modalPhone" class="form-control-custom" placeholder="ex: 0700000000" maxlength="10" required>
         </div>
         <div class="form-group">
-          <label>Montant de l'opération (FCFA)</label>
-          <input type="number" id="modalAmount" class="form-control-custom" placeholder="ex: 2000" min="100" max="500000" required>
+          <label>Montant (FCFA)</label>
+          <input type="number" id="modalAmount" class="form-control-custom" placeholder="ex: 2000" min="100" required>
         </div>
         <button type="submit" class="btn-submit">Valider l'opération</button>
       </form>
@@ -446,142 +398,90 @@
   </div>
 
   <script>
-    // Images d'arrière-plan alternant enfants africains et professionnels
-    const imagesList = [
-      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop", // Enfants qui jouent
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop", // Équipe professionnelle au travail
-      "https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1600&auto=format&fit=crop", // Enfants souriants en Afrique
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1600&auto=format&fit=crop"  // Consultation/Services informatiques
-    ];
-
-    let currentImgIndex = 0;
-    const bgElement = document.getElementById('bgSlideshow');
-
-    function updateBackground() {
-      bgElement.style.backgroundImage = `url('${imagesList[currentImgIndex]}');
-      currentImgIndex = (currentImgIndex + 1) % imagesList.length;
-    }
-    updateBackground();
-    setInterval(updateBackground, 7000); // Change toutes les 7 secondes
-
-    // Gestion de l'ouverture des Modales
-    const modalOverlay = document.getElementById('modalOverlay');
+    const modal = document.getElementById('modalOverlay');
     const modalTitle = document.getElementById('modalTitle');
-    const dynamicFormContent = document.getElementById('dynamicFormContent');
+    const dynamicFields = document.getElementById('dynamicFields');
+    const chatBox = document.getElementById('chatBox');
 
-    const operators = ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'];
+    const ops = ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'];
 
-    document.getElementById('btnTransfert').addEventListener('click', function() {
-      modalTitle.innerText = 'Transferts Money';
-      dynamicFormContent.innerHTML = `
-        <div class="form-group">
-          <label>Réseau d'Origine (D'où provient l'argent ?)</label>
-          <select id="sourceSelect" class="form-control-custom" required>
-            <option value="">-- Choisir la source --</option>
-            ${operators.map(op => `<option value="${op}">${op}</option>).join('')}
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Réseau de Destination (Où envoyer l'argent ?)</label>
-          <select id="destSelect" class="form-control-custom" required>
-            <option value="">-- Choisir la destination --</option>
-            ${operators.map(op => `<option value="${op}">${op}</option>).join('')}
-          </select>
-        </div>
-      `;
-      modalOverlay.classList.add('active');
-    });
+    function openModal(type) {
+      if (type === 'transfert') {
+        modalTitle.innerText = 'Transferts Money';
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label>Réseau Source (D'où vient l'argent)</label>
+            <select id="srcNet" class="form-control-custom" required>
+              <option value="">-- Choisir --</option>
+              ${ops.map(o => `<option value="${o}">${o}</option>).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Réseau Destination (Où va l'argent)</label>
+            <select id="destNet" class="form-control-custom" required>
+              <option value="">-- Choisir --</option>
+              ${ops.map(o => <option value="${o}">${o}</option>).join('')}
+            </select>
+          </div>`;
+      } else if (type === 'pass') {
+        modalTitle.innerText = 'Pass & Internet';
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label>Forfait Désiré</label>
+            <select id="optType" class="form-control-custom" required>
+              <option value="">-- Choisir le pass --</option>
+              <option value="Pass Orange Internet">Pass Orange Internet</option>
+              <option value="Pass MTN Data">Pass MTN Data</option>
+              <option value="Pass Moov Web">Pass Moov Web</option>
+              <option value="Wave Internet">Wave Internet</option>
+            </select>
+          </div>`;
+      } else if (type === 'unites') {
+        modalTitle.innerText = 'Achat d\'Unités';
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label>Opérateur</label>
+            <select id="optType" class="form-control-custom" required>
+              <option value="">-- Choisir l'opérateur --</option>
+              <option value="Crédit Orange">Crédit Orange</option>
+              <option value="Crédit MTN">Crédit MTN</option>
+              <option value="Crédit Moov">Crédit Moov</option>
+            </select>
+          </div>`;
+      }
+      modal.style.display = 'flex';
+    }
 
-    document.getElementById('btnPass').addEventListener('click', function() {
-      modalTitle.innerText = 'Pass & Internet';
-      const passOptions = ['Pass Orange Internet', 'Pass MTN Data', 'Pass Moov Web', 'Wave Internet'];
-      dynamicFormContent.innerHTML = `
-        <div class="form-group">
-          <label>Choisissez le Pass</label>
-          <select id="simpleSelect" class="form-control-custom" required>
-            <option value="">-- Sélectionner --</option>
-            ${passOptions.map(opt => `<option value="${opt}">${opt}</option>).join('')}
-          </select>
-        </div>
-      `;
-      modalOverlay.classList.add('active');
-    });
+    function closeModal() {
+      modal.style.display = 'none';
+    }
 
-    document.getElementById('btnUnites').addEventListener('click', function() {
-      modalTitle.innerText = 'Achat d\'Unités';
-      const unitOptions = ['Crédit Orange', 'Crédit MTN', 'Crédit Moov'];
-      dynamicFormContent.innerHTML = `
-        <div class="form-group">
-          <label>Choisissez l'opérateur</label>
-          <select id="simpleSelect" class="form-control-custom" required>
-            <option value="">-- Sélectionner --</option>
-            ${unitOptions.map(opt => `<option value="${opt}">${opt}</option>).join('')}
-          </select>
-        </div>
-      `;
-      modalOverlay.classList.add('active');
-    });
-
-    document.getElementById('btnCloseModal').addEventListener('click', function() {
-      modalOverlay.classList.remove('active');
-    });
-
-    document.getElementById('transactionForm').addEventListener('submit', function(e) {
+    function handleFormSubmit(e) {
       e.preventDefault();
       const phone = document.getElementById('modalPhone').value;
       const amount = document.getElementById('modalAmount').value;
-      const title = modalTitle.innerText;
+      
+      alert('✅ Demande bien prise en compte !\nNuméro : ' + phone + '\nMontant : ' + amount + ' FCFA');
+      closeModal();
+    }
 
-      let detail = "";
-      if (title === 'Transferts Money') {
-        const src = document.getElementById('sourceSelect').value;
-        const dest = document.getElementById('destSelect').value;
-        detail = `De: ${src}\nVers: ${dest};
-      } else {
-        const opt = document.getElementById('simpleSelect').value;
-        detail = `Option: ${opt};
-      }
-
-      alert(`✅ Demande enregistrée !\n\nPrestation: ${title}\n${detail}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nTraitement en cours...);
-      modalOverlay.classList.remove('active');
-    });
-
-    // Assistance Chat
-    const chatBox = document.getElementById('chatBox');
-    document.getElementById('btnChatToggle').addEventListener('click', function() {
+    function toggleChat() {
       chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
-    });
+    }
 
-    document.getElementById('btnCloseChat').addEventListener('click', function() {
-      chatBox.style.display = 'none';
-    });
-
-    function sendChatMessage() {
+    function sendChat() {
       const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
+      if (!input.value.trim()) return;
+      
       const body = document.getElementById('chatBody');
-      const userMsg = document.createElement('div');
-      userMsg.className = 'chat-msg msg-user';
-      userMsg.innerText = text;
-      body.appendChild(userMsg);
+      body.innerHTML += `<div class="chat-msg msg-user">${input.value}</div>;
       input.value = '';
-      body.scrollTop = body.scrollHeight;
-
+      
       setTimeout(() => {
-        const botMsg = document.createElement('div');
-        botMsg.className = 'chat-msg msg-bot';
-        botMsg.innerText = "Pour une assistance immédiate, contactez notre support officiel WhatsApp au : 0767709102.";
-        body.appendChild(botMsg);
+        body.innerHTML += <div class="chat-msg msg-bot">Pour toute assistance rapide, contactez-nous au 0767709102.</div>;
         body.scrollTop = body.scrollHeight;
       }, 500);
     }
-
-    document.getElementById('btnSendChat').addEventListener('click', sendChatMessage);
-    document.getElementById('chatInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendChatMessage();
-    });
   </script>
 </body>
 </html>
