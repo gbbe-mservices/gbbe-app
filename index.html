@@ -152,7 +152,10 @@
       alert("Veuillez saisir un montant valide.");
       return;
     }
-
+if (typeof openKkiapayWidget !== "function") {
+      alert("Le script Kkiapay n'est pas chargé dans le <head>.");
+      return;
+    }
     if (typeof openKkiapayWidget !== "function") {
       alert("Le script Kkiapay n'est pas chargé dans le <head>.");
       return;
