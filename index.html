@@ -1,35 +1,34 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GBBE MULTI-SERVICES — Terminal Fintech Next-Gen</title>
   
-  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <style>
     :root {
-      --bg-dark: #05070E;
-      --panel-bg: rgba(13, 18, 30, 0.75);
-      --accent-cyan: #00F2FE;
-      --accent-blue: #4FACFE;
+      --bg-dark: #030509;
+      --panel-bg: rgba(10, 15, 26, 0.82);
+      
+      /* Couleurs spécifiques par service */
+      --color-transfer: #00F2FE;
+      --color-pass: #00E676;
+      --color-units: #FF6D00;
+
       --accent-orange: #FF6B00;
       --accent-mtn: #FFCC00;
       --accent-moov: #00A859;
       --accent-wave: #1DC1DD;
+      
       --text-main: #F1F5F9;
       --text-muted: #94A3B8;
-      --border-glow: rgba(0, 242, 254, 0.25);
+      --active-color: var(--color-transfer);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
     body {
       background-color: var(--bg-dark);
@@ -41,29 +40,44 @@
       position: relative;
     }
 
-    /* Arrière-plan dynamique cyberpunk */
+    /* Arrière-plan animé type Centre de Serveurs & Data Center */
     .cyber-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -2;
-      background: radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.12), transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(79, 172, 254, 0.1), transparent 40%),
-                  url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1600&auto=format&fit=crop');
+      background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.08), transparent 70%),
+                  url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
-      filter: brightness(0.4) contrast(1.1);
+      filter: brightness(0.35) contrast(1.2);
     }
 
+    /* Animation de grille et flux de données */
     .cyber-grid-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -1;
-      background: linear-gradient(to bottom, rgba(5, 7, 14, 0.7) 0%, rgba(5, 7, 14, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(3, 5, 9, 0.75) 0%, rgba(3, 5, 9, 0.95) 100%);
+    }
+
+    .data-stream {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(0deg, transparent 0%, rgba(0, 242, 254, 0.05) 50%, transparent 100%);
+      background-size: 100% 200px;
+      animation: streamAnimation 8s linear infinite;
+    }
+
+    @keyframes streamAnimation {
+      0% { background-position: 0 -200px; }
+      100% { background-position: 0 100vh; }
     }
 
     /* Navigation Header */
     header {
-      background: rgba(8, 12, 22, 0.85);
+      background: rgba(6, 10, 18, 0.9);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 16px 32px;
@@ -75,58 +89,31 @@
       z-index: 100;
     }
 
-    .brand-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .brand-container { display: flex; align-items: center; gap: 12px; }
     .brand-icon {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--color-transfer), #0077FF);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: #000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: #000;
       box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      transition: all 0.3s ease;
     }
 
-    .brand-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .brand-title span {
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .brand-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; }
+    .brand-title span { color: var(--active-color); transition: color 0.3s ease; }
 
     .system-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #10B981;
+      padding: 6px 14px; border-radius: 30px;
+      font-size: 12px; font-weight: 600; color: #10B981;
     }
 
     .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #10B981;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #10B981;
-      animation: pulse 1.8s infinite;
+      width: 8px; height: 8px; background-color: #10B981; border-radius: 50%;
+      box-shadow: 0 0 10px #10B981; animation: pulse 1.8s infinite;
     }
 
     @keyframes pulse {
@@ -137,417 +124,160 @@
 
     /* Container Principal */
     .main-wrapper {
-      max-width: 1100px;
-      width: 100%;
-      margin: 40px auto;
-      padding: 0 20px;
-      flex: 1;
+      max-width: 1100px; width: 100%;
+      margin: 30px auto; padding: 0 20px; flex: 1;
     }
 
-    /* En-tête Hero */
-    .hero-section {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-
+    .hero-section { text-align: center; margin-bottom: 30px; }
     .hero-tag {
-      display: inline-block;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--accent-cyan);
-      background: rgba(0, 242, 254, 0.08);
-      border: 1px solid var(--border-glow);
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 12px;
+      display: inline-block; font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--active-color); background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--active-color); padding: 6px 16px; border-radius: 20px;
+      margin-bottom: 12px; transition: all 0.3s ease;
     }
 
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.3rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+    .hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+    .hero-subtitle { color: var(--text-muted); font-size: 0.92rem; max-width: 600px; margin: 0 auto; }
 
-    .hero-subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      max-width: 550px;
-      margin: 0 auto;
-    }
-
-    /* Panneau de Contrôle Principal */
+    /* Terminal de Contrôle */
     .terminal-container {
       background: var(--panel-bg);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 28px;
-      padding: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      position: relative;
+      gap: 30px;
     }
 
     @media (max-width: 850px) {
-      .terminal-container {
-        grid-template-columns: 1fr;
-      }
+      .terminal-container { grid-template-columns: 1fr; }
     }
 
-    /* Colonne de Sélection */
-    .selector-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
+    .selector-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 16px; }
 
-    .mode-selector {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
+    .mode-selector { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
 
     .mode-btn {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      color: var(--text-main);
-      text-align: left;
+      border-radius: 16px; padding: 16px 18px;
+      display: flex; align-items: center; gap: 16px;
+      cursor: pointer; transition: all 0.25s ease; color: var(--text-main);
     }
 
-    .mode-btn:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateX(4px);
+    /* Style Transfert (Bleu Cyan) */
+    .mode-btn.type-transfert:hover, .mode-btn.type-transfert.active {
+      background: rgba(0, 242, 254, 0.08);
+      border-color: var(--color-transfer);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
     }
+    .mode-btn.type-transfert.active .mode-icon { background: var(--color-transfer); color: #000; }
 
-    .mode-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.12), rgba(79, 172, 254, 0.06));
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+    /* Style Pass (Vert Émeraude) */
+    .mode-btn.type-pass:hover, .mode-btn.type-pass.active {
+      background: rgba(0, 230, 118, 0.08);
+      border-color: var(--color-pass);
+      box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
     }
+    .mode-btn.type-pass.active .mode-icon { background: var(--color-pass); color: #000; }
+
+    /* Style Unités (Orange Néon) */
+    .mode-btn.type-unites:hover, .mode-btn.type-unites.active {
+      background: rgba(255, 109, 0, 0.08);
+      border-color: var(--color-units);
+      box-shadow: 0 0 15px rgba(255, 109, 0, 0.2);
+    }
+    .mode-btn.type-unites.active .mode-icon { background: var(--color-units); color: #000; }
 
     .mode-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 12px;
       background: rgba(255, 255, 255, 0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: var(--accent-cyan);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; transition: all 0.3s ease;
     }
 
-    .mode-btn.active .mode-icon {
-      background: var(--accent-cyan);
-      color: #000;
-    }
+    .mode-info h4 { font-size: 0.98rem; font-weight: 700; margin-bottom: 2px; }
+    .mode-info p { font-size: 0.78rem; color: var(--text-muted); }
 
-    .mode-info h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .mode-info p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    /* Badges Réseaux Disponibles */
-    .networks-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 16px;
-    }
-
-    .networks-list {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .net-tag {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .net-orange { background: rgba(255, 107, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
-    .net-wave { background: rgba(29, 193, 221, 0.2); color: var(--accent-wave); border: 1px solid var(--accent-wave); }
-    .net-mtn { background: rgba(255, 204, 0, 0.2); color: var(--accent-mtn); border: 1px solid var(--accent-mtn); }
-    .net-moov { background: rgba(0, 168, 89, 0.2); color: var(--accent-moov); border: 1px solid var(--accent-moov); }
-
-    /* Colonne Formulaire Dynamique */
+    /* Formulaire */
     .form-panel {
-      background: rgba(8, 12, 22, 0.6);
+      background: rgba(5, 8, 15, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      border-radius: 20px; padding: 22px;
+      display: flex; flex-direction: column; justify-content: space-between;
     }
 
-    .form-header {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 14px;
-      margin-bottom: 20px;
-    }
+    .form-header { border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 18px; }
+    .form-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--active-color); transition: color 0.3s ease; }
 
-    .form-header h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-    }
-
-    .field-group {
-      margin-bottom: 18px;
-    }
-
-    .field-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
+    .field-group { margin-bottom: 14px; }
+    .field-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
 
     .cyber-input, .cyber-select {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      width: 100%; background: rgba(0, 0, 0, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 14px 16px;
-      color: #FFF;
-      font-size: 0.95rem;
-      outline: none;
-      transition: all 0.2s ease;
+      border-radius: 12px; padding: 12px 14px;
+      color: #FFF; font-size: 0.92rem; outline: none; transition: all 0.2s ease;
     }
 
     .cyber-input:focus, .cyber-select:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+      border-color: var(--active-color);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
     }
 
-    .cyber-select option {
-      background: #0D121E;
-      color: #FFF;
-    }
+    .cyber-select option { background: #0A0F1A; color: #FFF; }
 
-    /* Calculateur de coût */
+    /* Calculateur Récapitulatif */
     .summary-card {
-      background: rgba(0, 242, 254, 0.05);
-      border: 1px dashed var(--border-glow);
-      border-radius: 12px;
-      padding: 14px;
-      margin: 10px 0 20px 0;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px; padding: 14px; margin: 14px 0;
     }
 
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
+    .summary-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
     .summary-row.total {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FFF;
+      font-size: 14px; font-weight: 700; color: #FFF;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 6px;
-      margin-bottom: 0;
+      padding-top: 8px; margin-top: 6px; margin-bottom: 0;
     }
 
     .btn-execute {
-      width: 100%;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      border: none;
-      color: #000;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 16px;
-      border-radius: 14px;
-      cursor: pointer;
+      width: 100%; background: var(--active-color);
+      border: none; color: #000;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.98rem;
+      padding: 14px; border-radius: 12px; cursor: pointer;
       transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
 
-    .btn-execute:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
-    }
+    .btn-execute:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-    /* Footer & Socials */
+    /* Footer & Widgets */
     footer {
-      background: rgba(8, 12, 22, 0.9);
+      background: rgba(6, 10, 18, 0.95);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 24px;
-      margin-top: 40px;
+      padding: 20px; margin-top: 40px; text-align: center;
     }
 
-    .footer-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 12px;
-    }
-
+    .social-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
     .social-pill {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .social-pill:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-    }
-
-    /* Floating Widget Chat */
-    .widget-support {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 1000;
+      color: var(--text-main); text-decoration: none;
+      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
     }
 
     .widget-btn {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      color: #000;
-      border: none;
-      padding: 14px 22px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.4);
-    }
-
-    .chat-panel {
-      position: fixed;
-      bottom: 90px;
-      right: 24px;
-      width: 340px;
-      max-width: 85vw;
-      height: 420px;
-      background: #0D121E;
-      border: 1px solid var(--border-glow);
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 1001;
-    }
-
-    .chat-top {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .msg-box {
-      max-width: 80%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .msg-bot { background: rgba(255, 255, 255, 0.08); align-self: flex-start; color: #E2E8F0; }
-    .msg-user { background: var(--accent-cyan); color: #000; font-weight: 600; align-self: flex-end; }
-
-    .chat-input-area {
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      gap: 8px;
-    }
-
-    .chat-input-area input {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px;
-      color: #FFF;
-      font-size: 12px;
-      outline: none;
-    }
-
-    .chat-send-btn {
-      background: var(--accent-cyan);
-      border: none;
-      color: #000;
-      padding: 0 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--active-color); color: #000;
+      border: none; padding: 12px 20px; border-radius: 30px;
+      font-weight: 700; font-size: 13px; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); z-index: 1000;
+      display: flex; align-items: center; gap: 8px;
     }
   </style>
 </head>
@@ -555,113 +285,106 @@
 
   <div class="cyber-bg"></div>
   <div class="cyber-grid-overlay"></div>
+  <div class="data-stream"></div>
 
-  <!-- Header -->
+  <!-- En-tête -->
   <header>
     <div class="brand-container">
-      <div class="brand-icon"><i class="bi bi-cpu-fill"></i></div>
+      <div class="brand-icon" id="main-brand-icon"><i class="bi bi-cpu-fill"></i></div>
       <div class="brand-title">GBBE <span>MULTI-SERVICES</span></div>
     </div>
     <div class="system-status">
-      <div class="pulse-dot"></div>
-      Guichet Automatique En Ligne
+      <div class="pulse-dot"></div> Serveurs en Ligne
     </div>
   </header>
 
-  <!-- Container Principal -->
   <div class="main-wrapper">
-    
     <div class="hero-section">
-      <div class="hero-tag">Plateforme Sécurisée v2.4</div>
-      <h1 class="hero-title">Plateforme Directe de Paiement</h1>
-      <p class="hero-subtitle">Recharges instantanées, forfaits internet et transferts d'argent réseau à réseau 24h/24.</p>
+      <div class="hero-tag" id="hero-tag">Services Financiers Instantanés</div>
+      <h1 class="hero-title">Guichet Automatique de Paiement</h1>
+      <p class="hero-subtitle">Traitements automatisés des recharges, pass internet et transferts d'argent 24h/24.</p>
     </div>
 
-    <!-- Terminal de Commande -->
     <div class="terminal-container">
       
-      <!-- Colonne Sélection -->
+      <!-- Sélection des Services -->
       <div>
-        <div class="selector-title">1. Choisissez un Service</div>
+        <div class="selector-title">1. Choisissez une prestation</div>
         <div class="mode-selector">
           
-          <div class="mode-btn active" id="btn-transfert" onclick="selectService('transfert')">
+          <div class="mode-btn type-transfert active" id="btn-transfert" onclick="selectService('transfert')">
             <div class="mode-icon"><i class="bi bi-arrow-left-right"></i></div>
             <div class="mode-info">
-              <h4>Transferts Inter-Réseaux</h4>
-              <p>Envoyez d'un réseau à un autre sans contrainte</p>
+              <h4 style="color: var(--color-transfer);">Transferts Inter-Réseaux</h4>
+              <p>Envoyer d'un réseau vers un autre</p>
             </div>
           </div>
 
-          <div class="mode-btn" id="btn-pass" onclick="selectService('pass')">
+          <div class="mode-btn type-pass" id="btn-pass" onclick="selectService('pass')">
             <div class="mode-icon"><i class="bi bi-wifi"></i></div>
             <div class="mode-info">
-              <h4>Pass & Data Internet</h4>
-              <p>Forfaits internet haut débit tous réseaux</p>
+              <h4 style="color: var(--color-pass);">Pass & Data Internet</h4>
+              <p>Forfaits internet haut débit</p>
             </div>
           </div>
 
-          <div class="mode-btn" id="btn-unites" onclick="selectService('unites')">
+          <div class="mode-btn type-unites" id="btn-unites" onclick="selectService('unites')">
             <div class="mode-icon"><i class="bi bi-phone"></i></div>
             <div class="mode-info">
-              <h4>Recharge d'Unités</h4>
+              <h4 style="color: var(--color-units);">Recharge d'Unités</h4>
               <p>Crédit de communication direct</p>
             </div>
           </div>
 
         </div>
-
-        <div class="networks-box">
-          <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Opérateurs Supportés</div>
-          <div class="networks-list">
-            <span class="net-tag net-orange"><i class="bi bi-lightning-fill"></i> Orange</span>
-            <span class="net-tag net-wave"><i class="bi bi-water"></i> Wave</span>
-            <span class="net-tag net-mtn"><i class="bi bi-phone"></i> MTN</span>
-            <span class="net-tag net-moov"><i class="bi bi-reception-4"></i> Moov</span>
-          </div>
-        </div>
       </div>
 
-      <!-- Colonne Formulaire Dynamique -->
+      <!-- Formulaire et Calculateur -->
       <div class="form-panel">
         <div>
           <div class="form-header">
-            <h3 id="panel-title">Transfert Money Inter-Réseau</h3>
+            <h3 id="panel-title">Transferts Inter-Réseaux</h3>
           </div>
 
-          <form id="transaction-form" onsubmit="executeTransaction(event)">
+          <form onsubmit="executeTransaction(event)">
             
             <div id="dynamic-fields">
-              <!-- Rempli par JavaScript -->
+              <!-- Injecté via JavaScript -->
             </div>
 
             <div class="field-group">
-              <label>Numéro de Réception</label>
-              <input type="tel" id="input-phone" class="cyber-input" placeholder="ex: 0700000000" maxlength="10" required>
+              <label>Numéro à Débiter (Qui paie)</label>
+              <input type="tel" id="input-sender-phone" class="cyber-input" placeholder="ex: 0701020304" maxlength="10" required>
             </div>
 
             <div class="field-group">
-              <label>Montant de la Transaction (FCFA)</label>
-              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 5000" min="100" oninput="updateSummary()" required>
+              <label>Numéro de Réception (Qui reçoit)</label>
+              <input type="tel" id="input-receiver-phone" class="cyber-input" placeholder="ex: 0501020304" maxlength="10" required>
             </div>
 
+            <div class="field-group">
+              <label>Montant (FCFA)</label>
+              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 2000" min="100" oninput="calculateTotal()" required>
+            </div>
+
+            <!-- Calculateur Fonctionnel -->
             <div class="summary-card">
               <div class="summary-row">
                 <span>Montant saisi :</span>
                 <span id="sum-amount">0 FCFA</span>
               </div>
               <div class="summary-row">
-                <span>Frais de service (0%) :</span>
-                <span>0 FCFA</span>
+                <span>Frais de service (1%) :</span>
+                <span id="sum-fees">0 FCFA</span>
               </div>
               <div class="summary-row total">
                 <span>Total à régler :</span>
-                <span id="sum-total" style="color: var(--accent-cyan);">0 FCFA</span>
+                <span id="sum-total" style="color: var(--active-color);">0 FCFA</span>
               </div>
             </div>
 
             <button type="submit" class="btn-execute">
-              <span>Lancer l'opération</span>
+              <span>Lancer la transaction</span>
               <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
           </form>
@@ -671,56 +394,37 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer>
-    <div class="footer-content">
-      <div style="font-size: 12px; color: var(--text-muted);">
-        © 2026 GBBE MULTI-SERVICES — Guichet Automatique de Paiement.
-      </div>
-      <div class="social-links">
-        <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color: #25D366;"></i> WhatsApp</a>
-        <a href="#" class="social-pill"><i class="bi bi-facebook" style="color: #1877F2;"></i> Facebook</a>
-        <a href="#" class="social-pill"><i class="bi bi-tiktok"></i> TikTok</a>
-        <a href="#" class="social-pill"><i class="bi bi-telegram" style="color: #229ED9;"></i> Telegram</a>
-      </div>
+    <div style="font-size: 12px; color: var(--text-muted);">
+      © 2026 GBBE MULTI-SERVICES — Guichet Automatique et Maintenance Serveurs.
+    </div>
+    <div class="social-links">
+      <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color: #25D366;"></i> WhatsApp Support</a>
     </div>
   </footer>
 
-  <!-- Support Widget -->
-  <div class="widget-support">
-    <button class="widget-btn" onclick="toggleChat()">
-      <i class="bi bi-headset fs-5"></i>
-      <span>Assistance 24/7</span>
-    </button>
-  </div>
+  <button class="widget-btn" id="widget-btn">
+    <i class="bi bi-headset"></i> Assistance 24h/24
+  </button>
 
-  <!-- Chat Box -->
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-top">
-      <span><i class="bi bi-robot" style="color: var(--accent-cyan);"></i> Assistant GBBE</span>
-      <span style="cursor: pointer;" onclick="toggleChat()">✕</span>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="msg-box msg-bot">Bonjour ! Je suis l'assistant automatique GBBE. Comment puis-je vous aider ?</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Posez une question...">
-      <button class="chat-send-btn" onclick="sendChatMessage()">Envoyer</button>
-    </div>
-  </div>
-
-  <!-- JavaScript Logique -->
   <script>
     let currentMode = 'transfert';
 
+    const colors = {
+      transfert: '#00F2FE',
+      pass: '#00E676',
+      unites: '#FF6D00'
+    };
+
     const serviceConfigs = {
       transfert: {
-        title: 'Transfert Money Inter-Réseau',
+        title: 'Transferts Inter-Réseaux',
+        tag: 'Module de Transfert',
         renderFields: () => `
           <div class="field-group">
-            <label>Réseau Source (Compte Débité)</label>
-            <select id="src-network" class="cyber-select" required>
-              <option value="">-- Sélectionnez l'opérateur --</option>
+            <label>Réseau Source (Compte à débiter)</label>
+            <select class="cyber-select" required>
+              <option value="">-- Choisir le réseau source --</option>
               <option value="Wave CI">Wave CI</option>
               <option value="Orange Money">Orange Money</option>
               <option value="MTN MoMo">MTN MoMo</option>
@@ -728,97 +432,87 @@
             </select>
           </div>
           <div class="field-group">
-            <label>Réseau Destination (Compte Crédité)</label>
-            <select id="dest-network" class="cyber-select" required>
-              <option value="">-- Sélectionnez l'opérateur --</option>
+            <label>Réseau Destination (Compte à créditer)</label>
+            <select class="cyber-select" required>
+              <option value="">-- Choisir le réseau destinataire --</option>
               <option value="Wave CI">Wave CI</option>
               <option value="Orange Money">Orange Money</option>
               <option value="MTN MoMo">MTN MoMo</option>
               <option value="Moov Money">Moov Money</option>
             </select>
-          </div>
-        `
+          </div>`
       },
       pass: {
         title: 'Souscription Pass & Internet',
+        tag: 'Module Pass & Data',
         renderFields: () => `
           <div class="field-group">
-            <label>Type de Forfait Internet</label>
-            <select id="pass-type" class="cyber-select" required>
-              <option value="">-- Choisir votre forfait --</option>
-              <option value="Orange Internet Direct">Orange Pass Internet</option>
-              <option value="MTN Data Pass">MTN Data Pass</option>
-              <option value="Moov Web Pass">Moov Web Pass</option>
-              <option value="Wave Data Direct">Wave Data Direct</option>
+            <label>Choix du Pass / Forfait</label>
+            <select class="cyber-select" required>
+              <option value="">-- Choisir un Forfait --</option>
+              <option value="Orange Internet">Pass Orange Internet</option>
+              <option value="MTN Data Pass">Pass MTN Data</option>
+              <option value="Moov Web Pass">Pass Moov Web</option>
+              <option value="Wave Data">Wave Data</option>
             </select>
-          </div>
-        `
+          </div>`
       },
       unites: {
-        title: 'Achat Direct d\'Unités',
+        title: 'Achat d\'Unités Téléphoniques',
+        tag: 'Module Recharge d\'Unités',
         renderFields: () => `
           <div class="field-group">
-            <label>Réseau Téléphonique</label>
-            <select id="operator-type" class="cyber-select" required>
+            <label>Opérateur Télécom</label>
+            <select class="cyber-select" required>
               <option value="">-- Choisir l'opérateur --</option>
-              <option value="Orange Côte d'Ivoire">Orange CI</option>
-              <option value="MTN Côte d'Ivoire">MTN CI</option>
-              <option value="Moov Africa CI">Moov Africa CI</option>
+              <option value="Orange CI">Orange Côte d'Ivoire</option>
+              <option value="MTN CI">MTN Côte d'Ivoire</option>
+              <option value="Moov CI">Moov Africa CI</option>
             </select>
-          </div>
-        `
+          </div>`
       }
     };
 
     function selectService(mode) {
       currentMode = mode;
-      
-      // Mise à jour des boutons
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(btn-${mode}`).classList.add('active');
+      const themeColor = colors[mode];
 
-      // Mise à jour du formulaire
+      // Mettre à jour la variable CSS globale de couleur active
+      document.documentElement.style.setProperty('--active-color', themeColor);
+
+      // Activer les boutons et les styles
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(btn-${mode}).classList.add('active');
+
+      // Mettre à jour les titres et champs du formulaire
       document.getElementById('panel-title').innerText = serviceConfigs[mode].title;
+      document.getElementById('hero-tag').innerText = serviceConfigs[mode].tag;
       document.getElementById('dynamic-fields').innerHTML = serviceConfigs[mode].renderFields();
-      
-      // Réinitialiser le montant
-      document.getElementById('input-amount').value = '';
-      updateSummary();
+
+      // Recalculer le total
+      calculateTotal();
     }
 
-    function updateSummary() {
-      const val = document.getElementById('input-amount').value || 0;
-      const formatted = Number(val).toLocaleString('fr-FR');
-      document.getElementById('sum-amount').innerText = `${formatted} FCFA;
-      document.getElementById('sum-total').innerText = `${formatted} FCFA;
+    // Calculateur dynamique réparé
+    function calculateTotal() {
+      const inputVal = document.getElementById('input-amount').value;
+      const amount = parseFloat(inputVal) || 0;
+      
+      const fees = Math.round(amount * 0.01); // 1% de frais
+      const total = amount + fees;
+
+      document.getElementById('sum-amount').innerText = ${amount.toLocaleString('fr-FR')} FCFA;
+      document.getElementById('sum-fees').innerText = ${fees.toLocaleString('fr-FR')} FCFA;
+      document.getElementById('sum-total').innerText = ${total.toLocaleString('fr-FR')} FCFA;
     }
 
     function executeTransaction(e) {
       e.preventDefault();
-      const phone = document.getElementById('input-phone').value;
+      const sender = document.getElementById('input-sender-phone').value;
+      const receiver = document.getElementById('input-receiver-phone').value;
       const amount = document.getElementById('input-amount').value;
 
-      alert(`🚀 Transaction Initialisée !\nService: ${serviceConfigs[currentMode].title}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nVotre demande est en cours de traitement.);
-    }
-
-    function toggleChat() {
-      const panel = document.getElementById('chatPanel');
-      panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById('chatInput');
-      const container = document.getElementById('chatMessages');
-      if (!input.value.trim()) return;
-
-      container.innerHTML += `<div class="msg-box msg-user">${input.value}</div>;
-      const query = input.value;
-      input.value = '';
-
-      setTimeout(() => {
-        container.innerHTML += `<div class="msg-box msg-bot">Pour une assistance immédiate sur votre transaction, contactez le service client WhatsApp au 0767709102.</div>;
-        container.scrollTop = container.scrollHeight;
-      }, 600);
+      alert(🚀 Transaction en cours de traitement par nos serveurs !\n\n- Numéro Débité : ${sender}\n- Numéro Crédité : ${receiver}\n- Montant : ${amount} FCFA);
     }
 
     // Initialisation
