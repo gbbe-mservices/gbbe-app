@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <link rel="stylesheet" href="./style.css?v=4.0" />
+  <link rel="stylesheet" href="./style.css?v=5.0" />
 </head>
 <body>
 
@@ -33,30 +33,54 @@
       <!-- Colonne Gauche : Formulaire de Saisie -->
       <section class="card-box form-section">
         <h2>Passer une transaction</h2>
-        <p class="subtitle">Saisissez les détails de votre transfert inter-réseaux</p>
+        <p class="subtitle">Sélectionnez les réseaux et saisissez les informations de transfert</p>
 
         <form id="transfer-form">
-          <div class="route-display">
-            <div class="route-item">
-              <span class="route-label">Source</span>
-              <div class="route-badge wave"><i class="bi bi-water"></i> Wave (0777046526)</div>
+          
+          <!-- Sélection Source & Destination -->
+          <div class="selection-grid">
+            
+            <!-- Bloc Source -->
+            <div class="select-block">
+              <label><i class="bi bi-wallet2"></i> Réseau Source (Débit)</label>
+              <select id="source-network">
+                <option value="Wave" selected>Wave</option>
+                <option value="Orange">Orange Money</option>
+                <option value="MTN">MTN MoMo</option>
+                <option value="Moov">Moov Money</option>
+              </select>
+              <input type="tel" id="source-number" placeholder="N° de téléphone source" required />
             </div>
-            <i class="bi bi-arrow-right route-icon"></i>
-            <div class="route-item">
-              <span class="route-label">Destination</span>
-              <div class="route-badge orange"><i class="bi bi-phone"></i> Orange (0759754145)</div>
+
+            <div class="arrow-divider">
+              <i class="bi bi-arrow-right"></i>
             </div>
+
+            <!-- Bloc Destination -->
+            <div class="select-block">
+              <label><i class="bi bi-person-down"></i> Réseau Destination (Crédit)</label>
+              <select id="dest-network">
+                <option value="Wave">Wave</option>
+                <option value="Orange" selected>Orange Money</option>
+                <option value="MTN">MTN MoMo</option>
+                <option value="Moov">Moov Money</option>
+              </select>
+              <input type="tel" id="dest-number" placeholder="N° du destinataire" required />
+            </div>
+
           </div>
 
+          <!-- Montant -->
           <div class="form-group">
             <label for="transfer-amount">Montant à transférer</label>
             <div class="input-container">
-              <input type="number" id="transfer-amount" placeholder="5 000" inputmode="numeric" />
+              <input type="number" id="transfer-amount" placeholder="50000" inputmode="numeric" />
               <span class="currency-tag">FCFA</span>
             </div>
             <span class="help-text">Montant min: 250 FCFA — Max: 300 000 FCFA</span>
           </div>
 
+          <!-- Case à cocher Frais -->
           <div class="checkbox-card">
             <label class="custom-checkbox">
               <input type="checkbox" id="include-fees" checked>
@@ -67,18 +91,27 @@
         </form>
       </section>
 
-      <!-- Colonne Droite : Récapitulatif et Validation -->
+      <!-- Colonne Droite : Récapitulatif -->
       <section class="card-box summary-section">
         <h3>Résumé de la commande</h3>
         
         <div class="receipt-details">
           <div class="receipt-line">
-            <span>Montant transféré</span>
+            <span>Réseau Source</span>
+            <span id="summary-src-net" class="value">Wave</span>
+          </div>
+          <div class="receipt-line">
+            <span>Réseau Destinataire</span>
+            <span id="summary-dst-net" class="value">Orange Money</span>
+          </div>
+          <div class="divider"></div>
+          <div class="receipt-line">
+            <span>Montant à recevoir</span>
             <span id="receipt-amount" class="value">0 FCFA</span>
           </div>
           <div class="receipt-line">
-            <span>Frais de gestion (1%)</span>
-            <span id="receipt-fee" class="value">Inclus</span>
+            <span>Frais de service (1%)</span>
+            <span id="receipt-fee" class="value">0 FCFA</span>
           </div>
           <div class="divider"></div>
           <div class="receipt-line total-line">
@@ -88,7 +121,7 @@
         </div>
 
         <button type="button" id="btn-continue" class="action-btn">
-          <span>Payer avec Wave</span>
+          <span>Procéder au paiement</span>
           <i class="bi bi-arrow-right-short"></i>
         </button>
 
@@ -108,7 +141,7 @@
         <h3>Confirmation</h3>
       </div>
       <p class="modal-body">
-        Vous allez envoyer <strong id="modal-amount">0 FCFA</strong> au <strong>0759754145</strong>.
+        Vous allez envoyer <strong id="modal-amount">0 FCFA</strong> (<span id="modal-src">Wave</span>) vers le numéro <strong id="modal-dst-num">--</strong> (<span id="modal-dst">Orange</span>).
       </p>
       <p class="warning-text">* Les opérations validées ne peuvent pas être annulées.</p>
       <div class="modal-actions">
@@ -118,6 +151,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=4.0"></script>
+  <script src="./app.js?v=5.0"></script>
 </body>
 </html>
