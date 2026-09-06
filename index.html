@@ -2,102 +2,122 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>GBBE-MULTISERVICES.CI — Guichet Express</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GBBE-MULTISERVICES.CI — Plateforme de Transfert</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <link rel="stylesheet" href="./style.css?v=3.0" />
+  <link rel="stylesheet" href="./style.css?v=4.0" />
 </head>
 <body>
 
-  <div class="mobile-wrapper">
-    
-    <!-- En-tête de l'application -->
-    <header class="app-header">
-      <button class="nav-btn" type="button"><i class="bi bi-arrow-left"></i></button>
-      <div class="header-title">GBBE-MULTISERVICES.CI</div>
-      <button class="nav-btn" type="button"><i class="bi bi-x-lg"></i></button>
-    </header>
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-logo"><i class="bi bi-lightning-charge-fill"></i></div>
+      <div>
+        <span class="brand-name">GBBE-MULTISERVICES.CI</span>
+        <span class="brand-sub">Guichet Automatisé</span>
+      </div>
+    </div>
+    <div class="status-pill">
+      <span class="status-dot"></span> Service Actif
+    </div>
+  </header>
 
-    <!-- Zone principale -->
-    <main class="content-area">
+  <main class="main-container">
+    <div class="checkout-grid">
       
-      <h1 class="main-heading">Combien envoyez-vous ?</h1>
+      <!-- Colonne Gauche : Formulaire de Saisie -->
+      <section class="card-box form-section">
+        <h2>Passer une transaction</h2>
+        <p class="subtitle">Saisissez les détails de votre transfert inter-réseaux</p>
 
-      <!-- Badges réseaux -->
-      <div class="route-badge">
-        <div class="icon-circle wave"><i class="bi bi-water"></i></div>
-        <i class="bi bi-arrow-right route-arrow"></i>
-        <div class="icon-circle orange"><i class="bi bi-phone"></i></div>
-      </div>
+        <form id="transfer-form">
+          <div class="route-display">
+            <div class="route-item">
+              <span class="route-label">Source</span>
+              <div class="route-badge wave"><i class="bi bi-water"></i> Wave (0777046526)</div>
+            </div>
+            <i class="bi bi-arrow-right route-icon"></i>
+            <div class="route-item">
+              <span class="route-label">Destination</span>
+              <div class="route-badge orange"><i class="bi bi-phone"></i> Orange (0759754145)</div>
+            </div>
+          </div>
 
-      <div class="flow-details">
-        <p>Vous envoyez au <strong id="display-dest">0759754145</strong></p>
-        <p class="sub">Depuis le <span id="display-source">0777046526</span></p>
-      </div>
+          <div class="form-group">
+            <label for="transfer-amount">Montant à transférer</label>
+            <div class="input-container">
+              <input type="number" id="transfer-amount" placeholder="5 000" inputmode="numeric" />
+              <span class="currency-tag">FCFA</span>
+            </div>
+            <span class="help-text">Montant min: 250 FCFA — Max: 300 000 FCFA</span>
+          </div>
 
-      <form id="transfer-form">
+          <div class="checkbox-card">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="include-fees" checked>
+              <span class="checkmark"></span>
+              <span class="checkbox-label">Prendre les frais de service (1%) à ma charge</span>
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <!-- Colonne Droite : Récapitulatif et Validation -->
+      <section class="card-box summary-section">
+        <h3>Résumé de la commande</h3>
         
-        <!-- Saisie du Montant -->
-        <div class="amount-card">
-          <span class="label-tiny">Montant à envoyer</span>
-          <div class="amount-input-row">
-            <input type="number" id="transfer-amount" placeholder="2000" inputmode="numeric" />
-            <span class="currency">FCFA</span>
+        <div class="receipt-details">
+          <div class="receipt-line">
+            <span>Montant transféré</span>
+            <span id="receipt-amount" class="value">0 FCFA</span>
+          </div>
+          <div class="receipt-line">
+            <span>Frais de gestion (1%)</span>
+            <span id="receipt-fee" class="value">Inclus</span>
+          </div>
+          <div class="divider"></div>
+          <div class="receipt-line total-line">
+            <span>Total à débiter</span>
+            <span id="receipt-total" class="total-value">0 FCFA</span>
           </div>
         </div>
 
-        <!-- Bascule des frais -->
-        <div class="toggle-row">
-          <span>Je paye les frais</span>
-          <label class="switch">
-            <input type="checkbox" id="include-fees" checked>
-            <span class="slider round"></span>
-          </label>
+        <button type="button" id="btn-continue" class="action-btn">
+          <span>Payer avec Wave</span>
+          <i class="bi bi-arrow-right-short"></i>
+        </button>
+
+        <div class="security-tag">
+          <i class="bi bi-shield-lock-fill"></i> Transaction 100% sécurisée
         </div>
+      </section>
 
-        <div class="info-note">
-          <i class="bi bi-info-circle"></i>
-          <span>Entrez un montant qui se termine par 0 (Min: 250 FCFA — Max: 300 000 FCFA)</span>
-        </div>
-
-        <!-- Résumé financier -->
-        <div class="summary-box">
-          <div class="summary-line">
-            <span>Correspondant recevra</span>
-            <span id="receipt-amount" class="bold">0 FCFA</span>
-          </div>
-          <div class="summary-line highlight">
-            <span>Montant à débiter</span>
-            <span id="receipt-total" class="accent-val">0 FCFA</span>
-          </div>
-        </div>
-
-        <button type="button" id="btn-continue" class="btn-primary">Continuer</button>
-      </form>
-    </main>
-
-  </div>
+    </div>
+  </main>
 
   <!-- Modale de Confirmation -->
   <div class="modal-overlay" id="confirm-modal">
-    <div class="modal-card">
-      <p class="modal-text">
-        Vous allez effectuer une transaction de <strong id="modal-amount" class="text-purple">0 FCFA</strong> du <span id="modal-src">0777046526</span> vers le <span id="modal-dst">0759754145</span>.
+    <div class="modal-box">
+      <div class="modal-header">
+        <i class="bi bi-exclamation-circle"></i>
+        <h3>Confirmation</h3>
+      </div>
+      <p class="modal-body">
+        Vous allez envoyer <strong id="modal-amount">0 FCFA</strong> au <strong>0759754145</strong>.
       </p>
-      <p class="modal-warning">* Aucun remboursement ne sera possible</p>
-      
+      <p class="warning-text">* Les opérations validées ne peuvent pas être annulées.</p>
       <div class="modal-actions">
-        <button type="button" class="btn-secondary" id="btn-cancel">Annuler</button>
-        <button type="button" class="btn-purple" id="btn-confirm">Envoyer</button>
+        <button type="button" class="btn-cancel" id="btn-cancel">Annuler</button>
+        <button type="button" class="btn-confirm" id="btn-confirm">Confirmer & Payer</button>
       </div>
     </div>
   </div>
 
-  <script src="./app.js?v=3.0"></script>
+  <script src="./app.js?v=4.0"></script>
 </body>
 </html>
