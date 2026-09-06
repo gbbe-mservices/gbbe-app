@@ -2,200 +2,102 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GBBE-MULTISERVICES.CI — Terminal Fintech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GBBE-MULTISERVICES.CI — Guichet Express</title>
   
-  <!-- Polices et Icônes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <!-- Fichier CSS principal -->
-  <link rel="stylesheet" href="./style.css?v=2.0" />
+  <link rel="stylesheet" href="./style.css?v=3.0" />
 </head>
 <body>
 
-  <div class="glow-bg"></div>
+  <div class="mobile-wrapper">
+    
+    <!-- En-tête de l'application -->
+    <header class="app-header">
+      <button class="nav-btn" type="button"><i class="bi bi-arrow-left"></i></button>
+      <div class="header-title">GBBE-MULTISERVICES.CI</div>
+      <button class="nav-btn" type="button"><i class="bi bi-x-lg"></i></button>
+    </header>
 
-  <header class="navbar">
-    <div class="brand">
-      <div class="brand-logo">
-        <i class="bi bi-lightning-charge-fill"></i>
+    <!-- Zone principale -->
+    <main class="content-area">
+      
+      <h1 class="main-heading">Combien envoyez-vous ?</h1>
+
+      <!-- Badges réseaux -->
+      <div class="route-badge">
+        <div class="icon-circle wave"><i class="bi bi-water"></i></div>
+        <i class="bi bi-arrow-right route-arrow"></i>
+        <div class="icon-circle orange"><i class="bi bi-phone"></i></div>
       </div>
-     <div class="brand-text">
-  <span class="brand-name">GBBE-MULTISERVICES.CI</span>
-</div>
-    <div class="status-pill">
-      <span class="status-dot"></span>
-      <span class="status-text">Guichet Actif</span>
-    </div>
-  </header>
 
-  <main class="app-container">
-    <section class="hero">
-      <span class="badge">Plateforme Automatisée</span>
-      <h1>Guichet de Paiement Instantané</h1>
-      <p>Sélectionnez un service et effectuez vos opérations en toute sécurité.</p>
-    </section>
+      <div class="flow-details">
+        <p>Vous envoyez au <strong id="display-dest">0759754145</strong></p>
+        <p class="sub">Depuis le <span id="display-source">0777046526</span></p>
+      </div>
 
-    <div class="layout-grid">
-      <aside class="sidebar">
-        <h2 class="section-label">1. Services Disponibles</h2>
-
-        <div class="service-list">
-          <button type="button" class="service-card active">
-            <div class="service-icon"><i class="bi bi-arrow-left-right"></i></div>
-            <div class="service-info">
-              <h3>Transfert Inter-Réseaux</h3>
-              <p>Envoyez du crédit d'un opérateur à un autre</p>
-            </div>
-            <i class="bi bi-chevron-right arrow-icon"></i>
-          </button>
-
-          <button type="button" class="service-card">
-            <div class="service-icon"><i class="bi bi-wifi"></i></div>
-            <div class="service-info">
-              <h3>Pass & Data Internet</h3>
-              <p>Forfaits internet pour tous les réseaux</p>
-            </div>
-            <i class="bi bi-chevron-right arrow-icon"></i>
-          </button>
-
-          <button type="button" class="service-card">
-            <div class="service-icon"><i class="bi bi-phone-vibrate"></i></div>
-            <div class="service-info">
-              <h3>Recharge d'Unités</h3>
-              <p>Crédit de communication direct</p>
-            </div>
-            <i class="bi bi-chevron-right arrow-icon"></i>
-          </button>
-        </div>
-      </aside>
-
-      <section class="main-panel">
-        <div class="panel-header">
-          <h2>Transfert Inter-Réseaux</h2>
-          <span class="step-indicator">Étape 2 sur 2</span>
+      <form id="transfer-form">
+        
+        <!-- Saisie du Montant -->
+        <div class="amount-card">
+          <span class="label-tiny">Montant à envoyer</span>
+          <div class="amount-input-row">
+            <input type="number" id="transfer-amount" placeholder="2000" inputmode="numeric" />
+            <span class="currency">FCFA</span>
+          </div>
         </div>
 
-        <form class="checkout-form">
-          
-          <div class="form-group">
-            <label class="form-label">Réseau à débiter (Source)</label>
-            <div class="operator-selector" id="source-selector">
-              <label class="op-card wave active">
-                <input type="radio" name="source" value="wave" checked />
-                <div class="op-badge">Wave</div>
-              </label>
+        <!-- Bascule des frais -->
+        <div class="toggle-row">
+          <span>Je paye les frais</span>
+          <label class="switch">
+            <input type="checkbox" id="include-fees" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
 
-              <label class="op-card orange">
-                <input type="radio" name="source" value="orange" />
-                <div class="op-badge">Orange</div>
-              </label>
+        <div class="info-note">
+          <i class="bi bi-info-circle"></i>
+          <span>Entrez un montant qui se termine par 0 (Min: 250 FCFA — Max: 300 000 FCFA)</span>
+        </div>
 
-              <label class="op-card mtn">
-                <input type="radio" name="source" value="mtn" />
-                <div class="op-badge">MTN</div>
-              </label>
-
-              <label class="op-card moov">
-                <input type="radio" name="source" value="moov" />
-                <div class="op-badge">Moov</div>
-              </label>
-            </div>
+        <!-- Résumé financier -->
+        <div class="summary-box">
+          <div class="summary-line">
+            <span>Correspondant recevra</span>
+            <span id="receipt-amount" class="bold">0 FCFA</span>
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Numéro du compte à débiter</label>
-            <div class="input-wrapper">
-              <i class="bi bi-phone input-icon"></i>
-              <input type="tel" id="source-phone" placeholder="ex: 0700000000" maxlength="10" />
-            </div>
+          <div class="summary-line highlight">
+            <span>Montant à débiter</span>
+            <span id="receipt-total" class="accent-val">0 FCFA</span>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label class="form-label">Réseau à créditer (Destination)</label>
-            <div class="operator-selector" id="dest-selector">
-              <label class="op-card wave">
-                <input type="radio" name="dest" value="wave" />
-                <div class="op-badge">Wave</div>
-              </label>
+        <button type="button" id="btn-continue" class="btn-primary">Continuer</button>
+      </form>
+    </main>
 
-              <label class="op-card orange active">
-                <input type="radio" name="dest" value="orange" checked />
-                <div class="op-badge">Orange</div>
-              </label>
+  </div>
 
-              <label class="op-card mtn">
-                <input type="radio" name="dest" value="mtn" />
-                <div class="op-badge">MTN</div>
-              </label>
-
-              <label class="op-card moov">
-                <input type="radio" name="dest" value="moov" />
-                <div class="op-badge">Moov</div>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Numéro du destinataire</label>
-            <div class="input-wrapper">
-              <i class="bi bi-person input-icon"></i>
-              <input type="tel" id="dest-phone" placeholder="ex: 0500000000" maxlength="10" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Montant à transférer (FCFA)</label>
-            <div class="input-wrapper">
-              <i class="bi bi-cash-stack input-icon"></i>
-              <input type="number" id="transfer-amount" placeholder="ex: 5000" min="100" />
-            </div>
-          </div>
-
-          <div class="form-group fee-checkbox-group">
-            <label class="checkbox-container">
-              <input type="checkbox" id="include-fees" checked />
-              <span class="checkmark"></span>
-              <span class="checkbox-label">Frais inclus dans le montant saisi</span>
-            </label>
-          </div>
-
-          <div class="receipt-card">
-            <div class="receipt-row">
-              <span>Montant transaction</span>
-              <span class="val" id="receipt-amount">0 FCFA</span>
-            </div>
-            <div class="receipt-row">
-              <span>Frais de service (1%)</span>
-              <span class="val" id="receipt-fee">0 FCFA</span>
-            </div>
-            <div class="receipt-divider"></div>
-            <div class="receipt-row total">
-              <span>Total à débiter</span>
-              <span class="val-total" id="receipt-total">0 FCFA</span>
-            </div>
-          </div>
-
-          <button type="submit" class="pay-btn" id="btn-pay">
-            <span>Payer maintenant</span>
-            <i class="bi bi-arrow-right-short"></i>
-          </button>
-
-        </form>
-      </section>
+  <!-- Modale de Confirmation -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-card">
+      <p class="modal-text">
+        Vous allez effectuer une transaction de <strong id="modal-amount" class="text-purple">0 FCFA</strong> du <span id="modal-src">0777046526</span> vers le <span id="modal-dst">0759754145</span>.
+      </p>
+      <p class="modal-warning">* Aucun remboursement ne sera possible</p>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="btn-cancel">Annuler</button>
+        <button type="button" class="btn-purple" id="btn-confirm">Envoyer</button>
+      </div>
     </div>
-  </main>
+  </div>
 
-  <footer class="footer">
-    <p>© 2026 GBBE MULTI-SERVICES — Tous droits réservés.</p>
-    <div class="support-link">
-      <i class="bi bi-whatsapp"></i> Assistance WhatsApp 24h/7j
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
+  <script src="./app.js?v=3.0"></script>
 </body>
 </html>
