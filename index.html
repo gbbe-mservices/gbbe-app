@@ -1,19 +1,18 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GBBE MULTI-SERVICES — Terminal Fintech Next-Gen</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
   <style>
     :root {
       --bg-dark: #030509;
       --panel-bg: rgba(10, 15, 26, 0.82);
       
-      /* Couleurs spécifiques par service */
       --color-transfer: #00F2FE;
       --color-pass: #00E676;
       --color-units: #FF6D00;
@@ -28,7 +27,12 @@ DOCTYPE html>
       --active-color: var(--color-transfer);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
 
     body {
       background-color: var(--bg-dark);
@@ -40,34 +44,49 @@ DOCTYPE html>
       position: relative;
     }
 
-    /* Arrière-plan animé type Centre de Serveurs & Data Center */
+    /* Arrière-plan animé */
     .cyber-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -2;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.08), transparent 70%),
-                  url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.35) contrast(1.2);
+      z-index: -3;
+      background-color: #00121b;
+      overflow: hidden;
     }
-
-    /* Animation de grille et flux de données */
+    /* Animation de lignes défilantes pour fond */
+    .lines {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background:
+        repeating-linear-gradient(45deg, rgba(0,255,255,0.05) 0 2px, transparent 2px 20px),
+        repeating-linear-gradient(-45deg, rgba(0,255,255,0.05) 0 2px, transparent 2px 20px);
+      
+      animation: slideLines 60s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes slideLines {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 100px 100px, -100px -100px; }
+    }
+    
     .cyber-grid-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -1;
-      background: linear-gradient(180deg, rgba(3, 5, 9, 0.75) 0%, rgba(3, 5, 9, 0.95) 100%);
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at center, #00F2FE 1px, transparent 2px),
+                  radial-gradient(circle at center, #00F2FE 1px, transparent 2px);
+      background-position: 0 0, 25px 25px;
+      background-size: 50px 50px;
+      opacity: 0.06;
+      z-index: -2;
+      pointer-events: none;
     }
 
     .data-stream {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -1;
       pointer-events: none;
-      background: linear-gradient(0deg, transparent 0%, rgba(0, 242, 254, 0.05) 50%, transparent 100%);
+      background: linear-gradient(0deg, transparent 0%, rgba(0,242,254,0.06) 50%, transparent 100%);
       background-size: 100% 200px;
-      animation: streamAnimation 8s linear infinite;
+      animation: streamAnimation 12s linear infinite;
     }
 
     @keyframes streamAnimation {
@@ -75,11 +94,11 @@ DOCTYPE html>
       100% { background-position: 0 100vh; }
     }
 
-    /* Navigation Header */
+    /* Header */
     header {
       background: rgba(6, 10, 18, 0.9);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       padding: 16px 32px;
       display: flex;
       justify-content: space-between;
@@ -88,206 +107,436 @@ DOCTYPE html>
       top: 0;
       z-index: 100;
     }
-
-    .brand-container { display: flex; align-items: center; gap: 12px; }
+    .brand-container {
+      display: flex; align-items: center; gap: 12px;
+    }
     .brand-icon {
       width: 42px; height: 42px;
       background: linear-gradient(135deg, var(--color-transfer), #0077FF);
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: #000;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      font-size: 22px; color: #000;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
       transition: all 0.3s ease;
     }
-
-    .brand-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; }
-    .brand-title span { color: var(--active-color); transition: color 0.3s ease; }
-
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      user-select: none;
+    }
+    .brand-title span {
+      color: var(--active-color);
+      transition: color 0.3s ease;
+    }
     .system-status {
       display: flex; align-items: center; gap: 8px;
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(16, 185, 129, 0.12);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 6px 14px; border-radius: 30px;
-      font-size: 12px; font-weight: 600; color: #10B981;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #10B981;
+      user-select: none;
     }
-
     .pulse-dot {
-      width: 8px; height: 8px; background-color: #10B981; border-radius: 50%;
-      box-shadow: 0 0 10px #10B981; animation: pulse 1.8s infinite;
+      width: 8px; height: 8px;
+      background-color: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulse 1.8s infinite;
     }
-
     @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
+      0%, 100% { transform: scale(0.95); opacity: 0.8; }
       50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #10B981; }
-      100% { transform: scale(0.95); opacity: 0.8; }
     }
 
-    /* Container Principal */
+    /* Main container */
     .main-wrapper {
       max-width: 1100px; width: 100%;
-      margin: 30px auto; padding: 0 20px; flex: 1;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+      flex: 1;
     }
 
-    .hero-section { text-align: center; margin-bottom: 30px; }
+    .hero-section {
+      text-align: center; margin-bottom: 30px;
+    }
     .hero-tag {
-      display: inline-block; font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
-      color: var(--active-color); background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--active-color); padding: 6px 16px; border-radius: 20px;
-      margin-bottom: 12px; transition: all 0.3s ease;
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--active-color);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--active-color);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.4;
     }
 
-    .hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
-    .hero-subtitle { color: var(--text-muted); font-size: 0.92rem; max-width: 600px; margin: 0 auto; }
-
-    /* Terminal de Contrôle */
+    /* Terminal */
     .terminal-container {
       background: var(--panel-bg);
       backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 28px;
       padding: 30px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 30px;
+      min-height: 480px;
     }
-
     @media (max-width: 850px) {
       .terminal-container { grid-template-columns: 1fr; }
     }
 
-    .selector-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 16px; }
-
-    .mode-selector { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-
+    /* Service selection */
+    .selector-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      user-select: none;
+    }
+    .mode-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
     .mode-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px; padding: 16px 18px;
-      display: flex; align-items: center; gap: 16px;
-      cursor: pointer; transition: all 0.25s ease; color: var(--text-main);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-main);
+      user-select: none;
+      position: relative;
     }
-
-    /* Style Transfert (Bleu Cyan) */
-    .mode-btn.type-transfert:hover, .mode-btn.type-transfert.active {
-      background: rgba(0, 242, 254, 0.08);
-      border-color: var(--color-transfer);
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    .mode-btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--active-color);
+      box-shadow: 0 0 20px var(--active-color);
     }
-    .mode-btn.type-transfert.active .mode-icon { background: var(--color-transfer); color: #000; }
-
-    /* Style Pass (Vert Émeraude) */
-    .mode-btn.type-pass:hover, .mode-btn.type-pass.active {
-      background: rgba(0, 230, 118, 0.08);
-      border-color: var(--color-pass);
-      box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+    .mode-btn.active {
+      background: rgba(0, 242, 254, 0.12);
+      border-color: var(--active-color);
+      box-shadow: 0 0 25px var(--active-color);
     }
-    .mode-btn.type-pass.active .mode-icon { background: var(--color-pass); color: #000; }
-
-    /* Style Unités (Orange Néon) */
-    .mode-btn.type-unites:hover, .mode-btn.type-unites.active {
-      background: rgba(255, 109, 0, 0.08);
-      border-color: var(--color-units);
-      box-shadow: 0 0 15px rgba(255, 109, 0, 0.2);
-    }
-    .mode-btn.type-unites.active .mode-icon { background: var(--color-units); color: #000; }
-
     .mode-icon {
-      width: 42px; height: 42px; border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; transition: all 0.3s ease;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: all 0.3s ease;
+      color: #bbb;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.1);
+    }
+    .mode-btn.active .mode-icon {
+      background: var(--active-color);
+      color: #000;
+      box-shadow: 0 0 15px var(--active-color);
+    }
+    .mode-info h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--active-color);
+      transition: color 0.3s ease;
+    }
+    .mode-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0;
+      user-select: none;
     }
 
-    .mode-info h4 { font-size: 0.98rem; font-weight: 700; margin-bottom: 2px; }
-    .mode-info p { font-size: 0.78rem; color: var(--text-muted); }
+    /* Logos des réseaux avec couleurs */
+    .logo {
+      width: 28px;
+      height: 28px;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    }
+    .logo.orange {
+      background: #FF7900;
+      border-radius: 5px;
+      position: relative;
+    }
+    .logo.mtn {
+      background: #FFCC00;
+      border-radius: 50% / 40%;
+      position: relative;
+    }
+    .logo.moov {
+      background: #00A859;
+      border-radius: 5px;
+      position: relative;
+    }
+    .logo.wave {
+      background: #1DC1DD;
+      border-radius: 50%;
+      position: relative;
+    }
+    /* Simple icon inside logos using CSS for demo */
+    .logo.orange::after {
+      content: 'O';
+      position: absolute; top: 3px; left: 5px;
+      color: white;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    .logo.mtn::after {
+      content: 'M';
+      position: absolute; top: 4px; left: 8px;
+      color: black;
+      font-weight: 900;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
+    .logo.moov::after {
+      content: 'M';
+      position: absolute; top: 4px; left: 8px;
+      color: white;
+      font-weight: 900;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
+    .logo.wave::after {
+      content: 'W';
+      position: absolute; top: 3px; left: 7px;
+      color: white;
+      font-weight: 900;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
 
-    /* Formulaire */
+    /* Form panel */
     .form-panel {
-      background: rgba(5, 8, 15, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px; padding: 22px;
-      display: flex; flex-direction: column; justify-content: space-between;
+      background: rgba(5, 8, 15, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 26px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1);
     }
-
-    .form-header { border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 18px; }
-    .form-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--active-color); transition: color 0.3s ease; }
-
-    .field-group { margin-bottom: 14px; }
-    .field-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
-
+    .form-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+    .form-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--active-color);
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .field-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      user-select: none;
+    }
     .cyber-input, .cyber-select {
-      width: 100%; background: rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px; padding: 12px 14px;
-      color: #FFF; font-size: 0.92rem; outline: none; transition: all 0.2s ease;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #FFF;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
-
+    .cyber-input::placeholder {
+      color: #bbb;
+      opacity: 0.8;
+    }
     .cyber-input:focus, .cyber-select:focus {
       border-color: var(--active-color);
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 15px var(--active-color);
+      background: rgba(0, 0, 0, 0.85);
+    }
+    .cyber-select option {
+      background: #0A0F1A;
+      color: #FFF;
     }
 
-    .cyber-select option { background: #0A0F1A; color: #FFF; }
-
-    /* Calculateur Récapitulatif */
+    /* Résumé des frais */
     .summary-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 12px; padding: 14px; margin: 14px 0;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 16px 0 22px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-
-    .summary-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      user-select: none;
+    }
     .summary-row.total {
-      font-size: 14px; font-weight: 700; color: #FFF;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 8px; margin-top: 6px; margin-bottom: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFF;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      padding-top: 10px;
+      margin-top: 10px;
     }
 
+    /* Bouton d’action */
     .btn-execute {
-      width: 100%; background: var(--active-color);
-      border: none; color: #000;
-      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.98rem;
-      padding: 14px; border-radius: 12px; cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%;
+      background: var(--active-color);
+      border: none;
+      color: #000;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 16px 0;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      user-select: none;
+      box-shadow: 0 5px 25px rgba(0, 242, 254, 0.4);
+    }
+    .btn-execute:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.15);
+      box-shadow: 0 8px 35px rgba(0, 242, 254, 0.6);
     }
 
-    .btn-execute:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-    /* Footer & Widgets */
+    /* Footer */
     footer {
       background: rgba(6, 10, 18, 0.95);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 20px; margin-top: 40px; text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      user-select: none;
     }
-
-    .social-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
     .social-pill {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-main); text-decoration: none;
-      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.25s ease;
+    }
+    .social-pill:hover {
+      background: var(--active-color);
+      color: #000;
+      border-color: var(--active-color);
     }
 
     .widget-btn {
-      position: fixed; bottom: 20px; right: 20px;
-      background: var(--active-color); color: #000;
-      border: none; padding: 12px 20px; border-radius: 30px;
-      font-weight: 700; font-size: 13px; cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); z-index: 1000;
-      display: flex; align-items: center; gap: 8px;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--active-color);
+      color: #000;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 36px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 5px 25px rgba(0, 242, 254, 0.6);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+      transition: filter 0.3s ease;
+    }
+    .widget-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    /* Styles pour les selects avec logos */
+    select option[data-logo] {
+      padding-left: 36px;
+      background-repeat: no-repeat;
+      background-position: 6px center;
+      background-size: 24px 24px;
     }
   </style>
 </head>
 <body>
 
-  <div class="cyber-bg"></div>
+  <div class="cyber-bg">
+    <div class="lines"></div>
+  </div>
   <div class="cyber-grid-overlay"></div>
   <div class="data-stream"></div>
 
-  <!-- En-tête -->
   <header>
     <div class="brand-container">
       <div class="brand-icon" id="main-brand-icon"><i class="bi bi-cpu-fill"></i></div>
@@ -306,16 +555,14 @@ DOCTYPE html>
     </div>
 
     <div class="terminal-container">
-      
       <!-- Sélection des Services -->
       <div>
         <div class="selector-title">1. Choisissez une prestation</div>
         <div class="mode-selector">
-          
           <div class="mode-btn type-transfert active" id="btn-transfert" onclick="selectService('transfert')">
             <div class="mode-icon"><i class="bi bi-arrow-left-right"></i></div>
             <div class="mode-info">
-              <h4 style="color: var(--color-transfer);">Transferts Inter-Réseaux</h4>
+              <h4>Transferts Inter-Réseaux</h4>
               <p>Envoyer d'un réseau vers un autre</p>
             </div>
           </div>
@@ -323,7 +570,7 @@ DOCTYPE html>
           <div class="mode-btn type-pass" id="btn-pass" onclick="selectService('pass')">
             <div class="mode-icon"><i class="bi bi-wifi"></i></div>
             <div class="mode-info">
-              <h4 style="color: var(--color-pass);">Pass & Data Internet</h4>
+              <h4>Pass & Data Internet</h4>
               <p>Forfaits internet haut débit</p>
             </div>
           </div>
@@ -331,11 +578,10 @@ DOCTYPE html>
           <div class="mode-btn type-unites" id="btn-unites" onclick="selectService('unites')">
             <div class="mode-icon"><i class="bi bi-phone"></i></div>
             <div class="mode-info">
-              <h4 style="color: var(--color-units);">Recharge d'Unités</h4>
+              <h4>Recharge d'Unités</h4>
               <p>Crédit de communication direct</p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -346,29 +592,25 @@ DOCTYPE html>
             <h3 id="panel-title">Transferts Inter-Réseaux</h3>
           </div>
 
-          <form onsubmit="executeTransaction(event)">
-            
-            <div id="dynamic-fields">
-              <!-- Injecté via JavaScript -->
+          <form id="transaction-form" onsubmit="executeTransaction(event)">
+            <div id="dynamic-fields"></div>
+
+            <div class="field-group">
+              <label for="input-sender-phone">Numéro à Débiter (Qui paie)</label>
+              <input type="tel" id="input-sender-phone" class="cyber-input" placeholder="ex: 0701020304" maxlength="10" pattern="[0-9]{8,10}" required />
             </div>
 
             <div class="field-group">
-              <label>Numéro à Débiter (Qui paie)</label>
-              <input type="tel" id="input-sender-phone" class="cyber-input" placeholder="ex: 0701020304" maxlength="10" required>
+              <label for="input-receiver-phone">Numéro de Réception (Qui reçoit)</label>
+              <input type="tel" id="input-receiver-phone" class="cyber-input" placeholder="ex: 0501020304" maxlength="10" pattern="[0-9]{8,10}" required />
             </div>
 
             <div class="field-group">
-              <label>Numéro de Réception (Qui reçoit)</label>
-              <input type="tel" id="input-receiver-phone" class="cyber-input" placeholder="ex: 0501020304" maxlength="10" required>
+              <label for="input-amount">Montant (FCFA)</label>
+              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 2000" min="100" oninput="calculateTotal()" required />
             </div>
 
-            <div class="field-group">
-              <label>Montant (FCFA)</label>
-              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 2000" min="100" oninput="calculateTotal()" required>
-            </div>
-
-            <!-- Calculateur Fonctionnel -->
-            <div class="summary-card">
+            <div class="summary-card" aria-live="polite" aria-atomic="true">
               <div class="summary-row">
                 <span>Montant saisi :</span>
                 <span id="sum-amount">0 FCFA</span>
@@ -390,16 +632,13 @@ DOCTYPE html>
           </form>
         </div>
       </div>
-
     </div>
   </div>
 
   <footer>
-    <div style="font-size: 12px; color: var(--text-muted);">
-      © 2026 GBBE MULTI-SERVICES — Guichet Automatique et Maintenance Serveurs.
-    </div>
+    <div>©️ 2026 GBBE MULTI-SERVICES — Guichet Automatique et Maintenance Serveurs.</div>
     <div class="social-links">
-      <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color: #25D366;"></i> WhatsApp Support</a>
+      <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color:#25D366;"></i> WhatsApp Support</a>
     </div>
   </footer>
 
@@ -416,29 +655,36 @@ DOCTYPE html>
       unites: '#FF6D00'
     };
 
+    const networkLogos = {
+      "Wave CI": "url('https://upload.wikimedia.org/wikipedia/commons/9/9f/Wave_Mobile_money_logo.png')",
+      "Orange Money": "url('https://upload.wikimedia.org/wikipedia/commons/8/85/Orange_Money_logo.svg')",
+      "MTN MoMo": "url('https://upload.wikimedia.org/wikipedia/commons/f/f0/MTN_Mobile_Money_Logo.svg')",
+      "Moov Money": "url('https://upload.wikimedia.org/wikipedia/commons/4/47/Moov_afrique_logo.svg')"
+    };
+
     const serviceConfigs = {
       transfert: {
         title: 'Transferts Inter-Réseaux',
         tag: 'Module de Transfert',
         renderFields: () => `
           <div class="field-group">
-            <label>Réseau Source (Compte à débiter)</label>
-            <select class="cyber-select" required>
+            <label for="network-source">Réseau Source (Compte à débiter)</label>
+            <select id="network-source" class="cyber-select" required>
               <option value="">-- Choisir le réseau source --</option>
-              <option value="Wave CI">Wave CI</option>
-              <option value="Orange Money">Orange Money</option>
-              <option value="MTN MoMo">MTN MoMo</option>
-              <option value="Moov Money">Moov Money</option>
+              <option value="Wave CI" data-logo="wave">Wave CI</option>
+              <option value="Orange Money" data-logo="orange">Orange Money</option>
+              <option value="MTN MoMo" data-logo="mtn">MTN MoMo</option>
+              <option value="Moov Money" data-logo="moov">Moov Money</option>
             </select>
           </div>
           <div class="field-group">
-            <label>Réseau Destination (Compte à créditer)</label>
-            <select class="cyber-select" required>
+            <label for="network-destination">Réseau Destination (Compte à créditer)</label>
+            <select id="network-destination" class="cyber-select" required>
               <option value="">-- Choisir le réseau destinataire --</option>
-              <option value="Wave CI">Wave CI</option>
-              <option value="Orange Money">Orange Money</option>
-              <option value="MTN MoMo">MTN MoMo</option>
-              <option value="Moov Money">Moov Money</option>
+              <option value="Wave CI" data-logo="wave">Wave CI</option>
+              <option value="Orange Money" data-logo="orange">Orange Money</option>
+              <option value="MTN MoMo" data-logo="mtn">MTN MoMo</option>
+              <option value="Moov Money" data-logo="moov">Moov Money</option>
             </select>
           </div>`
       },
@@ -447,13 +693,13 @@ DOCTYPE html>
         tag: 'Module Pass & Data',
         renderFields: () => `
           <div class="field-group">
-            <label>Choix du Pass / Forfait</label>
-            <select class="cyber-select" required>
-              <option value="">-- Choisir un Forfait --</option>
-              <option value="Orange Internet">Pass Orange Internet</option>
-              <option value="MTN Data Pass">Pass MTN Data</option>
-              <option value="Moov Web Pass">Pass Moov Web</option>
-              <option value="Wave Data">Wave Data</option>
+            <label for="pass-choice">Choix du Pass / Forfait</label>
+            <select id="pass-choice" class="cyber-select" required>
+              <option value="">-- Choisir un forfait --</option>
+              <option value="Orange Internet" data-logo="orange">Pass Orange Internet</option>
+              <option value="MTN Data Pass" data-logo="mtn">Pass MTN Data</option>
+              <option value="Moov Web Pass" data-logo="moov">Pass Moov Web</option>
+              <option value="Wave Data" data-logo="wave">Wave Data</option>
             </select>
           </div>`
       },
@@ -462,12 +708,12 @@ DOCTYPE html>
         tag: 'Module Recharge d\'Unités',
         renderFields: () => `
           <div class="field-group">
-            <label>Opérateur Télécom</label>
-            <select class="cyber-select" required>
+            <label for="operator-choice">Opérateur Télécom</label>
+            <select id="operator-choice" class="cyber-select" required>
               <option value="">-- Choisir l'opérateur --</option>
-              <option value="Orange CI">Orange Côte d'Ivoire</option>
-              <option value="MTN CI">MTN Côte d'Ivoire</option>
-              <option value="Moov CI">Moov Africa CI</option>
+              <option value="Orange CI" data-logo="orange">Orange Côte d'Ivoire</option>
+              <option value="MTN CI" data-logo="mtn">MTN Côte d'Ivoire</option>
+              <option value="Moov CI" data-logo="moov">Moov Africa CI</option>
             </select>
           </div>`
       }
@@ -477,46 +723,131 @@ DOCTYPE html>
       currentMode = mode;
       const themeColor = colors[mode];
 
-      // Mettre à jour la variable CSS globale de couleur active
       document.documentElement.style.setProperty('--active-color', themeColor);
 
-      // Activer les boutons et les styles
       document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(btn-${mode}).classList.add('active');
 
-      // Mettre à jour les titres et champs du formulaire
       document.getElementById('panel-title').innerText = serviceConfigs[mode].title;
       document.getElementById('hero-tag').innerText = serviceConfigs[mode].tag;
       document.getElementById('dynamic-fields').innerHTML = serviceConfigs[mode].renderFields();
 
-      // Recalculer le total
+      addLogoToSelectOptions();
+
       calculateTotal();
     }
 
-    // Calculateur dynamique réparé
+    // Ajoute les logos aux options des selects
+    function addLogoToSelectOptions() {
+      const selects = document.querySelectorAll('.cyber-select');
+      selects.forEach(select => {
+        Array.from(select.options).forEach(option => {
+          const logoClass = option.getAttribute('data-logo');
+          if (logoClass && option.value !== '') {
+            option.style.backgroundImage = getLogoBackground(logoClass);
+            option.style.paddingLeft = '36px';
+            option.style.backgroundRepeat = 'no-repeat';
+            option.style.backgroundPosition = '6px center';
+            option.style.backgroundSize = '24px 24px';
+          } else {
+            option.style.backgroundImage = 'none';
+          }
+        });
+      });
+    }
+
+    function getLogoBackground(name) {
+      switch(name) {
+        case 'orange': return 'linear-gradient(90deg, #FF7900 0%, #FF6200 100%)';
+        case 'mtn': return 'linear-gradient(90deg, #FFCC00 0%, #E6B800 100%)';
+        case 'moov': return 'linear-gradient(90deg, #00A859 0%, #008D47 100%)';
+        case 'wave': return 'linear-gradient(90deg, #1DC1DD 0%, #1391A6 100%)';
+        default: return 'none';
+      }
+    }
+
     function calculateTotal() {
       const inputVal = document.getElementById('input-amount').value;
       const amount = parseFloat(inputVal) || 0;
       
-      const fees = Math.round(amount * 0.01); // 1% de frais
+      const fees = Math.round(amount * 0.01); // 1% frais
       const total = amount + fees;
 
-      document.getElementById('sum-amount').innerText = ${amount.toLocaleString('fr-FR')} FCFA;
-      document.getElementById('sum-fees').innerText = ${fees.toLocaleString('fr-FR')} FCFA;
-      document.getElementById('sum-total').innerText = ${total.toLocaleString('fr-FR')} FCFA;
+      document.getElementById('sum-amount').innerText = amount.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('sum-fees').innerText = fees.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('sum-total').innerText = total.toLocaleString('fr-FR') + ' FCFA';
     }
 
     function executeTransaction(e) {
       e.preventDefault();
-      const sender = document.getElementById('input-sender-phone').value;
-      const receiver = document.getElementById('input-receiver-phone').value;
-      const amount = document.getElementById('input-amount').value;
 
-      alert(🚀 Transaction en cours de traitement par nos serveurs !\n\n- Numéro Débité : ${sender}\n- Numéro Crédité : ${receiver}\n- Montant : ${amount} FCFA);
+      // Récupère les valeurs communes
+      const sender = document.getElementById('input-sender-phone').value.trim();
+      const receiver = document.getElementById('input-receiver-phone').value.trim();
+      const amountStr = document.getElementById('input-amount').value.trim();
+      const amount = parseFloat(amountStr);
+      if (amount < 100) {
+        alert('Le montant minimum est de 100 FCFA.');
+        return;
+      }
+
+      // Récupération des sélecteurs dynamiques selon service
+      let sourceNetwork = '', destNetwork = sourceNetwork = '', destNetwork = '', passChoice = '', operator = '';
+
+      if (currentMode === 'transfert') {
+        const sourceSelect = document.getElementById('network-source');
+        const destSelect = document.getElementById('network-destination');
+        if (!sourceSelect.value || !destSelect.value) {
+          alert('Veuillez choisir les réseaux source et destination.');
+          return;
+        }
+        sourceNetwork = sourceSelect.value;
+        destNetwork = destSelect.value;
+        if(sourceNetwork === destNetwork){
+          alert('Le réseau source et le réseau destination doivent être différents.');
+          return;
+        }
+      } else if (currentMode === 'pass') {
+        const passSelect = document.getElementById('pass-choice');
+        if (!passSelect.value) {
+          alert('Veuillez choisir un forfait.');
+          return;
+        }
+        passChoice = passSelect.value;
+      } else if (currentMode === 'unites') {
+        const opSelect = document.getElementById('operator-choice');
+        if (!opSelect.value) {
+          alert('Veuillez choisir un opérateur.');
+          return;
+        }
+        operator = opSelect.value;
+      }
+
+      let message = 🚀 Transaction en cours de traitement par nos serveurs !\n\n;
+      switch(currentMode) {
+        case 'transfert':
+          message += - Réseau source (débité) : ${sourceNetwork}\n- Numéro débité : ${sender}\n- Réseau destination (crédité) : ${destNetwork}\n- Numéro crédité : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+          break;
+
+        case 'pass':
+          message += - Forfait : ${passChoice}\n- Numéro : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+          break;
+
+        case 'unites':
+          message += - Opérateur : ${operator}\n- Numéro : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+          break;
+      }
+
+      alert(message);
+
+      // Reset formulaire
+      document.getElementById('transaction-form').reset();
+      calculateTotal();
     }
 
     // Initialisation
     selectService('transfert');
   </script>
+
 </body>
 </html>
