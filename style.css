@@ -6,6 +6,8 @@
   --text-main: #0F172A;
   --text-muted: #64748B;
   --border-color: #CBD5E1;
+  --orange-brand: #FF7900;
+  --orange-hover: #E06B00;
 }
 
 * {
@@ -117,7 +119,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* Grille de sélection des réseaux */
 .selection-grid {
   display: flex;
   align-items: flex-start;
@@ -347,18 +348,20 @@ body {
   gap: 6px;
 }
 
-/* Modale */
+/* Style des Modales */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s ease;
   padding: 20px;
+  z-index: 1000;
 }
 
 .modal-overlay.active {
@@ -368,10 +371,11 @@ body {
 
 .modal-box {
   background: #FFF;
-  padding: 24px;
-  border-radius: 16px;
-  max-width: 420px;
+  padding: 28px;
+  border-radius: 20px;
+  max-width: 440px;
   width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
@@ -379,14 +383,15 @@ body {
   align-items: center;
   gap: 10px;
   color: var(--primary);
-  font-size: 1.2rem;
-  margin-bottom: 12px;
+  font-size: 1.25rem;
+  margin-bottom: 14px;
 }
 
 .modal-body {
   font-size: 0.95rem;
   line-height: 1.5;
   margin-bottom: 8px;
+  color: var(--text-main);
 }
 
 .warning-text {
@@ -406,16 +411,103 @@ body {
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
+  border: none;
 }
 
 .btn-cancel {
   background: #F1F5F9;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #CBD5E1;
   color: var(--text-main);
 }
 
 .btn-confirm {
   background: var(--primary);
-  border: none;
   color: #FFF;
+}
+
+/* Modale spécifique Orange Money */
+.orange-header {
+  color: var(--orange-brand) !important;
+}
+
+.om-instructions {
+  background: #FFF7ED;
+  border: 1px solid #FFEDD5;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.om-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #7C2D12;
+}
+
+.step-num {
+  background: var(--orange-brand);
+  color: #FFF;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.code-ussd {
+  background: #FFEDD5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--orange-brand);
+  font-family: monospace;
+  font-size: 0.95rem;
+}
+
+.om-input-group {
+  margin-bottom: 16px;
+}
+
+.om-input-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.om-input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--orange-brand);
+  border-radius: 10px;
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  text-align: center;
+  font-weight: 800;
+  outline: none;
+  background: #FFF;
+}
+
+.btn-orange-submit {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--orange-brand);
+  color: #FFF;
+}
+
+.btn-orange-submit:hover {
+  background: var(--orange-hover);
 }
