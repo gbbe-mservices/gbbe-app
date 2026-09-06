@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GBBE MULTI-SERVICES — Terminal Fintech</title>
   
-  <!-- Polices & Icônes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,10 +14,8 @@
 </head>
 <body>
 
-  <!-- Arrière-plan dynamique -->
   <div class="glow-bg"></div>
 
-  <!-- Barre de Navigation -->
   <header class="navbar">
     <div class="brand">
       <div class="brand-logo">
@@ -36,10 +33,7 @@
     </div>
   </header>
 
-  <!-- Conteneur Principal -->
   <main class="app-container">
-    
-    <!-- Titre Hero -->
     <section class="hero">
       <span class="badge">Plateforme Automatisée</span>
       <h1>Guichet de Paiement Instantané</h1>
@@ -47,8 +41,6 @@
     </section>
 
     <div class="layout-grid">
-
-      <!-- COLONNE 1 : Choix des Services -->
       <aside class="sidebar">
         <h2 class="section-label">1. Services Disponibles</h2>
 
@@ -82,16 +74,14 @@
         </div>
       </aside>
 
-      <!-- COLONNE 2 : Formulaire de Transaction -->
       <section class="main-panel">
         <div class="panel-header">
           <h2>Transfert Inter-Réseaux</h2>
           <span class="step-indicator">Étape 2 sur 2</span>
         </div>
 
-        <form class="checkout-form" onsubmit="return false;">
+        <form class="checkout-form">
           
-          <!-- Sélection Réseau Source -->
           <div class="form-group">
             <label class="form-label">Réseau à débiter (Source)</label>
             <div class="operator-selector" id="source-selector">
@@ -117,7 +107,6 @@
             </div>
           </div>
 
-          <!-- Numéro Source -->
           <div class="form-group">
             <label class="form-label">Numéro du compte à débiter</label>
             <div class="input-wrapper">
@@ -126,7 +115,6 @@
             </div>
           </div>
 
-          <!-- Sélection Réseau Destination -->
           <div class="form-group">
             <label class="form-label">Réseau à créditer (Destination)</label>
             <div class="operator-selector" id="dest-selector">
@@ -152,7 +140,6 @@
             </div>
           </div>
 
-          <!-- Numéro Destination -->
           <div class="form-group">
             <label class="form-label">Numéro du destinataire</label>
             <div class="input-wrapper">
@@ -161,7 +148,6 @@
             </div>
           </div>
 
-          <!-- Montant -->
           <div class="form-group">
             <label class="form-label">Montant à transférer (FCFA)</label>
             <div class="input-wrapper">
@@ -170,7 +156,6 @@
             </div>
           </div>
 
-          <!-- Option Frais à cocher -->
           <div class="form-group fee-checkbox-group">
             <label class="checkbox-container">
               <input type="checkbox" id="include-fees" checked />
@@ -179,7 +164,6 @@
             </label>
           </div>
 
-          <!-- Reçu / Résumé du Paiement -->
           <div class="receipt-card">
             <div class="receipt-row">
               <span>Montant transaction</span>
@@ -196,7 +180,6 @@
             </div>
           </div>
 
-          <!-- Bouton d'action -->
           <button type="submit" class="pay-btn" id="btn-pay">
             <span>Payer maintenant</span>
             <i class="bi bi-arrow-right-short"></i>
@@ -204,11 +187,9 @@
 
         </form>
       </section>
-
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>© 2026 GBBE MULTI-SERVICES — Tous droits réservés.</p>
     <div class="support-link">
@@ -216,7 +197,6 @@
     </div>
   </footer>
 
-  <!-- Script JS du calculateur & de l'interactivité -->
   <script src="app.js"></script>
 </body>
 </html>
