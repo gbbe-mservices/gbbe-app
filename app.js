@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptAmount = document.getElementById('receipt-amount');
   const receiptFee = document.getElementById('receipt-fee');
   const receiptTotal = document.getElementById('receipt-total');
+  const payBtn = id => document.getElementById('btn-pay') || document.querySelector('.pay-btn');
+  const form = document.querySelector('form');
 
   const FEE_PERCENT = 0.01; // 1%
 
@@ -12,35 +14,62 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateCalculations() {
-    const val = parseFloat(amountInput.value);
+    const rawVal = parseFloat(amountInput.value);
 
-    if (isNaN(val) || val <= 0) {
+    if (isNaN(rawVal) || rawVal <= 0) {
       receiptAmount.textContent = '0 FCFA';
       receiptFee.textContent = '0 FCFA';
       receiptTotal.textContent = '0 FCFA';
       return;
     }
 
-    // Calcul des frais
-    const fee = Math.round(val * FEE_PERCENT);
-    
-    // Si la case est cochée, on ajoute les frais, sinon le total = le montant saisi
-    const total = feeCheckbox.checked ? (val + fee) : val;
+    let fee = 0;
+    let netAmount = 0;
+    let totalDebit = 0;
 
-    receiptAmount.textContent = formatMoney(val);
-    receiptFee.textContent = feeCheckbox.checked ? formatMoney(fee) : '0 FCFA (Inclus/Offerts)';
-    receiptTotal.textContent = formatMoney(total);
+    if (feeCheckbox && feeCheckbox.checked) {
+      // FRAIS INCLUS : Le client paie le montant exact saisi.
+      // Les frais sont déduits du montant reçu.
+      totalDebit = rawVal;
+      fee = Math.round(rawVal * FEE_PERCENT);
+      netAmount = rawVal - fee;
+
+      receiptAmount.textContent = ${formatMoney(netAmount)} (Montant net);
+      receiptFee.textContent = ${formatMoney(fee)} (Déduits);
+      receiptTotal.textContent = formatMoney(totalDebit);
+    } else {
+      // FRAIS NON INCLUS : Les frais s'ajoutent au total à débiter.
+      netAmount = rawVal;
+      fee = Math.round(rawVal * FEE_PERCENT);
+      totalDebit = rawVal + fee;
+
+      receiptAmount.textContent = formatMoney(netAmount);
+      receiptFee.textContent = formatMoney(fee);
+      receiptTotal.textContent = formatMoney(totalDebit);
+    }
   }
 
-  if (amountInput) {
-    amountInput.addEventListener('input', updateCalculations);
+  // Écouteurs d'événements pour le calculateur
+  if (amountInput) amountInput.addEventListener('input', updateCalculations);
+  if (feeCheckbox) feeCheckbox.addEventListener('change', updateCalculations);
+
+  // Empêcher le rechargement de page au clic sur "Payer maintenant"
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Empêche le rechargement
+      
+      const amount = amountInput.value;
+      if (!amount || amount <= 0) {
+        alert('Veuillez saisir un montant valide.');
+        return;
+      }
+
+      // Exemple d'action : Message de confirmation (ou redirection)
+      alert(Paiement initié avec succès !\nTotal à débiter : ${receiptTotal.textContent});
+    });
   }
 
-  if (feeCheckbox) {
-    feeCheckbox.addEventListener('change', updateCalculations);
-  }
-
-  // Sélecteur d'opérateurs
+  // Sélecteur dynamique d'opérateurs
   const setupSelector = (selectorId) => {
     const container = document.getElementById(selectorId);
     if (!container) return;
