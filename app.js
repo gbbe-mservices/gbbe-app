@@ -2,81 +2,74 @@ document.addEventListener('DOMContentLoaded', () => {
   const amountInput = document.getElementById('transfer-amount');
   const feeCheckbox = document.getElementById('include-fees');
   const receiptAmount = document.getElementById('receipt-amount');
-  const receiptFee = document.getElementById('receipt-fee');
   const receiptTotal = document.getElementById('receipt-total');
+  
+  const btnContinue = document.getElementById('btn-continue');
+  const confirmModal = document.getElementById('confirm-modal');
+  const btnCancel = document.getElementById('btn-cancel');
+  const btnConfirm = document.getElementById('btn-confirm');
+
+  const modalAmount = document.getElementById('modal-amount');
+
+  // URL du lien Wave Merchant ou deep link de paiement
+  // Remplacez par votre lien Wave direct si vous en possédez un
+  const WAVE_PAYMENT_URL = 'https://wave.com/pay'; 
 
   const FEE_RATE = 0.01; // 1%
 
   function formatFCFA(val) {
-    return new Intl.NumberFormat('fr-FR').format(val) + ' FCFA';
+    return new Intl.NumberFormat('fr-FR').format(val) + ' Fcfa';
   }
 
   function calculate() {
-    if (!amountInput) return;
-    const value = parseFloat(amountInput.value);
+    const rawVal = parseFloat(amountInput.value);
 
-    if (isNaN(value) || value <= 0) {
-      if (receiptAmount) receiptAmount.textContent = '0 FCFA';
-      if (receiptFee) receiptFee.textContent = '0 FCFA';
-      if (receiptTotal) receiptTotal.textContent = '0 FCFA';
+    if (isNaN(rawVal) || rawVal <= 0) {
+      receiptAmount.textContent = '0 Fcfa';
+      receiptTotal.textContent = '0 Fcfa';
       return;
     }
 
-    const fee = Math.round(value * FEE_RATE);
+    const fee = Math.round(rawVal * FEE_RATE);
 
-    if (feeCheckbox && feeCheckbox.checked) {
-      // Frais inclus : Le montant débité reste égal à la valeur saisie
-      const net = value - fee;
-      if (receiptAmount) receiptAmount.textContent = formatFCFA(net);
-      if (receiptFee) receiptFee.textContent = formatFCFA(fee);
-      if (receiptTotal) receiptTotal.textContent = formatFCFA(value);
+    if (feeCheckbox.checked) {
+      const net = rawVal - fee;
+      receiptAmount.textContent = formatFCFA(net);
+      receiptTotal.textContent = formatFCFA(rawVal);
     } else {
-      // Frais non inclus : Les frais s'ajoutent au total
-      const total = value + fee;
-      if (receiptAmount) receiptAmount.textContent = formatFCFA(value);
-      if (receiptFee) receiptFee.textContent = formatFCFA(fee);
-      if (receiptTotal) receiptTotal.textContent = formatFCFA(total);
+      const total = rawVal + fee;
+      receiptAmount.textContent = formatFCFA(rawVal);
+      receiptTotal.textContent = formatFCFA(total);
     }
   }
 
-  if (amountInput) {
-    amountInput.addEventListener('input', calculate);
-    amountInput.addEventListener('change', calculate);
-  }
+  amountInput.addEventListener('input', calculate);
+  feeCheckbox.addEventListener('change', calculate);
 
-  if (feeCheckbox) {
-    feeCheckbox.addEventListener('change', calculate);
-  }
+  // Ouverture de la modale
+  btnContinue.addEventListener('click', () => {
+    const val = parseFloat(amountInput.value);
+    if (isNaN(val) || val < 250) {
+      alert('Veuillez saisir un montant valide (minimum 250 FCFA).');
+      return;
+    }
 
-  // Intercepter le formulaire
-  const form = document.querySelector('form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const val = amountInput ? amountInput.value : 0;
-      if (!val || val <= 0) {
-        alert('Veuillez entrer un montant valide.');
-        return;
-      }
-      alert(Transaction validée !\nTotal à débiter : ${receiptTotal.textContent});
-    });
-  }
+    modalAmount.textContent = formatFCFA(val);
+    confirmModal.classList.add('active');
+  });
 
-  // Sélection cartes opérateurs
-  const setupOpSelectors = (id) => {
-    const group = document.getElementById(id);
-    if (!group) return;
-    const cards = group.querySelectorAll('.op-card');
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        cards.forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        const radio = card.querySelector('input[type="radio"]');
-        if (radio) radio.checked = true;
-      });
-    });
-  };
+  // Annuler
+  btnCancel.addEventListener('click', () => {
+    confirmModal.classList.remove('active');
+  });
 
-  setupOpSelectors('source-selector');
-  setupOpSelectors('dest-selector');
+  // Redirection vers Wave
+  btnConfirm.addEventListener('click', () => {
+    btnConfirm.textContent = 'Redirection...';
+    btnConfirm.disabled = true;
+
+    setTimeout(() => {
+      window.location.href = WAVE_PAYMENT_URL;
+    }, 600);
+  });
 });
