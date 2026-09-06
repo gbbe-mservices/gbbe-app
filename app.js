@@ -4,83 +4,71 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptAmount = document.getElementById('receipt-amount');
   const receiptFee = document.getElementById('receipt-fee');
   const receiptTotal = document.getElementById('receipt-total');
-  const payBtn = document.getElementById('btn-pay');
-  const form = document.querySelector('.checkout-form') || document.querySelector('form');
 
-  const FEE_PERCENT = 0.01; // 1%
+  const FEE_RATE = 0.01; // 1%
 
-  function formatMoney(amount) {
-    return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
+  function formatFCFA(val) {
+    return new Intl.NumberFormat('fr-FR').format(val) + ' FCFA';
   }
 
-  function updateCalculations() {
+  function calculate() {
     if (!amountInput) return;
-    
-    const rawVal = parseFloat(amountInput.value);
+    const value = parseFloat(amountInput.value);
 
-    if (isNaN(rawVal) || rawVal <= 0) {
+    if (isNaN(value) || value <= 0) {
       if (receiptAmount) receiptAmount.textContent = '0 FCFA';
       if (receiptFee) receiptFee.textContent = '0 FCFA';
       if (receiptTotal) receiptTotal.textContent = '0 FCFA';
       return;
     }
 
-    let fee = Math.round(rawVal * FEE_PERCENT);
-    let netAmount = 0;
-    let totalDebit = 0;
+    const fee = Math.round(value * FEE_RATE);
 
     if (feeCheckbox && feeCheckbox.checked) {
-      // Frais inclus dans le montant saisi : Le client est débité du montant exact saisi
-      totalDebit = rawVal;
-      netAmount = rawVal - fee;
-
-      if (receiptAmount) receiptAmount.textContent = formatMoney(netAmount);
-      if (receiptFee) receiptFee.textContent = formatMoney(fee);
-      if (receiptTotal) receiptTotal.textContent = formatMoney(totalDebit);
+      // Frais inclus : Le montant débité reste égal à la valeur saisie
+      const net = value - fee;
+      if (receiptAmount) receiptAmount.textContent = formatFCFA(net);
+      if (receiptFee) receiptFee.textContent = formatFCFA(fee);
+      if (receiptTotal) receiptTotal.textContent = formatFCFA(value);
     } else {
-      // Frais NON inclus : Les frais s'ajoutent au-dessus
-      netAmount = rawVal;
-      totalDebit = rawVal + fee;
-
-      if (receiptAmount) receiptAmount.textContent = formatMoney(netAmount);
-      if (receiptFee) receiptFee.textContent = formatMoney(fee);
-      if (receiptTotal) receiptTotal.textContent = formatMoney(totalDebit);
+      // Frais non inclus : Les frais s'ajoutent au total
+      const total = value + fee;
+      if (receiptAmount) receiptAmount.textContent = formatFCFA(value);
+      if (receiptFee) receiptFee.textContent = formatFCFA(fee);
+      if (receiptTotal) receiptTotal.textContent = formatFCFA(total);
     }
   }
 
-  // Écoute de la saisie du montant et de la case à cocher
   if (amountInput) {
-    amountInput.addEventListener('input', updateCalculations);
-    amountInput.addEventListener('keyup', updateCalculations);
+    amountInput.addEventListener('input', calculate);
+    amountInput.addEventListener('change', calculate);
   }
 
   if (feeCheckbox) {
-    feeCheckbox.addEventListener('change', updateCalculations);
+    feeCheckbox.addEventListener('change', calculate);
   }
 
-  // Gestion du bouton Payer (pour éviter le rechargement de page)
+  // Intercepter le formulaire
+  const form = document.querySelector('form');
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      const amount = amountInput ? amountInput.value : 0;
-      if (!amount || amount <= 0) {
-        alert('Veuillez saisir un montant valide.');
+      const val = amountInput ? amountInput.value : 0;
+      if (!val || val <= 0) {
+        alert('Veuillez entrer un montant valide.');
         return;
       }
-
-      alert(Paiement initié !\nTotal à débiter : ${receiptTotal.textContent});
+      alert(Transaction validée !\nTotal à débiter : ${receiptTotal.textContent});
     });
   }
 
-  // Sélection dynamique des cartes d'opérateurs
-  const setupSelector = (selectorId) => {
-    const container = document.getElementById(selectorId);
-    if (!container) return;
-
-    const cards = container.querySelectorAll('.op-card');
+  // Sélection cartes opérateurs
+  const setupOpSelectors = (id) => {
+    const group = document.getElementById(id);
+    if (!group) return;
+    const cards = group.querySelectorAll('.op-card');
     cards.forEach(card => {
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', () => {
         cards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         const radio = card.querySelector('input[type="radio"]');
@@ -89,6 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  setupSelector('source-selector');
-  setupSelector('dest-selector');
+  setupOpSelectors('source-selector');
+  setupOpSelectors('dest-selector');
 });
