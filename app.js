@@ -1,18 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Sélection des éléments du calculateur
   const amountInput = document.getElementById('transfer-amount');
+  const feeCheckbox = document.getElementById('include-fees');
   const receiptAmount = document.getElementById('receipt-amount');
   const receiptFee = document.getElementById('receipt-fee');
   const receiptTotal = document.getElementById('receipt-total');
 
-  const FEE_PERCENT = 0.01; // Taux de frais de 1%
+  const FEE_PERCENT = 0.01; // 1%
 
-  // Fonction de formatage des montants
   function formatMoney(amount) {
     return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
   }
 
-  // Calcul dynamique
   function updateCalculations() {
     const val = parseFloat(amountInput.value);
 
@@ -23,11 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Calcul des frais
     const fee = Math.round(val * FEE_PERCENT);
-    const total = val + fee;
+    
+    // Si la case est cochée, on ajoute les frais, sinon le total = le montant saisi
+    const total = feeCheckbox.checked ? (val + fee) : val;
 
     receiptAmount.textContent = formatMoney(val);
-    receiptFee.textContent = formatMoney(fee);
+    receiptFee.textContent = feeCheckbox.checked ? formatMoney(fee) : '0 FCFA (Inclus/Offerts)';
     receiptTotal.textContent = formatMoney(total);
   }
 
@@ -35,7 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
     amountInput.addEventListener('input', updateCalculations);
   }
 
-  // Gestion de la sélection visuelle des cartes d'opérateurs
+  if (feeCheckbox) {
+    feeCheckbox.addEventListener('change', updateCalculations);
+  }
+
+  // Sélecteur d'opérateurs
   const setupSelector = (selectorId) => {
     const container = document.getElementById(selectorId);
     if (!container) return;
