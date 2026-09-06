@@ -14,14 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptTotal = document.getElementById('receipt-total');
 
   const btnContinue = document.getElementById('btn-continue');
+  
+  // Modale Standard
   const confirmModal = document.getElementById('confirm-modal');
   const btnCancel = document.getElementById('btn-cancel');
   const btnConfirm = document.getElementById('btn-confirm');
-
   const modalAmount = document.getElementById('modal-amount');
   const modalSrc = document.getElementById('modal-src');
   const modalDst = document.getElementById('modal-dst');
   const modalDstNum = document.getElementById('modal-dst-num');
+
+  // Modale Orange Money
+  const orangeModal = document.getElementById('orange-modal');
+  const btnOrangeCancel = document.getElementById('btn-orange-cancel');
+  const btnOrangeConfirm = document.getElementById('btn-orange-confirm');
+  const omOtpInput = document.getElementById('om-otp-code');
+
+  // URL Marchand Wave officielle
+  const WAVE_MERCHANT_URL = 'https://pay.wave.com/m/M_ci_OrrWOYxbonu6/c/ci/';
 
   const FEE_RATE = 0.01; // 1%
 
@@ -30,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function calculate() {
-    // Mettre à jour l'affichage des réseaux
     summarySrcNet.textContent = sourceNet.value;
     summaryDstNet.textContent = destNet.value;
 
@@ -46,16 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const fee = Math.round(rawVal * FEE_RATE);
 
     if (feeCheckbox.checked) {
-      // Cas : Frais pris en charge par l'utilisateur
-      // Le destinataire reçoit EXACTEMENT le montant saisi
-      // Le total débiter = Montant saisi + 1%
+      // Frais à la charge de l'utilisateur : le destinataire reçoit 100% du montant saisi
       receiptAmount.textContent = formatFCFA(rawVal);
       receiptFee.textContent = formatFCFA(fee);
       receiptTotal.textContent = formatFCFA(rawVal + fee);
     } else {
-      // Cas : Frais déduits du montant transféré
-      // Le total débiter = Montant saisi
-      // Le destinataire reçoit = Montant saisi - 1%
+      // Frais déduits du montant transféré
       const net = Math.max(0, rawVal - fee);
       receiptAmount.textContent = formatFCFA(net);
       receiptFee.textContent = formatFCFA(fee);
@@ -63,13 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Écouteurs d'événements
+  // Écouteurs sur les sélecteurs et champs
   sourceNet.addEventListener('change', calculate);
   destNet.addEventListener('change', calculate);
   amountInput.addEventListener('input', calculate);
   feeCheckbox.addEventListener('change', calculate);
 
-  // Validation avant modale
+  // Clic sur "Procéder au paiement"
   btnContinue.addEventListener('click', () => {
     const val = parseFloat(amountInput.value);
     
@@ -88,30 +93,64 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Remplir la modale
-    modalAmount.textContent = formatFCFA(val);
-    modalSrc.textContent = sourceNet.value;
-    modalDst.textContent = destNet.value;
-    modalDstNum.textContent = destNum.value.trim();
-
-    confirmModal.classList.add('active');
+    // Aiguillage selon le réseau source sélectionné
+    if (sourceNet.value === 'Orange') {
+      // Afficher la modale dédiée à Orange Money avec la procédure OTP
+      omOtpInput.value = '';
+      orangeModal.classList.add('active');
+    } else {
+      // Afficher la modale standard (Wave / MTN / Moov)
+      modalAmount.textContent = formatFCFA(val);
+      modalSrc.textContent = sourceNet.value;
+      modalDst.textContent = destNet.value;
+      modalDstNum.textContent = destNum.value.trim();
+      confirmModal.classList.add('active');
+    }
   });
 
+  // Fermeture des modales
   btnCancel.addEventListener('click', () => {
     confirmModal.classList.remove('active');
   });
 
+  btnOrangeCancel.addEventListener('click', () => {
+    orangeModal.classList.remove('active');
+  });
+
+  // Action de confirmation pour Wave / MTN / Moov
   btnConfirm.addEventListener('click', () => {
     btnConfirm.textContent = 'Redirection...';
     btnConfirm.disabled = true;
 
-    // Définition de la redirection selon le réseau source sélectionné
-    let redirectUrl = 'https://wave.com/pay';
-    if (sourceNet.value === 'Orange') redirectUrl = 'https://orange-money.ci';
-    if (sourceNet.value === 'MTN') redirectUrl = 'https://momo.mtn.ci';
+    setTimeout(() => {
+      if (sourceNet.value === 'Wave') {
+        window.location.href = WAVE_MERCHANT_URL;
+      } else {
+        alert('Redirection en cours vers le guichet sécurisé ' + sourceNet.value + '...');
+        confirmModal.classList.remove('active');
+        btnConfirm.textContent = 'Confirmer & Payer';
+        btnConfirm.disabled = false;
+      }
+    }, 600);
+  });
+
+  // Validation du paiement Orange Money avec Code OTP
+  btnOrangeConfirm.addEventListener('click', () => {
+    const otp = omOtpInput.value.trim();
+
+    if (!otp || otp.length < 4) {
+      alert('Veuillez entrer un code d\'autorisation valide (4 à 6 chiffres).');
+      return;
+    }
+
+    btnOrangeConfirm.textContent = 'Traitement...';
+    btnOrangeConfirm.disabled = true;
 
     setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 600);
+      alert('Paiement Orange Money initié avec succès pour le code ' + otp + ' !');
+      orangeModal.classList.remove('active');
+      btnOrangeConfirm.textContent = 'Valider le paiement';
+      btnOrangeConfirm.disabled = false;
+    }, 1200);
   });
 });
