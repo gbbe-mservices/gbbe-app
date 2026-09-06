@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <link rel="stylesheet" href="./style.css?v=5.0" />
+  <link rel="stylesheet" href="./style.css?v=6.0" />
 </head>
 <body>
 
@@ -133,11 +133,11 @@
     </div>
   </main>
 
-  <!-- Modale de Confirmation -->
+  <!-- Modale Standard de Confirmation -->
   <div class="modal-overlay" id="confirm-modal">
     <div class="modal-box">
       <div class="modal-header">
-        <i class="bi bi-exclamation-circle"></i>
+        <i class="bi bi-exclamation-circle-fill"></i>
         <h3>Confirmation</h3>
       </div>
       <p class="modal-body">
@@ -151,6 +151,43 @@
     </div>
   </div>
 
-  <script src="./app.js?v=5.0"></script>
+  <!-- Modale Dédiée Orange Money (Code OTP) -->
+  <div class="modal-overlay" id="orange-modal">
+    <div class="modal-box orange-theme">
+      <div class="modal-header orange-header">
+        <i class="bi bi-phone-vibrate-fill"></i>
+        <h3>Paiement Orange Money</h3>
+      </div>
+      
+      <div class="om-instructions">
+        <div class="om-step">
+          <span class="step-num">1</span>
+          <p>Composez le <strong class="code-ussd">#144*82#</strong> sur votre téléphone Orange.</p>
+        </div>
+        <div class="om-step">
+          <span class="step-num">2</span>
+          <p>Entrez votre code secret pour générer un code d'autorisation temporaire.</p>
+        </div>
+        <div class="om-step">
+          <span class="step-num">3</span>
+          <p>Saisissez le code temporaire reçu ci-dessous pour valider :</p>
+        </div>
+      </div>
+
+      <div class="om-input-group">
+        <label for="om-otp-code">Code d'autorisation (OTP)</label>
+        <input type="text" id="om-otp-code" placeholder="Ex: 4821" maxlength="6" inputmode="numeric" />
+      </div>
+
+      <p class="warning-text">* Ce code est à usage unique et expire après quelques minutes.</p>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="btn-orange-cancel">Annuler</button>
+        <button type="button" class="btn-orange-submit" id="btn-orange-confirm">Valider le paiement</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js?v=6.0"></script>
 </body>
 </html>
