@@ -5,9 +5,7 @@
   --primary-hover: #1D4ED8;
   --text-main: #0F172A;
   --text-muted: #64748B;
-  --border-color: #E2E8F0;
-  --wave-color: #1DC9CE;
-  --orange-color: #FF7900;
+  --border-color: #CBD5E1;
 }
 
 * {
@@ -21,13 +19,11 @@ body {
   background-color: var(--bg-page);
   color: var(--text-main);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .navbar {
   background: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #E2E8F0;
   padding: 16px 8%;
   display: flex;
   justify-content: space-between;
@@ -84,10 +80,9 @@ body {
 }
 
 .main-container {
-  max-width: 1000px;
+  max-width: 1050px;
   margin: 40px auto;
   padding: 0 20px;
-  width: 100%;
 }
 
 .checkout-grid {
@@ -96,7 +91,7 @@ body {
   gap: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .checkout-grid {
     grid-template-columns: 1fr;
   }
@@ -104,10 +99,10 @@ body {
 
 .card-box {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: 1px solid #E2E8F0;
   border-radius: 20px;
   padding: 28px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
 }
 
 .form-section h2 {
@@ -122,40 +117,67 @@ body {
   margin-bottom: 24px;
 }
 
-.route-display {
+/* Grille de sélection des réseaux */
+.selection-grid {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
   background: #F8FAFC;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 14px;
+  border-radius: 16px;
+  padding: 16px;
   margin-bottom: 24px;
 }
 
-.route-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  font-weight: 700;
-  display: block;
-  margin-bottom: 4px;
+.select-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.route-badge {
-  font-size: 0.85rem;
+.select-block label {
+  font-size: 0.75rem;
   font-weight: 700;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.route-badge.wave { color: var(--wave-color); }
-.route-badge.orange { color: var(--orange-color); }
+.select-block select, .select-block input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #FFF;
+  outline: none;
+}
 
-.route-icon {
+.select-block select:focus, .select-block input:focus {
+  border-color: var(--primary);
+}
+
+.arrow-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 32px;
   color: var(--text-muted);
   font-size: 1.2rem;
+}
+
+@media (max-width: 550px) {
+  .selection-grid {
+    flex-direction: column;
+  }
+  .arrow-divider {
+    padding-top: 0;
+    width: 100%;
+    transform: rotate(90deg);
+  }
 }
 
 .form-group label {
@@ -180,7 +202,6 @@ body {
   font-weight: 700;
   outline: none;
   background: #F8FAFC;
-  transition: all 0.2s;
 }
 
 .input-container input:focus {
@@ -193,7 +214,6 @@ body {
   right: 16px;
   font-weight: 800;
   color: var(--text-muted);
-  font-size: 0.9rem;
 }
 
 .help-text {
@@ -223,16 +243,27 @@ body {
 .custom-checkbox input { display: none; }
 
 .checkmark {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border: 2px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   background: #FFF;
+  position: relative;
 }
 
 .custom-checkbox input:checked ~ .checkmark {
   background: var(--primary);
   border-color: var(--primary);
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  content: "";
+  position: absolute;
+  left: 6px; top: 2px;
+  width: 5px; height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .summary-section {
@@ -248,7 +279,7 @@ body {
 
 .receipt-details {
   background: #F8FAFC;
-  border: 1px solid var(--border-color);
+  border: 1px solid #E2E8F0;
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 24px;
@@ -269,7 +300,7 @@ body {
 
 .divider {
   height: 1px;
-  background: var(--border-color);
+  background: #E2E8F0;
   margin: 12px 0;
 }
 
@@ -339,7 +370,7 @@ body {
   background: #FFF;
   padding: 24px;
   border-radius: 16px;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
 }
 
@@ -354,7 +385,7 @@ body {
 
 .modal-body {
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.5;
   margin-bottom: 8px;
 }
 
@@ -379,7 +410,7 @@ body {
 
 .btn-cancel {
   background: #F1F5F9;
-  border: 1px solid var(--border-color);
+  border: 1px solid #E2E8F0;
   color: var(--text-main);
 }
 
