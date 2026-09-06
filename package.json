@@ -1,7 +1,7 @@
 {
   "name": "gbbe-app",
   "version": "1.0.0",
-  "description": "Plateforme Fintech GBBE Multi-Services",
+  "description": "GBBE Multi-Services Application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
