@@ -1,46 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Sélection des éléments HTML
-  const amountInput = document.querySelector('input[type="number"]');
-  const receiptAmount = document.querySelector('.receipt-row:nth-child(1) .val');
-  const receiptFees = document.querySelector('.receipt-row:nth-child(2) .val');
-  const receiptTotal = document.querySelector('.val-total');
+  // Sélection des éléments du calculateur
+  const amountInput = document.getElementById('transfer-amount');
+  const receiptAmount = document.getElementById('receipt-amount');
+  const receiptFee = document.getElementById('receipt-fee');
+  const receiptTotal = document.getElementById('receipt-total');
 
-  // Taux de frais de service (1%)
-  const FEE_RATE = 0.01;
+  const FEE_PERCENT = 0.01; // Taux de frais de 1%
 
-  // Fonction de formatage des montants (ex: 5 000 FCFA)
-  function formatFCFA(amount) {
+  // Fonction de formatage des montants
+  function formatMoney(amount) {
     return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
   }
 
-  // Fonction de calcul et mise à jour du reçu
-  function calculateTotal() {
-    const rawValue = parseFloat(amountInput.value);
+  // Calcul dynamique
+  function updateCalculations() {
+    const val = parseFloat(amountInput.value);
 
-    if (isNaN(rawValue) || rawValue <= 0) {
+    if (isNaN(val) || val <= 0) {
       receiptAmount.textContent = '0 FCFA';
-      receiptFees.textContent = '0 FCFA';
+      receiptFee.textContent = '0 FCFA';
       receiptTotal.textContent = '0 FCFA';
       return;
     }
 
-    const fees = Math.round(rawValue * FEE_RATE);
-    const total = rawValue + fees;
+    const fee = Math.round(val * FEE_PERCENT);
+    const total = val + fee;
 
-    receiptAmount.textContent = formatFCFA(rawValue);
-    receiptFees.textContent = formatFCFA(fees);
-    receiptTotal.textContent = formatFCFA(total);
+    receiptAmount.textContent = formatMoney(val);
+    receiptFee.textContent = formatMoney(fee);
+    receiptTotal.textContent = formatMoney(total);
   }
 
-  // Écoute de la saisie dans le champ du montant
   if (amountInput) {
-    amountInput.addEventListener('input', calculateTotal);
+    amountInput.addEventListener('input', updateCalculations);
   }
 
-  // Gestion des clics sur les cartes d'opérateurs
-  const opGroups = document.querySelectorAll('.operator-selector');
-  opGroups.forEach(group => {
-    const cards = group.querySelectorAll('.op-card');
+  // Gestion de la sélection visuelle des cartes d'opérateurs
+  const setupSelector = (selectorId) => {
+    const container = document.getElementById(selectorId);
+    if (!container) return;
+
+    const cards = container.querySelectorAll('.op-card');
     cards.forEach(card => {
       card.addEventListener('click', () => {
         cards.forEach(c => c.classList.remove('active'));
@@ -49,5 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (radio) radio.checked = true;
       });
     });
-  });
+  };
+
+  setupSelector('source-selector');
+  setupSelector('dest-selector');
 });
