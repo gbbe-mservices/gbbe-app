@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptAmount = document.getElementById('receipt-amount');
   const receiptFee = document.getElementById('receipt-fee');
   const receiptTotal = document.getElementById('receipt-total');
-  const payBtn = id => document.getElementById('btn-pay') || document.querySelector('.pay-btn');
-  const form = document.querySelector('form');
+  const payBtn = document.getElementById('btn-pay');
+  const form = document.querySelector('.checkout-form') || document.querySelector('form');
 
   const FEE_PERCENT = 0.01; // 1%
 
@@ -14,69 +14,73 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateCalculations() {
+    if (!amountInput) return;
+    
     const rawVal = parseFloat(amountInput.value);
 
     if (isNaN(rawVal) || rawVal <= 0) {
-      receiptAmount.textContent = '0 FCFA';
-      receiptFee.textContent = '0 FCFA';
-      receiptTotal.textContent = '0 FCFA';
+      if (receiptAmount) receiptAmount.textContent = '0 FCFA';
+      if (receiptFee) receiptFee.textContent = '0 FCFA';
+      if (receiptTotal) receiptTotal.textContent = '0 FCFA';
       return;
     }
 
-    let fee = 0;
+    let fee = Math.round(rawVal * FEE_PERCENT);
     let netAmount = 0;
     let totalDebit = 0;
 
     if (feeCheckbox && feeCheckbox.checked) {
-      // FRAIS INCLUS : Le client paie le montant exact saisi.
-      // Les frais sont déduits du montant reçu.
+      // Frais inclus dans le montant saisi : Le client est débité du montant exact saisi
       totalDebit = rawVal;
-      fee = Math.round(rawVal * FEE_PERCENT);
       netAmount = rawVal - fee;
 
-      receiptAmount.textContent = ${formatMoney(netAmount)} (Montant net);
-      receiptFee.textContent = ${formatMoney(fee)} (Déduits);
-      receiptTotal.textContent = formatMoney(totalDebit);
+      if (receiptAmount) receiptAmount.textContent = formatMoney(netAmount);
+      if (receiptFee) receiptFee.textContent = formatMoney(fee);
+      if (receiptTotal) receiptTotal.textContent = formatMoney(totalDebit);
     } else {
-      // FRAIS NON INCLUS : Les frais s'ajoutent au total à débiter.
+      // Frais NON inclus : Les frais s'ajoutent au-dessus
       netAmount = rawVal;
-      fee = Math.round(rawVal * FEE_PERCENT);
       totalDebit = rawVal + fee;
 
-      receiptAmount.textContent = formatMoney(netAmount);
-      receiptFee.textContent = formatMoney(fee);
-      receiptTotal.textContent = formatMoney(totalDebit);
+      if (receiptAmount) receiptAmount.textContent = formatMoney(netAmount);
+      if (receiptFee) receiptFee.textContent = formatMoney(fee);
+      if (receiptTotal) receiptTotal.textContent = formatMoney(totalDebit);
     }
   }
 
-  // Écouteurs d'événements pour le calculateur
-  if (amountInput) amountInput.addEventListener('input', updateCalculations);
-  if (feeCheckbox) feeCheckbox.addEventListener('change', updateCalculations);
+  // Écoute de la saisie du montant et de la case à cocher
+  if (amountInput) {
+    amountInput.addEventListener('input', updateCalculations);
+    amountInput.addEventListener('keyup', updateCalculations);
+  }
 
-  // Empêcher le rechargement de page au clic sur "Payer maintenant"
+  if (feeCheckbox) {
+    feeCheckbox.addEventListener('change', updateCalculations);
+  }
+
+  // Gestion du bouton Payer (pour éviter le rechargement de page)
   if (form) {
     form.addEventListener('submit', (e) => {
-      e.preventDefault(); // Empêche le rechargement
+      e.preventDefault();
       
-      const amount = amountInput.value;
+      const amount = amountInput ? amountInput.value : 0;
       if (!amount || amount <= 0) {
         alert('Veuillez saisir un montant valide.');
         return;
       }
 
-      // Exemple d'action : Message de confirmation (ou redirection)
-      alert(Paiement initié avec succès !\nTotal à débiter : ${receiptTotal.textContent});
+      alert(Paiement initié !\nTotal à débiter : ${receiptTotal.textContent});
     });
   }
 
-  // Sélecteur dynamique d'opérateurs
+  // Sélection dynamique des cartes d'opérateurs
   const setupSelector = (selectorId) => {
     const container = document.getElementById(selectorId);
     if (!container) return;
 
     const cards = container.querySelectorAll('.op-card');
     cards.forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
         cards.forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         const radio = card.querySelector('input[type="radio"]');
