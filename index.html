@@ -3,478 +3,826 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GBBE MULTI-SERVICES — Plateforme Officielle</title>
+  <title>GBBE MULTI-SERVICES — Terminal Fintech Next-Gen</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <style>
     :root {
-      --bg-dark: #07090E;
-      --card-bg: rgba(15, 23, 42, 0.88);
-      --accent-blue: #3B82F6;
-      --accent-cyan: #06B6D4;
+      --bg-dark: #05070E;
+      --panel-bg: rgba(13, 18, 30, 0.75);
+      --accent-cyan: #00F2FE;
+      --accent-blue: #4FACFE;
       --accent-orange: #FF6B00;
       --accent-mtn: #FFCC00;
-      --accent-moov: #008751;
-      --text-main: #F8FAFC;
+      --accent-moov: #00A859;
+      --accent-wave: #1DC1DD;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-glow: rgba(0, 242, 254, 0.25);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
 
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
       position: relative;
     }
 
-    .bg-fixed {
+    /* Arrière-plan dynamique cyberpunk */
+    .cyber-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -2;
-      background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop');
+      background: radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.12), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(79, 172, 254, 0.1), transparent 40%),
+                  url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1600&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
+      filter: brightness(0.4) contrast(1.1);
     }
 
-    .bg-overlay {
+    .cyber-grid-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -1;
-      background: rgba(7, 9, 14, 0.85);
+      background: linear-gradient(to bottom, rgba(5, 7, 14, 0.7) 0%, rgba(5, 7, 14, 0.95) 100%);
     }
 
+    /* Navigation Header */
     header {
-      background: rgba(10, 14, 23, 0.9);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 16px 24px;
+      background: rgba(8, 12, 22, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: sticky;
       top: 0;
       z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
-    .brand-logo { font-size: 1.3rem; font-weight: 800; }
-    .brand-gbbe { color: #38BDF8; }
-    .brand-ms { color: #F59E0B; }
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-    .status-badge {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid #10B981;
-      color: #10B981;
-      font-size: 11px;
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
       font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
+      letter-spacing: -0.5px;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px 20px;
+    .brand-title span {
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .hero-banner {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 24px;
-      padding: 28px;
-      margin-bottom: 28px;
-    }
-
-    .hero-banner h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-    .hero-banner p { font-size: 0.88rem; color: #CBD5E1; }
-
-    .section-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #38BDF8;
-      margin-bottom: 16px;
-    }
-
-    .grid-services {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-    }
-
-    .card-service {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 22px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .card-service * {
-      pointer-events: none; /* Empêche les éléments enfants de bloquer le clic parent */
-    }
-
-    .card-service:hover {
-      transform: translateY(-4px);
-      border-color: #38BDF8;
-    }
-
-    .card-header-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
+    .system-status {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      margin-bottom: 14px;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #10B981;
     }
 
-    .icon-transfer { background: rgba(59, 130, 246, 0.25); color: #60A5FA; }
-    .icon-pass { background: rgba(16, 185, 129, 0.25); color: #34D399; }
-    .icon-units { background: rgba(245, 158, 11, 0.25); color: #FBBF24; }
-
-    .card-service h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
-    .card-service p { font-size: 0.8rem; color: #94A3B8; margin-bottom: 14px; }
-
-    .operator-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-    .op-tag { font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; color: #FFF; }
-    .tag-orange { background: var(--accent-orange); }
-    .tag-wave { background: var(--accent-cyan); color: #000; }
-    .tag-mtn { background: var(--accent-mtn); color: #000; }
-    .tag-moov { background: var(--accent-moov); }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 16px;
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulse 1.8s infinite;
     }
 
-    .modal-card {
-      background: #151C2C;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 24px;
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #10B981; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    /* Container Principal */
+    .main-wrapper {
+      max-width: 1100px;
       width: 100%;
-      max-width: 450px;
-      padding: 26px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    /* En-tête Hero */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid var(--border-glow);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* Panneau de Contrôle Principal */
+    .terminal-container {
+      background: var(--panel-bg);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
       position: relative;
     }
 
-    .modal-close-btn {
-      position: absolute;
-      top: 18px; right: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      color: #FFF;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      font-weight: bold;
-      cursor: pointer;
+    @media (max-width: 850px) {
+      .terminal-container {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 12px; color: #94A3B8; margin-bottom: 6px; font-weight: 600; }
-    
-    .form-control-custom {
-      width: 100%;
-      background: #0B0F19;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 12px;
-      color: #FFF;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #2563EB, #06B6D4);
-      border: none;
-      color: #FFF;
+    /* Colonne de Sélection */
+    .selector-title {
+      font-size: 13px;
       font-weight: 700;
-      padding: 14px;
-      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .mode-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
       cursor: pointer;
-      font-size: 15px;
+      transition: all 0.25s ease;
+      color: var(--text-main);
+      text-align: left;
+    }
+
+    .mode-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(4px);
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.12), rgba(79, 172, 254, 0.06));
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+    }
+
+    .mode-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--accent-cyan);
+    }
+
+    .mode-btn.active .mode-icon {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    .mode-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .mode-info p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Badges Réseaux Disponibles */
+    .networks-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .networks-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 10px;
     }
 
-    .chat-btn-float {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: linear-gradient(135deg, #2563EB, #06B6D4);
-      color: #FFF;
-      border-radius: 50px;
-      padding: 14px 22px;
+    .net-tag {
+      font-size: 11px;
       font-weight: 700;
-      font-size: 14px;
-      z-index: 1000;
-      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
+      gap: 6px;
     }
 
-    .chat-box {
-      position: fixed;
-      bottom: 90px; right: 24px;
-      width: 350px; max-width: 88vw; height: 400px;
-      background: #151C2C;
+    .net-orange { background: rgba(255, 107, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+    .net-wave { background: rgba(29, 193, 221, 0.2); color: var(--accent-wave); border: 1px solid var(--accent-wave); }
+    .net-mtn { background: rgba(255, 204, 0, 0.2); color: var(--accent-mtn); border: 1px solid var(--accent-mtn); }
+    .net-moov { background: rgba(0, 168, 89, 0.2); color: var(--accent-moov); border: 1px solid var(--accent-moov); }
+
+    /* Colonne Formulaire Dynamique */
+    .form-panel {
+      background: rgba(8, 12, 22, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 20px;
-      z-index: 1001;
-      display: none;
+      padding: 24px;
+      display: flex;
       flex-direction: column;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      overflow: hidden;
+      justify-content: space-between;
     }
 
-    .chat-header {
-      background: #0B0F19;
-      padding: 14px;
+    .form-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+
+    .form-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
       font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .cyber-input, .cyber-select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #FFF;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .cyber-input:focus, .cyber-select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+    }
+
+    .cyber-select option {
+      background: #0D121E;
+      color: #FFF;
+    }
+
+    /* Calculateur de coût */
+    .summary-card {
+      background: rgba(0, 242, 254, 0.05);
+      border: 1px dashed var(--border-glow);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 10px 0 20px 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-row.total {
       font-size: 14px;
+      font-weight: 700;
+      color: #FFF;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 6px;
+      margin-bottom: 0;
+    }
+
+    .btn-execute {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border: none;
+      color: #000;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+    }
+
+    .btn-execute:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
+    }
+
+    /* Footer & Socials */
+    footer {
+      background: rgba(8, 12, 22, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .chat-body {
-      flex: 1; padding: 14px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 10px;
-      background: #0D1322;
+    .social-links {
+      display: flex;
+      gap: 12px;
     }
 
-    .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; }
-    .msg-bot { background: #1E293B; color: #FFF; align-self: flex-start; }
-    .msg-user { background: #2563EB; color: #FFF; align-self: flex-end; }
-
-    .chat-footer { padding: 10px; background: #0B0F19; display: flex; gap: 8px; }
-
-    footer {
-      margin-top: 50px;
-      background: rgba(10, 14, 23, 0.9);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    .social-title { font-size: 13px; font-weight: 700; color: #94A3B8; margin-bottom: 16px; }
-    .social-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .social-btn {
-      display: flex; align-items: center; gap: 8px;
+    .social-pill {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #FFF; text-decoration: none;
-      padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .social-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* Floating Widget Chat */
+    .widget-support {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .widget-btn {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      color: #000;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.4);
+    }
+
+    .chat-panel {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 340px;
+      max-width: 85vw;
+      height: 420px;
+      background: #0D121E;
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .chat-top {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg-box {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .msg-bot { background: rgba(255, 255, 255, 0.08); align-self: flex-start; color: #E2E8F0; }
+    .msg-user { background: var(--accent-cyan); color: #000; font-weight: 600; align-self: flex-end; }
+
+    .chat-input-area {
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      color: #FFF;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .chat-send-btn {
+      background: var(--accent-cyan);
+      border: none;
+      color: #000;
+      padding: 0 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-fixed"></div>
-  <div class="bg-overlay"></div>
+  <div class="cyber-bg"></div>
+  <div class="cyber-grid-overlay"></div>
 
+  <!-- Header -->
   <header>
-    <div class="brand-logo">
-      <span class="brand-gbbe">GBBE</span> <span class="brand-ms">MULTI-SERVICES</span>
+    <div class="brand-container">
+      <div class="brand-icon"><i class="bi bi-cpu-fill"></i></div>
+      <div class="brand-title">GBBE <span>MULTI-SERVICES</span></div>
     </div>
-    <div class="status-badge">⚡ Service Actif</div>
+    <div class="system-status">
+      <div class="pulse-dot"></div>
+      Guichet Automatique En Ligne
+    </div>
   </header>
 
-  <div class="container">
-    <div class="hero-banner">
-      <h1>Guichet Automatique de Paiement</h1>
-      <p>Plateforme sécurisée de recharges directes et transferts d'argent instantanés.</p>
+  <!-- Container Principal -->
+  <div class="main-wrapper">
+    
+    <div class="hero-section">
+      <div class="hero-tag">Plateforme Sécurisée v2.4</div>
+      <h1 class="hero-title">Plateforme Directe de Paiement</h1>
+      <p class="hero-subtitle">Recharges instantanées, forfaits internet et transferts d'argent réseau à réseau 24h/24.</p>
     </div>
 
-    <div class="section-title">Sélectionnez une prestation</div>
+    <!-- Terminal de Commande -->
+    <div class="terminal-container">
+      
+      <!-- Colonne Sélection -->
+      <div>
+        <div class="selector-title">1. Choisissez un Service</div>
+        <div class="mode-selector">
+          
+          <div class="mode-btn active" id="btn-transfert" onclick="selectService('transfert')">
+            <div class="mode-icon"><i class="bi bi-arrow-left-right"></i></div>
+            <div class="mode-info">
+              <h4>Transferts Inter-Réseaux</h4>
+              <p>Envoyez d'un réseau à un autre sans contrainte</p>
+            </div>
+          </div>
 
-    <div class="grid-services">
-      <div class="card-service" onclick="openModal('transfert')">
-        <div class="card-header-icon icon-transfer"><i class="bi bi-wallet2"></i></div>
-        <h3>Transferts Money</h3>
-        <p>Envoi d'un réseau vers un autre (Orange, Wave, MTN, Moov).</p>
-        <div class="operator-badges">
-          <span class="op-tag tag-orange">Orange</span>
-          <span class="op-tag tag-wave">Wave</span>
-          <span class="op-tag tag-mtn">MTN</span>
-          <span class="op-tag tag-moov">Moov</span>
+          <div class="mode-btn" id="btn-pass" onclick="selectService('pass')">
+            <div class="mode-icon"><i class="bi bi-wifi"></i></div>
+            <div class="mode-info">
+              <h4>Pass & Data Internet</h4>
+              <p>Forfaits internet haut débit tous réseaux</p>
+            </div>
+          </div>
+
+          <div class="mode-btn" id="btn-unites" onclick="selectService('unites')">
+            <div class="mode-icon"><i class="bi bi-phone"></i></div>
+            <div class="mode-info">
+              <h4>Recharge d'Unités</h4>
+              <p>Crédit de communication direct</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="networks-box">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Opérateurs Supportés</div>
+          <div class="networks-list">
+            <span class="net-tag net-orange"><i class="bi bi-lightning-fill"></i> Orange</span>
+            <span class="net-tag net-wave"><i class="bi bi-water"></i> Wave</span>
+            <span class="net-tag net-mtn"><i class="bi bi-phone"></i> MTN</span>
+            <span class="net-tag net-moov"><i class="bi bi-reception-4"></i> Moov</span>
+          </div>
         </div>
       </div>
 
-      <div class="card-service" onclick="openModal('pass')">
-        <div class="card-header-icon icon-pass"><i class="bi bi-wifi"></i></div>
-        <h3>Pass & Internet</h3>
-        <p>Souscription directe aux forfaits et volumes de données.</p>
-        <div class="operator-badges">
-          <span class="op-tag tag-orange">Orange</span>
-          <span class="op-tag tag-wave">Wave</span>
-          <span class="op-tag tag-mtn">MTN</span>
-          <span class="op-tag tag-moov">Moov</span>
+      <!-- Colonne Formulaire Dynamique -->
+      <div class="form-panel">
+        <div>
+          <div class="form-header">
+            <h3 id="panel-title">Transfert Money Inter-Réseau</h3>
+          </div>
+
+          <form id="transaction-form" onsubmit="executeTransaction(event)">
+            
+            <div id="dynamic-fields">
+              <!-- Rempli par JavaScript -->
+            </div>
+
+            <div class="field-group">
+              <label>Numéro de Réception</label>
+              <input type="tel" id="input-phone" class="cyber-input" placeholder="ex: 0700000000" maxlength="10" required>
+            </div>
+
+            <div class="field-group">
+              <label>Montant de la Transaction (FCFA)</label>
+              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 5000" min="100" oninput="updateSummary()" required>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-row">
+                <span>Montant saisi :</span>
+                <span id="sum-amount">0 FCFA</span>
+              </div>
+              <div class="summary-row">
+                <span>Frais de service (0%) :</span>
+                <span>0 FCFA</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total à régler :</span>
+                <span id="sum-total" style="color: var(--accent-cyan);">0 FCFA</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-execute">
+              <span>Lancer l'opération</span>
+              <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
+          </form>
         </div>
       </div>
 
-      <div class="card-service" onclick="openModal('unites')">
-        <div class="card-header-icon icon-units"><i class="bi bi-phone"></i></div>
-        <h3>Achat d'Unités</h3>
-        <p>Recharge de crédit de communication téléphonique direct.</p>
-        <div class="operator-badges">
-          <span class="op-tag tag-orange">Orange</span>
-          <span class="op-tag tag-mtn">MTN</span>
-          <span class="op-tag tag-moov">Moov</span>
-        </div>
-      </div>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <div class="social-title">Rejoignez-nous sur nos réseaux</div>
-    <div class="social-links">
-      <a href="https://wa.me/2250767709102" target="_blank" class="social-btn"><i class="bi bi-whatsapp" style="color: #25D366;"></i> WhatsApp</a>
-      <a href="https://facebook.com" target="_blank" class="social-btn"><i class="bi bi-facebook" style="color: #1877F2;"></i> Facebook</a>
-      <a href="https://tiktok.com" target="_blank" class="social-btn"><i class="bi bi-tiktok"></i> TikTok</a>
-      <a href="https://t.me" target="_blank" class="social-btn"><i class="bi bi-telegram" style="color: #229ED9;"></i> Telegram</a>
+    <div class="footer-content">
+      <div style="font-size: 12px; color: var(--text-muted);">
+        © 2026 GBBE MULTI-SERVICES — Guichet Automatique de Paiement.
+      </div>
+      <div class="social-links">
+        <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color: #25D366;"></i> WhatsApp</a>
+        <a href="#" class="social-pill"><i class="bi bi-facebook" style="color: #1877F2;"></i> Facebook</a>
+        <a href="#" class="social-pill"><i class="bi bi-tiktok"></i> TikTok</a>
+        <a href="#" class="social-pill"><i class="bi bi-telegram" style="color: #229ED9;"></i> Telegram</a>
+      </div>
     </div>
   </footer>
 
-  <button class="chat-btn-float" onclick="toggleChat()">
-    <i class="bi bi-headset fs-5"></i> Assistance 24h/24
-  </button>
+  <!-- Support Widget -->
+  <div class="widget-support">
+    <button class="widget-btn" onclick="toggleChat()">
+      <i class="bi bi-headset fs-5"></i>
+      <span>Assistance 24/7</span>
+    </button>
+  </div>
 
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span><i class="bi bi-headset" style="color: #38BDF8;"></i> Support GBBE</span>
-      <button onclick="toggleChat()" style="background:none; border:none; color:#FFF; cursor:pointer;">✕</button>
+  <!-- Chat Box -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-top">
+      <span><i class="bi bi-robot" style="color: var(--accent-cyan);"></i> Assistant GBBE</span>
+      <span style="cursor: pointer;" onclick="toggleChat()">✕</span>
     </div>
-    <div class="chat-body" id="chatBody">
-      <div class="chat-msg msg-bot">Bonjour ! En quoi pouvons-nous vous aider ?</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg-box msg-bot">Bonjour ! Je suis l'assistant automatique GBBE. Comment puis-je vous aider ?</div>
     </div>
-    <div class="chat-footer">
-      <input type="text" id="chatInput" class="form-control-custom" placeholder="Votre message...">
-      <button onclick="sendChat()" style="background:#2563EB; color:#FFF; border:none; padding:0 12px; border-radius:10px; font-weight:bold; cursor:pointer;">OK</button>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Posez une question...">
+      <button class="chat-send-btn" onclick="sendChatMessage()">Envoyer</button>
     </div>
   </div>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeModal()">✕</button>
-      <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; color: #FFF;"></h3>
-      
-      <form onsubmit="handleFormSubmit(event)">
-        <div id="dynamicFields"></div>
-
-        <div class="form-group">
-          <label>Numéro de téléphone</label>
-          <input type="tel" id="modalPhone" class="form-control-custom" placeholder="ex: 0700000000" maxlength="10" required>
-        </div>
-        <div class="form-group">
-          <label>Montant (FCFA)</label>
-          <input type="number" id="modalAmount" class="form-control-custom" placeholder="ex: 2000" min="100" required>
-        </div>
-        <button type="submit" class="btn-submit">Valider l'opération</button>
-      </form>
-    </div>
-  </div>
-
+  <!-- JavaScript Logique -->
   <script>
-    const ops = ['Wave CI', 'Orange Money', 'MTN Money', 'Moov Money'];
+    let currentMode = 'transfert';
 
-    function openModal(type) {
-      const modal = document.getElementById('modalOverlay');
-      const modalTitle = document.getElementById('modalTitle');
-      const dynamicFields = document.getElementById('dynamicFields');
-
-      if (type === 'transfert') {
-        modalTitle.innerText = 'Transferts Money';
-        dynamicFields.innerHTML = `
-          <div class="form-group">
-            <label>Réseau Source (D'où vient l'argent)</label>
-            <select id="srcNet" class="form-control-custom" required>
-              <option value="">-- Choisir --</option>
-              ${ops.map(o => <option value="${o}">${o}</option>).join('')}
+    const serviceConfigs = {
+      transfert: {
+        title: 'Transfert Money Inter-Réseau',
+        renderFields: () => `
+          <div class="field-group">
+            <label>Réseau Source (Compte Débité)</label>
+            <select id="src-network" class="cyber-select" required>
+              <option value="">-- Sélectionnez l'opérateur --</option>
+              <option value="Wave CI">Wave CI</option>
+              <option value="Orange Money">Orange Money</option>
+              <option value="MTN MoMo">MTN MoMo</option>
+              <option value="Moov Money">Moov Money</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Réseau Destination (Où va l'argent)</label>
-            <select id="destNet" class="form-control-custom" required>
-              <option value="">-- Choisir --</option>
-              ${ops.map(o => <option value="${o}">${o}</option>).join('')}
+          <div class="field-group">
+            <label>Réseau Destination (Compte Crédité)</label>
+            <select id="dest-network" class="cyber-select" required>
+              <option value="">-- Sélectionnez l'opérateur --</option>
+              <option value="Wave CI">Wave CI</option>
+              <option value="Orange Money">Orange Money</option>
+              <option value="MTN MoMo">MTN MoMo</option>
+              <option value="Moov Money">Moov Money</option>
             </select>
-          </div>`;
-      } else if (type === 'pass') {
-        modalTitle.innerText = 'Pass & Internet';
-        dynamicFields.innerHTML = `
-          <div class="form-group">
-            <label>Forfait Désiré</label>
-            <select id="optType" class="form-control-custom" required>
-              <option value="">-- Choisir le pass --</option>
-              <option value="Pass Orange Internet">Pass Orange Internet</option>
-              <option value="Pass MTN Data">Pass MTN Data</option>
-              <option value="Pass Moov Web">Pass Moov Web</option>
-              <option value="Wave Internet">Wave Internet</option>
+          </div>
+        `
+      },
+      pass: {
+        title: 'Souscription Pass & Internet',
+        renderFields: () => `
+          <div class="field-group">
+            <label>Type de Forfait Internet</label>
+            <select id="pass-type" class="cyber-select" required>
+              <option value="">-- Choisir votre forfait --</option>
+              <option value="Orange Internet Direct">Orange Pass Internet</option>
+              <option value="MTN Data Pass">MTN Data Pass</option>
+              <option value="Moov Web Pass">Moov Web Pass</option>
+              <option value="Wave Data Direct">Wave Data Direct</option>
             </select>
-          </div>`;
-      } else if (type === 'unites') {
-        modalTitle.innerText = 'Achat d\'Unités';
-        dynamicFields.innerHTML = `
-          <div class="form-group">
-            <label>Opérateur</label>
-            <select id="optType" class="form-control-custom" required>
+          </div>
+        `
+      },
+      unites: {
+        title: 'Achat Direct d\'Unités',
+        renderFields: () => `
+          <div class="field-group">
+            <label>Réseau Téléphonique</label>
+            <select id="operator-type" class="cyber-select" required>
               <option value="">-- Choisir l'opérateur --</option>
-              <option value="Crédit Orange">Crédit Orange</option>
-              <option value="Crédit MTN">Crédit MTN</option>
-              <option value="Crédit Moov">Crédit Moov</option>
+              <option value="Orange Côte d'Ivoire">Orange CI</option>
+              <option value="MTN Côte d'Ivoire">MTN CI</option>
+              <option value="Moov Africa CI">Moov Africa CI</option>
             </select>
-          </div>`;
+          </div>
+        `
       }
-      modal.style.display = 'flex';
-    }
+    };
 
-    function closeModal() {
-      document.getElementById('modalOverlay').style.display = 'none';
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      const phone = document.getElementById('modalPhone').value;
-      const amount = document.getElementById('modalAmount').value;
+    function selectService(mode) {
+      currentMode = mode;
       
-      alert('✅ Demande enregistrée !\nNuméro : ' + phone + '\nMontant : ' + amount + ' FCFA');
-      closeModal();
+      // Mise à jour des boutons
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(btn-${mode}`).classList.add('active');
+
+      // Mise à jour du formulaire
+      document.getElementById('panel-title').innerText = serviceConfigs[mode].title;
+      document.getElementById('dynamic-fields').innerHTML = serviceConfigs[mode].renderFields();
+      
+      // Réinitialiser le montant
+      document.getElementById('input-amount').value = '';
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const val = document.getElementById('input-amount').value || 0;
+      const formatted = Number(val).toLocaleString('fr-FR');
+      document.getElementById('sum-amount').innerText = `${formatted} FCFA;
+      document.getElementById('sum-total').innerText = `${formatted} FCFA;
+    }
+
+    function executeTransaction(e) {
+      e.preventDefault();
+      const phone = document.getElementById('input-phone').value;
+      const amount = document.getElementById('input-amount').value;
+
+      alert(`🚀 Transaction Initialisée !\nService: ${serviceConfigs[currentMode].title}\nNuméro: ${phone}\nMontant: ${amount} FCFA\n\nVotre demande est en cours de traitement.);
     }
 
     function toggleChat() {
-      const chatBox = document.getElementById('chatBox');
-      chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+      const panel = document.getElementById('chatPanel');
+      panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
     }
 
-    function sendChat() {
+    function sendChatMessage() {
       const input = document.getElementById('chatInput');
+      const container = document.getElementById('chatMessages');
       if (!input.value.trim()) return;
-      
-      const body = document.getElementById('chatBody');
-      body.innerHTML += <div class="chat-msg msg-user">${input.value}</div>;
+
+      container.innerHTML += `<div class="msg-box msg-user">${input.value}</div>;
+      const query = input.value;
       input.value = '';
-      
+
       setTimeout(() => {
-        body.innerHTML += <div class="chat-msg msg-bot">Pour toute assistance rapide, contactez-nous au 0767709102.</div>;
-        body.scrollTop = body.scrollHeight;
-      }, 500);
+        container.innerHTML += `<div class="msg-box msg-bot">Pour une assistance immédiate sur votre transaction, contactez le service client WhatsApp au 0767709102.</div>;
+        container.scrollTop = container.scrollHeight;
+      }, 600);
     }
+
+    // Initialisation
+    selectService('transfert');
   </script>
 </body>
 </html>
