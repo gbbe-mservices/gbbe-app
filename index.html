@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[13:49, 06/09/2026] Nobru: <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -18,6 +18,28 @@
       --color-units: #FF6D00;
 
       --accent-orange: #FF6B00;
+      --accent-mtn: #FFCC00;
+      --accent-moov: #00A8…
+[13:57, 06/09/2026] Nobru: <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GBBE MULTI-SERVICES — Terminal Fintech Next-Gen</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+
+  <style>
+    :root {
+      --bg-dark: #030509;
+      --panel-bg: rgba(10, 15, 26, 0.85);
+      
+      --color-transfer: #00F2FE;
+      --color-pass: #00E676;
+      --color-units: #FF6D00;
+
+      --accent-orange: #FF7900;
       --accent-mtn: #FFCC00;
       --accent-moov: #00A859;
       --accent-wave: #1DC1DD;
@@ -49,54 +71,37 @@
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       z-index: -3;
-      background-color: #00121b;
+      background: radial-gradient(circle at 50% 30%, #001e2e 0%, #030509 90%);
       overflow: hidden;
     }
-    /* Animation de lignes défilantes pour fond */
+    
     .lines {
       position: absolute;
       width: 200%;
       height: 200%;
       background:
-        repeating-linear-gradient(45deg, rgba(0,255,255,0.05) 0 2px, transparent 2px 20px),
-        repeating-linear-gradient(-45deg, rgba(0,255,255,0.05) 0 2px, transparent 2px 20px);
-      
-      animation: slideLines 60s linear infinite;
+        repeating-linear-gradient(45deg, rgba(0,242,254,0.03) 0 2px, transparent 2px 20px),
+        repeating-linear-gradient(-45deg, rgba(0,242,254,0.03) 0 2px, transparent 2px 20px);
+      animation: slideLines 50s linear infinite;
       pointer-events: none;
     }
     @keyframes slideLines {
-      0% { background-position: 0 0, 0 0; }
-      100% { background-position: 100px 100px, -100px -100px; }
+      0% { transform: translate(0,0); }
+      100% { transform: translate(-50px, -50px); }
     }
     
     .cyber-grid-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at center, #00F2FE 1px, transparent 2px),
-                  radial-gradient(circle at center, #00F2FE 1px, transparent 2px);
-      background-position: 0 0, 25px 25px;
-      background-size: 50px 50px;
-      opacity: 0.06;
+      background: radial-gradient(circle at center, rgba(0, 242, 254, 0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
       z-index: -2;
       pointer-events: none;
     }
 
-    .data-stream {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-      background: linear-gradient(0deg, transparent 0%, rgba(0,242,254,0.06) 50%, transparent 100%);
-      background-size: 100% 200px;
-      animation: streamAnimation 12s linear infinite;
-    }
-
-    @keyframes streamAnimation {
-      0% { background-position: 0 -200px; }
-      100% { background-position: 0 100vh; }
-    }
-
     /* Header */
     header {
-      background: rgba(6, 10, 18, 0.9);
+      background: rgba(6, 10, 18, 0.92);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
       padding: 16px 32px;
@@ -138,7 +143,6 @@
       font-size: 12px;
       font-weight: 600;
       color: #10B981;
-      user-select: none;
     }
     .pulse-dot {
       width: 8px; height: 8px;
@@ -176,7 +180,6 @@
       border-radius: 20px;
       margin-bottom: 12px;
       transition: all 0.3s ease;
-      user-select: none;
     }
     .hero-title {
       font-family: 'Space Grotesk', sans-serif;
@@ -203,7 +206,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 30px;
-      min-height: 480px;
     }
     @media (max-width: 850px) {
       .terminal-container { grid-template-columns: 1fr; }
@@ -217,7 +219,6 @@
       letter-spacing: 1px;
       color: var(--text-muted);
       margin-bottom: 16px;
-      user-select: none;
     }
     .mode-selector {
       display: flex;
@@ -236,18 +237,15 @@
       cursor: pointer;
       transition: all 0.3s ease;
       color: var(--text-main);
-      user-select: none;
-      position: relative;
     }
     .mode-btn:hover {
       background: rgba(255,255,255,0.08);
       border-color: var(--active-color);
-      box-shadow: 0 0 20px var(--active-color);
     }
     .mode-btn.active {
       background: rgba(0, 242, 254, 0.12);
       border-color: var(--active-color);
-      box-shadow: 0 0 25px var(--active-color);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
     }
     .mode-icon {
       width: 48px;
@@ -260,88 +258,63 @@
       font-size: 22px;
       transition: all 0.3s ease;
       color: #bbb;
-      box-shadow: inset 0 0 8px rgba(255,255,255,0.1);
     }
     .mode-btn.active .mode-icon {
       background: var(--active-color);
       color: #000;
-      box-shadow: 0 0 15px var(--active-color);
     }
     .mode-info h4 {
       font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 4px;
+      color: var(--text-main);
+    }
+    .mode-btn.active .mode-info h4 {
       color: var(--active-color);
-      transition: color 0.3s ease;
     }
     .mode-info p {
       font-size: 0.85rem;
       color: var(--text-muted);
-      margin-top: 0;
-      user-select: none;
     }
 
-    /* Logos des réseaux avec couleurs */
-    .logo {
-      width: 28px;
-      height: 28px;
-      display: inline-block;
-      margin-right: 8px;
-      vertical-align: middle;
-      filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    /* Grille de sélection visuelle des Réseaux avec Logos Officiels */
+    .network-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 8px;
     }
-    .logo.orange {
-      background: #FF7900;
-      border-radius: 5px;
-      position: relative;
+    .network-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
-    .logo.mtn {
-      background: #FFCC00;
-      border-radius: 50% / 40%;
-      position: relative;
+    .network-card img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 6px;
     }
-    .logo.moov {
-      background: #00A859;
-      border-radius: 5px;
-      position: relative;
-    }
-    .logo.wave {
-      background: #1DC1DD;
-      border-radius: 50%;
-      position: relative;
-    }
-    /* Simple icon inside logos using CSS for demo */
-    .logo.orange::after {
-      content: 'O';
-      position: absolute; top: 3px; left: 5px;
-      color: white;
+    .network-card span {
+      font-size: 11px;
       font-weight: 700;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
     }
-    .logo.mtn::after {
-      content: 'M';
-      position: absolute; top: 4px; left: 8px;
-      color: black;
-      font-weight: 900;
-      font-family: Arial, sans-serif;
-      font-size: 15px;
+    .network-card:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
     }
-    .logo.moov::after {
-      content: 'M';
-      position: absolute; top: 4px; left: 8px;
-      color: white;
-      font-weight: 900;
-      font-family: Arial, sans-serif;
-      font-size: 15px;
-    }
-    .logo.wave::after {
-      content: 'W';
-      position: absolute; top: 3px; left: 7px;
-      color: white;
-      font-weight: 900;
-      font-family: Arial, sans-serif;
-      font-size: 15px;
+    .network-card.selected {
+      border-color: var(--active-color);
+      background: rgba(0, 242, 254, 0.15);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
     }
 
     /* Form panel */
@@ -365,7 +338,6 @@
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--active-color);
-      user-select: none;
       transition: color 0.3s ease;
     }
     .field-group {
@@ -379,9 +351,8 @@
       letter-spacing: 0.5px;
       color: var(--text-muted);
       margin-bottom: 6px;
-      user-select: none;
     }
-    .cyber-input, .cyber-select {
+    .cyber-input {
       width: 100%;
       background: rgba(0, 0, 0, 0.65);
       border: 1.5px solid rgba(255, 255, 255, 0.18);
@@ -393,17 +364,12 @@
       transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
     .cyber-input::placeholder {
-      color: #bbb;
-      opacity: 0.8;
+      color: #777;
     }
-    .cyber-input:focus, .cyber-select:focus {
+    .cyber-input:focus {
       border-color: var(--active-color);
       box-shadow: 0 0 15px var(--active-color);
       background: rgba(0, 0, 0, 0.85);
-    }
-    .cyber-select option {
-      background: #0A0F1A;
-      color: #FFF;
     }
 
     /* Résumé des frais */
@@ -413,7 +379,6 @@
       border-radius: 12px;
       padding: 16px 20px;
       margin: 16px 0 22px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .summary-row {
       display: flex;
@@ -421,7 +386,6 @@
       font-size: 13px;
       color: var(--text-muted);
       margin-bottom: 8px;
-      user-select: none;
     }
     .summary-row.total {
       font-size: 15px;
@@ -449,7 +413,6 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      user-select: none;
       box-shadow: 0 5px 25px rgba(0, 242, 254, 0.4);
     }
     .btn-execute:hover {
@@ -467,7 +430,6 @@
       text-align: center;
       font-size: 12px;
       color: var(--text-muted);
-      user-select: none;
     }
     .social-links {
       display: flex;
@@ -493,7 +455,6 @@
     .social-pill:hover {
       background: var(--active-color);
       color: #000;
-      border-color: var(--active-color);
     }
 
     .widget-btn {
@@ -513,19 +474,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      user-select: none;
-      transition: filter 0.3s ease;
-    }
-    .widget-btn:hover {
-      filter: brightness(1.15);
-    }
-
-    /* Styles pour les selects avec logos */
-    select option[data-logo] {
-      padding-left: 36px;
-      background-repeat: no-repeat;
-      background-position: 6px center;
-      background-size: 24px 24px;
     }
   </style>
 </head>
@@ -535,7 +483,6 @@
     <div class="lines"></div>
   </div>
   <div class="cyber-grid-overlay"></div>
-  <div class="data-stream"></div>
 
   <header>
     <div class="brand-container">
@@ -559,7 +506,7 @@
       <div>
         <div class="selector-title">1. Choisissez une prestation</div>
         <div class="mode-selector">
-          <div class="mode-btn type-transfert active" id="btn-transfert" onclick="selectService('transfert')">
+          <div class="mode-btn active" id="btn-transfert" onclick="selectService('transfert')">
             <div class="mode-icon"><i class="bi bi-arrow-left-right"></i></div>
             <div class="mode-info">
               <h4>Transferts Inter-Réseaux</h4>
@@ -567,7 +514,7 @@
             </div>
           </div>
 
-          <div class="mode-btn type-pass" id="btn-pass" onclick="selectService('pass')">
+          <div class="mode-btn" id="btn-pass" onclick="selectService('pass')">
             <div class="mode-icon"><i class="bi bi-wifi"></i></div>
             <div class="mode-info">
               <h4>Pass & Data Internet</h4>
@@ -575,7 +522,7 @@
             </div>
           </div>
 
-          <div class="mode-btn type-unites" id="btn-unites" onclick="selectService('unites')">
+          <div class="mode-btn" id="btn-unites" onclick="selectService('unites')">
             <div class="mode-icon"><i class="bi bi-phone"></i></div>
             <div class="mode-info">
               <h4>Recharge d'Unités</h4>
@@ -593,26 +540,72 @@
           </div>
 
           <form id="transaction-form" onsubmit="executeTransaction(event)">
-            <div id="dynamic-fields"></div>
-
+            
+            <!-- Choix du réseau à débiter -->
             <div class="field-group">
-              <label for="input-sender-phone">Numéro à Débiter (Qui paie)</label>
-              <input type="tel" id="input-sender-phone" class="cyber-input" placeholder="ex: 0701020304" maxlength="10" pattern="[0-9]{8,10}" required />
+              <label>1. Sélectionner le réseau à DÉBITER (Qui Paie)</label>
+              <div class="network-grid" id="grid-source">
+                <div class="network-card selected" onclick="setNetwork('source', 'Wave', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Wave_Mobile_money_logo.png" alt="Wave" />
+                  <span>Wave</span>
+                </div>
+                <div class="network-card" onclick="setNetwork('source', 'Orange', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Orange_Money_logo.svg" alt="Orange" />
+                  <span>Orange</span>
+                </div>
+                <div class="network-card" onclick="setNetwork('source', 'MTN', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/MTN_Mobile_Money_Logo.svg" alt="MTN" />
+                  <span>MTN</span>
+                </div>
+                <div class="network-card" onclick="setNetwork('source', 'Moov', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Moov_afrique_logo.svg" alt="Moov" />
+                  <span>Moov</span>
+                </div>
+              </div>
             </div>
 
             <div class="field-group">
-              <label for="input-receiver-phone">Numéro de Réception (Qui reçoit)</label>
-              <input type="tel" id="input-receiver-phone" class="cyber-input" placeholder="ex: 0501020304" maxlength="10" pattern="[0-9]{8,10}" required />
+              <label for="input-sender-phone">Numéro du compte à débiter</label>
+              <input type="tel" id="input-sender-phone" class="cyber-input" placeholder="ex: 0701020304" maxlength="10" required />
+            </div>
+
+            <!-- Choix du réseau à créditer -->
+            <div class="field-group" id="group-destination">
+              <label>2. Sélectionner le réseau à CRÉDITER (Qui Reçoit)</label>
+              <div class="network-grid" id="grid-dest">
+                <div class="network-card" onclick="setNetwork('dest', 'Wave', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Wave_Mobile_money_logo.png" alt="Wave" />
+                  <span>Wave</span>
+                </div>
+                <div class="network-card selected" onclick="setNetwork('dest', 'Orange', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Orange_Money_logo.svg" alt="Orange" />
+                  <span>Orange</span>
+                </div>
+                <div class="network-card" onclick="setNetwork('dest', 'MTN', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/MTN_Mobile_Money_Logo.svg" alt="MTN" />
+                  <span>MTN</span>
+                </div>
+                <div class="network-card" onclick="setNetwork('dest', 'Moov', this)">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Moov_afrique_logo.svg" alt="Moov" />
+                  <span>Moov</span>
+                </div>
+              </div>
             </div>
 
             <div class="field-group">
-              <label for="input-amount">Montant (FCFA)</label>
-              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 2000" min="100" oninput="calculateTotal()" required />
+              <label for="input-receiver-phone">Numéro du destinataire</label>
+              <input type="tel" id="input-receiver-phone" class="cyber-input" placeholder="ex: 0501020304" maxlength="10" required />
             </div>
 
-            <div class="summary-card" aria-live="polite" aria-atomic="true">
+            <!-- Calculateur -->
+            <div class="field-group">
+              <label for="input-amount">Montant à envoyer (FCFA)</label>
+              <input type="number" id="input-amount" class="cyber-input" placeholder="ex: 5000" min="100" required />
+            </div>
+
+            <div class="summary-card">
               <div class="summary-row">
-                <span>Montant saisi :</span>
+                <span>Montant à débiter :</span>
                 <span id="sum-amount">0 FCFA</span>
               </div>
               <div class="summary-row">
@@ -620,13 +613,13 @@
                 <span id="sum-fees">0 FCFA</span>
               </div>
               <div class="summary-row total">
-                <span>Total à régler :</span>
+                <span>Total à Payer :</span>
                 <span id="sum-total" style="color: var(--active-color);">0 FCFA</span>
               </div>
             </div>
 
             <button type="submit" class="btn-execute">
-              <span>Lancer la transaction</span>
+              <span>Lancer & Payer maintenant</span>
               <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
           </form>
@@ -636,18 +629,20 @@
   </div>
 
   <footer>
-    <div>©️ 2026 GBBE MULTI-SERVICES — Guichet Automatique et Maintenance Serveurs.</div>
+    <div>© 2026 GBBE MULTI-SERVICES — Guichet Automatique et Maintenance Serveurs.</div>
     <div class="social-links">
       <a href="https://wa.me/2250767709102" target="_blank" class="social-pill"><i class="bi bi-whatsapp" style="color:#25D366;"></i> WhatsApp Support</a>
     </div>
   </footer>
 
-  <button class="widget-btn" id="widget-btn">
+  <button class="widget-btn">
     <i class="bi bi-headset"></i> Assistance 24h/24
   </button>
 
   <script>
     let currentMode = 'transfert';
+    let selectedSourceNetwork = 'Wave';
+    let selectedDestNetwork = 'Orange';
 
     const colors = {
       transfert: '#00F2FE',
@@ -655,69 +650,34 @@
       unites: '#FF6D00'
     };
 
-    const networkLogos = {
-      "Wave CI": "url('https://upload.wikimedia.org/wikipedia/commons/9/9f/Wave_Mobile_money_logo.png')",
-      "Orange Money": "url('https://upload.wikimedia.org/wikipedia/commons/8/85/Orange_Money_logo.svg')",
-      "MTN MoMo": "url('https://upload.wikimedia.org/wikipedia/commons/f/f0/MTN_Mobile_Money_Logo.svg')",
-      "Moov Money": "url('https://upload.wikimedia.org/wikipedia/commons/4/47/Moov_afrique_logo.svg')"
-    };
+    // Attachement direct des événements de saisie pour le calculateur
+    const amountInput = document.getElementById('input-amount');
+    ['input', 'keyup', 'change', 'paste'].forEach(evt => {
+      amountInput.addEventListener(evt, calculateTotal);
+    });
 
-    const serviceConfigs = {
-      transfert: {
-        title: 'Transferts Inter-Réseaux',
-        tag: 'Module de Transfert',
-        renderFields: () => `
-          <div class="field-group">
-            <label for="network-source">Réseau Source (Compte à débiter)</label>
-            <select id="network-source" class="cyber-select" required>
-              <option value="">-- Choisir le réseau source --</option>
-              <option value="Wave CI" data-logo="wave">Wave CI</option>
-              <option value="Orange Money" data-logo="orange">Orange Money</option>
-              <option value="MTN MoMo" data-logo="mtn">MTN MoMo</option>
-              <option value="Moov Money" data-logo="moov">Moov Money</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label for="network-destination">Réseau Destination (Compte à créditer)</label>
-            <select id="network-destination" class="cyber-select" required>
-              <option value="">-- Choisir le réseau destinataire --</option>
-              <option value="Wave CI" data-logo="wave">Wave CI</option>
-              <option value="Orange Money" data-logo="orange">Orange Money</option>
-              <option value="MTN MoMo" data-logo="mtn">MTN MoMo</option>
-              <option value="Moov Money" data-logo="moov">Moov Money</option>
-            </select>
-          </div>`
-      },
-      pass: {
-        title: 'Souscription Pass & Internet',
-        tag: 'Module Pass & Data',
-        renderFields: () => `
-          <div class="field-group">
-            <label for="pass-choice">Choix du Pass / Forfait</label>
-            <select id="pass-choice" class="cyber-select" required>
-              <option value="">-- Choisir un forfait --</option>
-              <option value="Orange Internet" data-logo="orange">Pass Orange Internet</option>
-              <option value="MTN Data Pass" data-logo="mtn">Pass MTN Data</option>
-              <option value="Moov Web Pass" data-logo="moov">Pass Moov Web</option>
-              <option value="Wave Data" data-logo="wave">Wave Data</option>
-            </select>
-          </div>`
-      },
-      unites: {
-        title: 'Achat d\'Unités Téléphoniques',
-        tag: 'Module Recharge d\'Unités',
-        renderFields: () => `
-          <div class="field-group">
-            <label for="operator-choice">Opérateur Télécom</label>
-            <select id="operator-choice" class="cyber-select" required>
-              <option value="">-- Choisir l'opérateur --</option>
-              <option value="Orange CI" data-logo="orange">Orange Côte d'Ivoire</option>
-              <option value="MTN CI" data-logo="mtn">MTN Côte d'Ivoire</option>
-              <option value="Moov CI" data-logo="moov">Moov Africa CI</option>
-            </select>
-          </div>`
+    function calculateTotal() {
+      const val = amountInput.value;
+      const amount = parseFloat(val) || 0;
+      
+      const fees = Math.round(amount * 0.01); // 1% frais
+      const total = amount + fees;
+
+      document.getElementById('sum-amount').innerText = amount.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('sum-fees').innerText = fees.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('sum-total').innerText = total.toLocaleString('fr-FR') + ' FCFA';
+    }
+
+    function setNetwork(type, network, element) {
+      if (type === 'source') {
+        selectedSourceNetwork = network;
+        document.querySelectorAll('#grid-source .network-card').forEach(c => c.classList.remove('selected'));
+      } else {
+        selectedDestNetwork = network;
+        document.querySelectorAll('#grid-dest .network-card').forEach(c => c.classList.remove('selected'));
       }
-    };
+      element.classList.add('selected');
+    }
 
     function selectService(mode) {
       currentMode = mode;
@@ -728,126 +688,68 @@
       document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(btn-${mode}).classList.add('active');
 
-      document.getElementById('panel-title').innerText = serviceConfigs[mode].title;
-      document.getElementById('hero-tag').innerText = serviceConfigs[mode].tag;
-      document.getElementById('dynamic-fields').innerHTML = serviceConfigs[mode].renderFields();
+      const destGroup = document.getElementById('group-destination');
 
-      addLogoToSelectOptions();
+      if (mode === 'transfert') {
+        document.getElementById('panel-title').innerText = 'Transferts Inter-Réseaux';
+        document.getElementById('hero-tag').innerText = 'Module de Transfert';
+        destGroup.style.display = 'block';
+      } else if (mode === 'pass') {
+        document.getElementById('panel-title').innerText = 'Souscription Pass & Internet';
+        document.getElementById('hero-tag').innerText = 'Module Pass & Data';
+        destGroup.style.display = 'none';
+      } else {
+        document.getElementById('panel-title').innerText = 'Recharge d\'Unités Téléphoniques';
+        document.getElementById('hero-tag').innerText = 'Module Recharge d\'Unités';
+        destGroup.style.display = 'none';
+      }
 
       calculateTotal();
-    }
-
-    // Ajoute les logos aux options des selects
-    function addLogoToSelectOptions() {
-      const selects = document.querySelectorAll('.cyber-select');
-      selects.forEach(select => {
-        Array.from(select.options).forEach(option => {
-          const logoClass = option.getAttribute('data-logo');
-          if (logoClass && option.value !== '') {
-            option.style.backgroundImage = getLogoBackground(logoClass);
-            option.style.paddingLeft = '36px';
-            option.style.backgroundRepeat = 'no-repeat';
-            option.style.backgroundPosition = '6px center';
-            option.style.backgroundSize = '24px 24px';
-          } else {
-            option.style.backgroundImage = 'none';
-          }
-        });
-      });
-    }
-
-    function getLogoBackground(name) {
-      switch(name) {
-        case 'orange': return 'linear-gradient(90deg, #FF7900 0%, #FF6200 100%)';
-        case 'mtn': return 'linear-gradient(90deg, #FFCC00 0%, #E6B800 100%)';
-        case 'moov': return 'linear-gradient(90deg, #00A859 0%, #008D47 100%)';
-        case 'wave': return 'linear-gradient(90deg, #1DC1DD 0%, #1391A6 100%)';
-        default: return 'none';
-      }
-    }
-
-    function calculateTotal() {
-      const inputVal = document.getElementById('input-amount').value;
-      const amount = parseFloat(inputVal) || 0;
-      
-      const fees = Math.round(amount * 0.01); // 1% frais
-      const total = amount + fees;
-
-      document.getElementById('sum-amount').innerText = amount.toLocaleString('fr-FR') + ' FCFA';
-      document.getElementById('sum-fees').innerText = fees.toLocaleString('fr-FR') + ' FCFA';
-      document.getElementById('sum-total').innerText = total.toLocaleString('fr-FR') + ' FCFA';
     }
 
     function executeTransaction(e) {
       e.preventDefault();
 
-      // Récupère les valeurs communes
       const sender = document.getElementById('input-sender-phone').value.trim();
       const receiver = document.getElementById('input-receiver-phone').value.trim();
-      const amountStr = document.getElementById('input-amount').value.trim();
-      const amount = parseFloat(amountStr);
+      const amount = parseFloat(amountInput.value) || 0;
+
       if (amount < 100) {
         alert('Le montant minimum est de 100 FCFA.');
         return;
       }
 
-      // Récupération des sélecteurs dynamiques selon service
-      let sourceNetwork = '', destNetwork = sourceNetwork = '', destNetwork = '', passChoice = '', operator = '';
+      const totalToPay = amount + Math.round(amount * 0.01);
 
-      if (currentMode === 'transfert') {
-        const sourceSelect = document.getElementById('network-source');
-        const destSelect = document.getElementById('network-destination');
-        if (!sourceSelect.value || !destSelect.value) {
-          alert('Veuillez choisir les réseaux source et destination.');
-          return;
-        }
-        sourceNetwork = sourceSelect.value;
-        destNetwork = destSelect.value;
-        if(sourceNetwork === destNetwork){
-          alert('Le réseau source et le réseau destination doivent être différents.');
-          return;
-        }
-      } else if (currentMode === 'pass') {
-        const passSelect = document.getElementById('pass-choice');
-        if (!passSelect.value) {
-          alert('Veuillez choisir un forfait.');
-          return;
-        }
-        passChoice = passSelect.value;
-      } else if (currentMode === 'unites') {
-        const opSelect = document.getElementById('operator-choice');
-        if (!opSelect.value) {
-          alert('Veuillez choisir un opérateur.');
-          return;
-        }
-        operator = opSelect.value;
-      }
+      alert(🚀 Redirection vers le réseau ${selectedSourceNetwork.toUpperCase()}...\n\nMontant à débiter: ${totalToPay} FCFA\nNuméro: ${sender});
 
-      let message = 🚀 Transaction en cours de traitement par nos serveurs !\n\n;
-      switch(currentMode) {
-        case 'transfert':
-          message += - Réseau source (débité) : ${sourceNetwork}\n- Numéro débité : ${sender}\n- Réseau destination (crédité) : ${destNetwork}\n- Numéro crédité : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+      // Logique de Redirection directe vers les applications/réseaux de paiement
+      let redirectUrl = "";
+
+      switch (selectedSourceNetwork) {
+        case 'Wave':
+          // Redirection Deep Link Wave CI
+          redirectUrl = https://wave.com/pay?amount=${totalToPay}&phone=${sender};
           break;
-
-        case 'pass':
-          message += - Forfait : ${passChoice}\n- Numéro : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+        case 'Orange':
+          // Portail Orange Money CI
+          redirectUrl = https://www.orange.ci/om;
           break;
-
-        case 'unites':
-          message += - Opérateur : ${operator}\n- Numéro : ${receiver}\n- Montant : ${amount.toLocaleString('fr-FR')} FCFA;
+        case 'MTN':
+          // Portail MTN MoMo
+          redirectUrl = https://www.mtn.ci/momo/;
+          break;
+        case 'Moov':
+          // Portail Moov Money
+          redirectUrl = https://www.moov-africa.ci/;
           break;
       }
 
-      alert(message);
-
-      // Reset formulaire
-      document.getElementById('transaction-form').reset();
-      calculateTotal();
+      window.open(redirectUrl, '_blank');
     }
 
     // Initialisation
-    selectService('transfert');
+    calculateTotal();
   </script>
-
 </body>
 </html>
