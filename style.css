@@ -348,7 +348,7 @@ body {
   gap: 6px;
 }
 
-/* Style des Modales */
+/* Modales */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -425,7 +425,7 @@ body {
   color: #FFF;
 }
 
-/* Modale spécifique Orange Money */
+/* Orange Specific */
 .orange-header {
   color: var(--orange-brand) !important;
 }
