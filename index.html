@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GBBE-MULTISERVICES.CI — Plateforme de Transfert</title>
+  <title>GBBE-MULTISERVICES.CI — Guichet Automatisé</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <link rel="stylesheet" href="./style.css?v=6.0" />
+  <link rel="stylesheet" href="./style.css?v=7.0" />
 </head>
 <body>
 
@@ -30,17 +30,15 @@
   <main class="main-container">
     <div class="checkout-grid">
       
-      <!-- Colonne Gauche : Formulaire de Saisie -->
+      <!-- Section Formulaire -->
       <section class="card-box form-section">
         <h2>Passer une transaction</h2>
         <p class="subtitle">Sélectionnez les réseaux et saisissez les informations de transfert</p>
 
-        <form id="transfer-form">
+        <form id="transfer-form" onsubmit="return false;">
           
-          <!-- Sélection Source & Destination -->
           <div class="selection-grid">
-            
-            <!-- Bloc Source -->
+            <!-- Source -->
             <div class="select-block">
               <label><i class="bi bi-wallet2"></i> Réseau Source (Débit)</label>
               <select id="source-network">
@@ -49,14 +47,14 @@
                 <option value="MTN">MTN MoMo</option>
                 <option value="Moov">Moov Money</option>
               </select>
-              <input type="tel" id="source-number" placeholder="N° de téléphone source" required />
+              <input type="tel" id="source-number" placeholder="Ex: 0707070707" required />
             </div>
 
             <div class="arrow-divider">
               <i class="bi bi-arrow-right"></i>
             </div>
 
-            <!-- Bloc Destination -->
+            <!-- Destination -->
             <div class="select-block">
               <label><i class="bi bi-person-down"></i> Réseau Destination (Crédit)</label>
               <select id="dest-network">
@@ -65,9 +63,8 @@
                 <option value="MTN">MTN MoMo</option>
                 <option value="Moov">Moov Money</option>
               </select>
-              <input type="tel" id="dest-number" placeholder="N° du destinataire" required />
+              <input type="tel" id="dest-number" placeholder="Ex: 0505050505" required />
             </div>
-
           </div>
 
           <!-- Montant -->
@@ -80,7 +77,7 @@
             <span class="help-text">Montant min: 250 FCFA — Max: 300 000 FCFA</span>
           </div>
 
-          <!-- Case à cocher Frais -->
+          <!-- Frais -->
           <div class="checkbox-card">
             <label class="custom-checkbox">
               <input type="checkbox" id="include-fees" checked>
@@ -91,7 +88,7 @@
         </form>
       </section>
 
-      <!-- Colonne Droite : Récapitulatif -->
+      <!-- Section Récapitulatif -->
       <section class="card-box summary-section">
         <h3>Résumé de la commande</h3>
         
@@ -133,7 +130,7 @@
     </div>
   </main>
 
-  <!-- Modale Standard de Confirmation -->
+  <!-- Modale Standard (Wave / MTN / Moov) -->
   <div class="modal-overlay" id="confirm-modal">
     <div class="modal-box">
       <div class="modal-header">
@@ -151,7 +148,7 @@
     </div>
   </div>
 
-  <!-- Modale Dédiée Orange Money (Code OTP) -->
+  <!-- Modale Orange Money (Code OTP) -->
   <div class="modal-overlay" id="orange-modal">
     <div class="modal-box orange-theme">
       <div class="modal-header orange-header">
@@ -188,6 +185,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=6.0"></script>
+  <script src="./app.js?v=7.0"></script>
 </body>
 </html>
