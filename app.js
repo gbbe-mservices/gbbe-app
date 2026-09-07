@@ -30,13 +30,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnOrangeConfirm = document.getElementById('btn-orange-confirm');
   const omOtpInput = document.getElementById('om-otp-code');
 
-  // URL Marchand Wave officielle
   const WAVE_MERCHANT_URL = 'https://pay.wave.com/m/M_ci_OrrWOYxbonu6/c/ci/';
+  const FEE_RATE = 0.01;
 
-  const FEE_RATE = 0.01; // 1%
+  // Table des préfixes CI (Plan 10 chiffres)
+  const PREFIXES = {
+    Orange: ['07', '08', '09', '17', '18', '19', '47', '48', '49', '57', '58', '59', '67', '68', '69', '77', '78', '79', '87', '88', '89', '97', '98'],
+    MTN: ['04', '05', '06', '14', '15', '16', '44', '45', '46', '54', '55', '56', '64', '65', '66', '74', '75', '76', '84', '85', '86', '94', '95', '96'],
+    Moov: ['01', '02', '03', '11', '12', '13', '41', '42', '43', '51', '52', '53', '61', '62', '63', '71', '72', '73', '81', '82', '83', '91', '92', '93']
+  };
 
   function formatFCFA(val) {
     return new Intl.NumberFormat('fr-FR').format(val) + ' Fcfa';
+  }
+
+  // Nettoyage du numéro de téléphone (enlève espaces, indicatif +225)
+  function cleanPhoneNumber(phone) {
+    let clean = phone.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+    if (clean.startsWith('225') && clean.length === 13) {
+      clean = clean.substring(3);
+    }
+    return clean;
+  }
+
+  // Validation du numéro selon le réseau
+  function validateNetworkNumber(network, phone) {
+    const cleanPhone = cleanPhoneNumber(phone);
+
+    if (cleanPhone.length !== 10) {
+      return { valid: false, message: Le numéro ${phone} doit comporter exactement 10 chiffres. };
+    }
+
+    if (network === 'Wave') {
+      // Wave prend tous les numéros valides en Côte d'Ivoire
+      const allPrefixes = [...PREFIXES.Orange, ...PREFIXES.MTN, ...PREFIXES.Moov];
+      const pref = cleanPhone.substring(0, 2);
+      if (!allPrefixes.includes(pref)) {
+        return { valid: false, message: Le numéro ${phone} n'est pas un numéro valide en Côte d'Ivoire. };
+      }
+      return { valid: true };
+    }
+
+    const validPrefixes = PREFIXES[network] || [];
+    const prefix = cleanPhone.substring(0, 2);
+
+    if (!validPrefixes.includes(prefix)) {
+      return { 
+        valid: false, 
+        message: Le numéro ${phone} ne correspond pas au réseau ${network}. Veuillez saisir un numéro ${network} valide. 
+      };
+    }
+
+    return { valid: true };
   }
 
   function calculate() {
@@ -55,12 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const fee = Math.round(rawVal * FEE_RATE);
 
     if (feeCheckbox.checked) {
-      // Frais à la charge de l'utilisateur : le destinataire reçoit 100% du montant saisi
       receiptAmount.textContent = formatFCFA(rawVal);
       receiptFee.textContent = formatFCFA(fee);
       receiptTotal.textContent = formatFCFA(rawVal + fee);
     } else {
-      // Frais déduits du montant transféré
       const net = Math.max(0, rawVal - fee);
       receiptAmount.textContent = formatFCFA(net);
       receiptFee.textContent = formatFCFA(fee);
@@ -68,23 +111,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Écouteurs sur les sélecteurs et champs
   sourceNet.addEventListener('change', calculate);
   destNet.addEventListener('change', calculate);
   amountInput.addEventListener('input', calculate);
   feeCheckbox.addEventListener('change', calculate);
 
-  // Clic sur "Procéder au paiement"
+  // Soumission et Contrôle de cohérence
   btnContinue.addEventListener('click', () => {
     const val = parseFloat(amountInput.value);
-    
-    if (!sourceNum.value.trim()) {
+    const srcPhone = sourceNum.value.trim();
+    const dstPhone = destNum.value.trim();
+
+    if (!srcPhone) {
       alert('Veuillez entrer le numéro de téléphone source.');
       return;
     }
 
-    if (!destNum.value.trim()) {
+    if (!dstPhone) {
       alert('Veuillez entrer le numéro du destinataire.');
+      return;
+    }
+
+    // Contrôle numéro Source
+    const srcCheck = validateNetworkNumber(sourceNet.value, srcPhone);
+    if (!srcCheck.valid) {
+      alert('Erreur Réseau Source : ' + srcCheck.message);
+      sourceNum.focus();
+      return;
+    }
+
+    // Contrôle numéro Destination
+    const dstCheck = validateNetworkNumber(destNet.value, dstPhone);
+    if (!dstCheck.valid) {
+      alert('Erreur Réseau Destination : ' + dstCheck.message);
+      destNum.focus();
       return;
     }
 
@@ -93,22 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Aiguillage selon le réseau source sélectionné
+    // Si tout est valide
     if (sourceNet.value === 'Orange') {
-      // Afficher la modale dédiée à Orange Money avec la procédure OTP
       omOtpInput.value = '';
       orangeModal.classList.add('active');
     } else {
-      // Afficher la modale standard (Wave / MTN / Moov)
       modalAmount.textContent = formatFCFA(val);
       modalSrc.textContent = sourceNet.value;
       modalDst.textContent = destNet.value;
-      modalDstNum.textContent = destNum.value.trim();
+      modalDstNum.textContent = cleanPhoneNumber(dstPhone);
       confirmModal.classList.add('active');
     }
   });
 
-  // Fermeture des modales
   btnCancel.addEventListener('click', () => {
     confirmModal.classList.remove('active');
   });
@@ -117,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
     orangeModal.classList.remove('active');
   });
 
-  // Action de confirmation pour Wave / MTN / Moov
   btnConfirm.addEventListener('click', () => {
     btnConfirm.textContent = 'Redirection...';
     btnConfirm.disabled = true;
@@ -126,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sourceNet.value === 'Wave') {
         window.location.href = WAVE_MERCHANT_URL;
       } else {
-        alert('Redirection en cours vers le guichet sécurisé ' + sourceNet.value + '...');
+        alert('Redirection vers le guichet de paiement ' + sourceNet.value);
         confirmModal.classList.remove('active');
         btnConfirm.textContent = 'Confirmer & Payer';
         btnConfirm.disabled = false;
@@ -134,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 600);
   });
 
-  // Validation du paiement Orange Money avec Code OTP
   btnOrangeConfirm.addEventListener('click', () => {
     const otp = omOtpInput.value.trim();
 
