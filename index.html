@@ -27,7 +27,86 @@
     
     <!-- COLONNE 1 : Espace Client & Transactions -->
     <section class="space-y-6">
-      
+      <!-- Carte Principale Transaction / Inscription -->
+<div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg max-w-xl mx-auto">
+  
+  <!-- Sélecteur de Mode (Invité vs Membre) -->
+  <div class="flex bg-slate-800 p-1 rounded-xl mb-6">
+    <button id="tabGuest" onclick="switchMode('guest')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white">
+      ⚡ Achat Rapide (Invité)
+    </button>
+    <button id="tabMember" onclick="switchMode('member')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400">
+      👤 Espace Membre / Inscription
+    </button>
+  </div>
+
+  <!-- MODE INVITÉ : Validation Immédiate -->
+  <div id="guestForm" class="space-y-4">
+    <p class="text-xs text-slate-400">Payer immédiatement sans créer de compte.</p>
+    
+    <div>
+      <label class="block text-xs text-slate-300 mb-1">Numéro à recharger / débiter</label>
+      <input type="tel" id="guestPhone" placeholder="ex: 0707070707" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+    </div>
+
+    <div>
+      <label class="block text-xs text-slate-300 mb-1">Montant (FCFA)</label>
+      <input type="number" id="guestAmount" placeholder="ex: 5000" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+    </div>
+
+    <button onclick="processGuestPayment()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-600/20">
+      Valider la transaction maintenant 🚀
+    </button>
+  </div>
+
+  <!-- MODE MEMBRE : Formulaire Inscription/Connexion -->
+  <div id="memberForm" class="space-y-4 hidden">
+    <p class="text-xs text-slate-400">Connectez-vous pour conserver votre historique et vos avantages parrainage.</p>
+    
+    <input type="tel" placeholder="Téléphone" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+    <input type="password" placeholder="Mot de passe" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+
+    <button class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">
+      Se connecter / S'inscrire
+    </button>
+  </div>
+
+</div>
+
+<!-- JavaScript pour alterner entre les deux modes -->
+<script>
+  function switchMode(mode) {
+    const guestTab = document.getElementById('tabGuest');
+    const memberTab = document.getElementById('tabMember');
+    const guestForm = document.getElementById('guestForm');
+    const memberForm = document.getElementById('memberForm');
+
+    if (mode === 'guest') {
+      guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+      memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
+      guestForm.classList.remove('hidden');
+      memberForm.classList.add('hidden');
+    } else {
+      memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+      guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
+      memberForm.classList.remove('hidden');
+      guestForm.classList.add('hidden');
+    }
+  }
+
+  function processGuestPayment() {
+    const phone = document.getElementById('guestPhone').value;
+    const amount = document.getElementById('guestAmount').value;
+
+    if (!phone || !amount) {
+      alert("Veuillez remplir le numéro et le montant.");
+      return;
+    }
+
+    alert(Transaction de ${amount} FCFA initiée pour le numéro ${phone}. Redirection vers le paiement...);
+    // Ici sera exécuté le lien d'API PayDunya en mode direct
+  }
+</script>
       <!-- Module Connexion / Inscription -->
       <div id="authCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
         <h2 class="text-lg font-bold mb-1">Espace Utilisateur</h2>
