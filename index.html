@@ -27,101 +27,55 @@
     
     <!-- COLONNE 1 : Espace Client & Transactions -->
     <section class="space-y-6">
-      <!-- Carte Principale Transaction / Inscription -->
-<div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg max-w-xl mx-auto">
-  
-  <!-- Sélecteur de Mode (Invité vs Membre) -->
-  <div class="flex bg-slate-800 p-1 rounded-xl mb-6">
-    <button id="tabGuest" onclick="switchMode('guest')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white">
-      ⚡ Achat Rapide (Invité)
-    </button>
-    <button id="tabMember" onclick="switchMode('member')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400">
-      👤 Espace Membre / Inscription
-    </button>
-  </div>
-
-  <!-- MODE INVITÉ : Validation Immédiate -->
-  <div id="guestForm" class="space-y-4">
-    <p class="text-xs text-slate-400">Payer immédiatement sans créer de compte.</p>
-    
-    <div>
-      <label class="block text-xs text-slate-300 mb-1">Numéro à recharger / débiter</label>
-      <input type="tel" id="guestPhone" placeholder="ex: 0707070707" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-    </div>
-
-    <div>
-      <label class="block text-xs text-slate-300 mb-1">Montant (FCFA)</label>
-      <input type="number" id="guestAmount" placeholder="ex: 5000" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-    </div>
-
-    <button onclick="processGuestPayment()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-600/20">
-      Valider la transaction maintenant 🚀
-    </button>
-  </div>
-
-  <!-- MODE MEMBRE : Formulaire Inscription/Connexion -->
-  <div id="memberForm" class="space-y-4 hidden">
-    <p class="text-xs text-slate-400">Connectez-vous pour conserver votre historique et vos avantages parrainage.</p>
-    
-    <input type="tel" placeholder="Téléphone" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-    <input type="password" placeholder="Mot de passe" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-
-    <button class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">
-      Se connecter / S'inscrire
-    </button>
-  </div>
-
-</div>
-
-<!-- JavaScript pour alterner entre les deux modes -->
-<script>
-  function switchMode(mode) {
-    const guestTab = document.getElementById('tabGuest');
-    const memberTab = document.getElementById('tabMember');
-    const guestForm = document.getElementById('guestForm');
-    const memberForm = document.getElementById('memberForm');
-
-    if (mode === 'guest') {
-      guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
-      memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
-      guestForm.classList.remove('hidden');
-      memberForm.classList.add('hidden');
-    } else {
-      memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
-      guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
-      memberForm.classList.remove('hidden');
-      guestForm.classList.add('hidden');
-    }
-  }
-
-  function processGuestPayment() {
-    const phone = document.getElementById('guestPhone').value;
-    const amount = document.getElementById('guestAmount').value;
-
-    if (!phone || !amount) {
-      alert("Veuillez remplir le numéro et le montant.");
-      return;
-    }
-
-    alert(Transaction de ${amount} FCFA initiée pour le numéro ${phone}. Redirection vers le paiement...);
-    // Ici sera exécuté le lien d'API PayDunya en mode direct
-  }
-</script>
-      <!-- Module Connexion / Inscription -->
-      <div id="authCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
-        <h2 class="text-lg font-bold mb-1">Espace Utilisateur</h2>
-        <p class="text-xs text-slate-400 mb-4">Créez un compte pour suivre vos opérations en temps réel.</p>
+      
+      <!-- Carte Principale (Onglets Invité / Membre) -->
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
         
-        <form id="authForm" onsubmit="handleAuth(event)" class="space-y-3">
-          <input type="tel" id="userPhone" placeholder="Numéro de téléphone (ex: 0707070707)" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-          <input type="password" id="userPass" placeholder="Mot de passe" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all">
-            Se connecter / S'inscrire
+        <!-- Sélecteur de Mode -->
+        <div class="flex bg-slate-800 p-1 rounded-xl mb-6">
+          <button id="tabGuest" onclick="switchMode('guest')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white">
+            ⚡ Achat Rapide (Invité)
           </button>
-        </form>
+          <button id="tabMember" onclick="switchMode('member')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400">
+            👤 Espace Membre / Inscription
+          </button>
+        </div>
+
+        <!-- MODE INVITÉ : Validation Immédiate -->
+        <div id="guestForm" class="space-y-4">
+          <p class="text-xs text-slate-400">Payer immédiatement sans créer de compte.</p>
+          
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Numéro à recharger / débiter</label>
+            <input type="tel" id="guestPhone" placeholder="ex: 0707070707" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Montant (FCFA)</label>
+            <input type="number" id="guestAmount" placeholder="ex: 5000" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+
+          <button type="button" onclick="processGuestPayment()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+            Valider la transaction maintenant 🚀
+          </button>
+        </div>
+
+        <!-- MODE MEMBRE : Formulaire Inscription/Connexion -->
+        <div id="memberForm" class="space-y-4 hidden">
+          <p class="text-xs text-slate-400">Connectez-vous pour conserver votre historique et vos avantages.</p>
+          
+          <form id="authForm" onsubmit="handleAuth(event)" class="space-y-3">
+            <input type="tel" id="userPhone" placeholder="Numéro de téléphone" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+            <input type="password" id="userPass" placeholder="Mot de passe" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">
+              Se connecter / S'inscrire
+            </button>
+          </form>
+        </div>
+
       </div>
 
-      <!-- Dashboard Client (Masqué au départ) -->
+      <!-- Dashboard Client Connecté (Masqué par défaut) -->
       <div id="dashCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg hidden">
         <div class="flex justify-between items-center mb-4">
           <div>
@@ -133,7 +87,7 @@
 
         <h3 class="text-sm font-semibold text-slate-300 mb-3">Suivi des Transactions en Direct</h3>
         <div id="txHistory" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-          <!-- Les transactions s'affichent ici -->
+          <!-- Historique dynamique -->
         </div>
       </div>
 
@@ -153,7 +107,7 @@
         Activez votre position GPS pour calculer la distance des pharmacies actuellement ouvertes dans votre zone.
       </p>
 
-      <button onclick="findNearbyPharmacies()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+      <button type="button" onclick="findNearbyPharmacies()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
         <span>📍</span> Activer la géolocalisation
       </button>
 
@@ -164,9 +118,42 @@
 
   </main>
 
-  <!-- JavaScript -->
+  <!-- SCRIPTS JAVASCRIPT (S'assurent que TOUS les boutons répondent) -->
   <script>
-    // 1. GESTION UTILISATEUR & SIMULATION REAL-TIME
+    // 1. ALTERNANCE MODE INVITÉ / MEMBRE
+    function switchMode(mode) {
+      const guestTab = document.getElementById('tabGuest');
+      const memberTab = document.getElementById('tabMember');
+      const guestForm = document.getElementById('guestForm');
+      const memberForm = document.getElementById('memberForm');
+
+      if (mode === 'guest') {
+        guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+        memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
+        guestForm.classList.remove('hidden');
+        memberForm.classList.add('hidden');
+      } else {
+        memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+        guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
+        memberForm.classList.remove('hidden');
+        guestForm.classList.add('hidden');
+      }
+    }
+
+    // 2. VALIDATION TRANSACTION INVITÉ
+    function processGuestPayment() {
+      const phone = document.getElementById('guestPhone').value;
+      const amount = document.getElementById('guestAmount').value;
+
+      if (!phone || !amount) {
+        alert("Veuillez renseigner le numéro de téléphone et le montant.");
+        return;
+      }
+
+      alert(Transaction de ${amount} FCFA initialisée pour le numéro ${phone}.\nProchaine étape : Redirection PayDunya.);
+    }
+
+    // 3. Espace Membre (Connexion & Historique)
     let currentUser = null;
     let pollInterval = null;
 
@@ -175,7 +162,6 @@
       const phone = document.getElementById('userPhone').value;
       currentUser = phone;
 
-      document.getElementById('authCard').classList.add('hidden');
       document.getElementById('dashCard').classList.remove('hidden');
       document.getElementById('connectedUserPhone').textContent = "Connecté: " + phone;
 
@@ -185,12 +171,10 @@
     function logout() {
       currentUser = null;
       clearInterval(pollInterval);
-      document.getElementById('authCard').classList.remove('hidden');
       document.getElementById('dashCard').classList.add('hidden');
     }
 
     function startRealtimeHistory() {
-      // Simulation de mise à jour toutes les 4 secondes
       loadMockTransactions();
       pollInterval = setInterval(loadMockTransactions, 4000);
     }
@@ -215,7 +199,7 @@
       `).join('');
     }
 
-    // 2. GESTION DES PHARMACIES DE GARDE (GPS)
+    // 4. GÉOLOCALISATION & PHARMACIES DE GARDE
     const pharmacyList = [
       { name: "Pharmacie Saint Jean", lat: 5.3500, lng: -4.0020, area: "Cocody", phone: "+225 07 00 00 01" },
       { name: "Pharmacie du Boulevard", lat: 5.3310, lng: -4.0150, area: "Plateau", phone: "+225 07 00 00 02" },
@@ -230,7 +214,7 @@
         return;
       }
 
-      resultsDiv.innerHTML = <p class="text-xs text-blue-400 animate-pulse">Recherche des pharmacies proches...</p>;
+      resultsDiv.innerHTML = <p class="text-xs text-blue-400 animate-pulse">Demande d'autorisation GPS en cours...</p>;
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -254,8 +238,8 @@
             </div>
           `).join('');
         },
-        () => {
-          resultsDiv.innerHTML = <p class="text-xs text-amber-400">Veuillez autoriser l'accès GPS dans les réglages de votre téléphone.</p>;
+        (error) => {
+          resultsDiv.innerHTML = <p class="text-xs text-amber-400">Veuillez autoriser l'accès GPS dans les paramètres de votre navigateur/téléphone.</p>;
         }
       );
     }
