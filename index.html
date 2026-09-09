@@ -1,190 +1,195 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GBBE-MULTISERVICES.CI — Guichet Automatisé</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
-  <link rel="stylesheet" href="./style.css?v=7.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GBBE-MULTISERVICES.CI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
 
-  <header class="navbar">
-    <div class="brand">
-      <div class="brand-logo"><i class="bi bi-lightning-charge-fill"></i></div>
+  <!-- En-tête -->
+  <header class="max-w-6xl mx-auto flex justify-between items-center pb-6 border-b border-slate-800 mb-8">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-xl font-bold">⚡</div>
       <div>
-        <span class="brand-name">GBBE-MULTISERVICES.CI</span>
-        <span class="brand-sub">Guichet Automatisé</span>
+        <h1 class="text-xl font-bold tracking-wide">GBBE-MULTISERVICES.CI</h1>
+        <p class="text-xs text-slate-400">Guichet Automatisé & Services Utilitaires</p>
       </div>
     </div>
-    <div class="status-pill">
-      <span class="status-dot"></span> Service Actif
-    </div>
+    <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 font-medium">
+      ● Service Actif
+    </span>
   </header>
 
-  <main class="main-container">
-    <div class="checkout-grid">
+  <!-- Conteneur Principal Responsive (1 col sur Mobile, 2 cols sur PC) -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <!-- COLONNE 1 : Espace Client & Transactions -->
+    <section class="space-y-6">
       
-      <!-- Section Formulaire -->
-      <section class="card-box form-section">
-        <h2>Passer une transaction</h2>
-        <p class="subtitle">Sélectionnez les réseaux et saisissez les informations de transfert</p>
-
-        <form id="transfer-form" onsubmit="return false;">
-          
-          <div class="selection-grid">
-            <!-- Source -->
-            <div class="select-block">
-              <label><i class="bi bi-wallet2"></i> Réseau Source (Débit)</label>
-              <select id="source-network">
-                <option value="Wave" selected>Wave</option>
-                <option value="Orange">Orange Money</option>
-                <option value="MTN">MTN MoMo</option>
-                <option value="Moov">Moov Money</option>
-              </select>
-              <input type="tel" id="source-number" placeholder="Ex: 0707070707" required />
-            </div>
-
-            <div class="arrow-divider">
-              <i class="bi bi-arrow-right"></i>
-            </div>
-
-            <!-- Destination -->
-            <div class="select-block">
-              <label><i class="bi bi-person-down"></i> Réseau Destination (Crédit)</label>
-              <select id="dest-network">
-                <option value="Wave">Wave</option>
-                <option value="Orange" selected>Orange Money</option>
-                <option value="MTN">MTN MoMo</option>
-                <option value="Moov">Moov Money</option>
-              </select>
-              <input type="tel" id="dest-number" placeholder="Ex: 0505050505" required />
-            </div>
-          </div>
-
-          <!-- Montant -->
-          <div class="form-group">
-            <label for="transfer-amount">Montant à transférer</label>
-            <div class="input-container">
-              <input type="number" id="transfer-amount" placeholder="50000" inputmode="numeric" />
-              <span class="currency-tag">FCFA</span>
-            </div>
-            <span class="help-text">Montant min: 250 FCFA — Max: 300 000 FCFA</span>
-          </div>
-
-          <!-- Frais -->
-          <div class="checkbox-card">
-            <label class="custom-checkbox">
-              <input type="checkbox" id="include-fees" checked>
-              <span class="checkmark"></span>
-              <span class="checkbox-label">Prendre les frais de service (1%) à ma charge</span>
-            </label>
-          </div>
-        </form>
-      </section>
-
-      <!-- Section Récapitulatif -->
-      <section class="card-box summary-section">
-        <h3>Résumé de la commande</h3>
+      <!-- Module Connexion / Inscription -->
+      <div id="authCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+        <h2 class="text-lg font-bold mb-1">Espace Utilisateur</h2>
+        <p class="text-xs text-slate-400 mb-4">Créez un compte pour suivre vos opérations en temps réel.</p>
         
-        <div class="receipt-details">
-          <div class="receipt-line">
-            <span>Réseau Source</span>
-            <span id="summary-src-net" class="value">Wave</span>
+        <form id="authForm" onsubmit="handleAuth(event)" class="space-y-3">
+          <input type="tel" id="userPhone" placeholder="Numéro de téléphone (ex: 0707070707)" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          <input type="password" id="userPass" placeholder="Mot de passe" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all">
+            Se connecter / S'inscrire
+          </button>
+        </form>
+      </div>
+
+      <!-- Dashboard Client (Masqué au départ) -->
+      <div id="dashCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg hidden">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Mon Tableau de Bord</h2>
+            <p id="connectedUserPhone" class="text-xs text-blue-400 font-mono"></p>
           </div>
-          <div class="receipt-line">
-            <span>Réseau Destinataire</span>
-            <span id="summary-dst-net" class="value">Orange Money</span>
-          </div>
-          <div class="divider"></div>
-          <div class="receipt-line">
-            <span>Montant à recevoir</span>
-            <span id="receipt-amount" class="value">0 FCFA</span>
-          </div>
-          <div class="receipt-line">
-            <span>Frais de service (1%)</span>
-            <span id="receipt-fee" class="value">0 FCFA</span>
-          </div>
-          <div class="divider"></div>
-          <div class="receipt-line total-line">
-            <span>Total à débiter</span>
-            <span id="receipt-total" class="total-value">0 FCFA</span>
-          </div>
+          <button onclick="logout()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">Déconnexion</button>
         </div>
 
-        <button type="button" id="btn-continue" class="action-btn">
-          <span>Procéder au paiement</span>
-          <i class="bi bi-arrow-right-short"></i>
-        </button>
-
-        <div class="security-tag">
-          <i class="bi bi-shield-lock-fill"></i> Transaction 100% sécurisée
+        <h3 class="text-sm font-semibold text-slate-300 mb-3">Suivi des Transactions en Direct</h3>
+        <div id="txHistory" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+          <!-- Les transactions s'affichent ici -->
         </div>
-      </section>
+      </div>
 
-    </div>
+    </section>
+
+    <!-- COLONNE 2 : Pharmacies de Garde (Géolocalisation) -->
+    <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg h-fit">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-2xl">🏥</span>
+        <div>
+          <h2 class="text-lg font-bold">Pharmacies de Garde</h2>
+          <p class="text-xs text-slate-400">Trouvez l'officine ouverte la plus proche</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-300 my-4 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+        Activez votre position GPS pour calculer la distance des pharmacies actuellement ouvertes dans votre zone.
+      </p>
+
+      <button onclick="findNearbyPharmacies()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+        <span>📍</span> Activer la géolocalisation
+      </button>
+
+      <div id="pharmacyResults" class="mt-4 space-y-3">
+        <!-- Les résultats s'afficheront ici -->
+      </div>
+    </section>
+
   </main>
 
-  <!-- Modale Standard (Wave / MTN / Moov) -->
-  <div class="modal-overlay" id="confirm-modal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <i class="bi bi-exclamation-circle-fill"></i>
-        <h3>Confirmation</h3>
-      </div>
-      <p class="modal-body">
-        Vous allez envoyer <strong id="modal-amount">0 FCFA</strong> (<span id="modal-src">Wave</span>) vers le numéro <strong id="modal-dst-num">--</strong> (<span id="modal-dst">Orange</span>).
-      </p>
-      <p class="warning-text">* Les opérations validées ne peuvent pas être annulées.</p>
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="btn-cancel">Annuler</button>
-        <button type="button" class="btn-confirm" id="btn-confirm">Confirmer & Payer</button>
-      </div>
-    </div>
-  </div>
+  <!-- JavaScript -->
+  <script>
+    // 1. GESTION UTILISATEUR & SIMULATION REAL-TIME
+    let currentUser = null;
+    let pollInterval = null;
 
-  <!-- Modale Orange Money (Code OTP) -->
-  <div class="modal-overlay" id="orange-modal">
-    <div class="modal-box orange-theme">
-      <div class="modal-header orange-header">
-        <i class="bi bi-phone-vibrate-fill"></i>
-        <h3>Paiement Orange Money</h3>
-      </div>
+    function handleAuth(e) {
+      e.preventDefault();
+      const phone = document.getElementById('userPhone').value;
+      currentUser = phone;
+
+      document.getElementById('authCard').classList.add('hidden');
+      document.getElementById('dashCard').classList.remove('hidden');
+      document.getElementById('connectedUserPhone').textContent = "Connecté: " + phone;
+
+      startRealtimeHistory();
+    }
+
+    function logout() {
+      currentUser = null;
+      clearInterval(pollInterval);
+      document.getElementById('authCard').classList.remove('hidden');
+      document.getElementById('dashCard').classList.add('hidden');
+    }
+
+    function startRealtimeHistory() {
+      // Simulation de mise à jour toutes les 4 secondes
+      loadMockTransactions();
+      pollInterval = setInterval(loadMockTransactions, 4000);
+    }
+
+    function loadMockTransactions() {
+      const mockData = [
+        { service: 'Recharge Wave', amount: '5 000 FCFA', status: 'Succès', time: 'À l\'instant' },
+        { service: 'Achat Pass Orange', amount: '1 000 FCFA', status: 'En traitement', time: 'Il y a 2 min' }
+      ];
+
+      const container = document.getElementById('txHistory');
+      container.innerHTML = mockData.map(tx => `
+        <div class="flex justify-between items-center p-3 bg-slate-800/60 rounded-xl border border-slate-700/40 text-xs">
+          <div>
+            <p class="font-bold text-white">${tx.service}</p>
+            <p class="text-slate-400">${tx.time} • ${tx.amount}</p>
+          </div>
+          <span class="px-2 py-1 rounded-md font-semibold ${tx.status === 'Succès' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}">
+            ${tx.status}
+          </span>
+        </div>
+      `).join('');
+    }
+
+    // 2. GESTION DES PHARMACIES DE GARDE (GPS)
+    const pharmacyList = [
+      { name: "Pharmacie Saint Jean", lat: 5.3500, lng: -4.0020, area: "Cocody", phone: "+225 07 00 00 01" },
+      { name: "Pharmacie du Boulevard", lat: 5.3310, lng: -4.0150, area: "Plateau", phone: "+225 07 00 00 02" },
+      { name: "Pharmacie des Grâces", lat: 5.3620, lng: -3.9800, area: "Bingerville", phone: "+225 07 00 00 03" }
+    ];
+
+    function findNearbyPharmacies() {
+      const resultsDiv = document.getElementById('pharmacyResults');
       
-      <div class="om-instructions">
-        <div class="om-step">
-          <span class="step-num">1</span>
-          <p>Composez le <strong class="code-ussd">#144*82#</strong> sur votre téléphone Orange.</p>
-        </div>
-        <div class="om-step">
-          <span class="step-num">2</span>
-          <p>Entrez votre code secret pour générer un code d'autorisation temporaire.</p>
-        </div>
-        <div class="om-step">
-          <span class="step-num">3</span>
-          <p>Saisissez le code temporaire reçu ci-dessous pour valider :</p>
-        </div>
-      </div>
+      if (!navigator.geolocation) {
+        resultsDiv.innerHTML = <p class="text-xs text-red-400">La géolocalisation n'est pas supportée par votre navigateur.</p>;
+        return;
+      }
 
-      <div class="om-input-group">
-        <label for="om-otp-code">Code d'autorisation (OTP)</label>
-        <input type="text" id="om-otp-code" placeholder="Ex: 4821" maxlength="6" inputmode="numeric" />
-      </div>
+      resultsDiv.innerHTML = <p class="text-xs text-blue-400 animate-pulse">Recherche des pharmacies proches...</p>;
 
-      <p class="warning-text">* Ce code est à usage unique et expire après quelques minutes.</p>
-      
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="btn-orange-cancel">Annuler</button>
-        <button type="button" class="btn-orange-submit" id="btn-orange-confirm">Valider le paiement</button>
-      </div>
-    </div>
-  </div>
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const uLat = pos.coords.latitude;
+          const uLng = pos.coords.longitude;
 
-  <script src="./app.js?v=7.0"></script>
+          const sorted = pharmacyList.map(p => {
+            const dist = getDistanceKm(uLat, uLng, p.lat, p.lng);
+            return { ...p, distance: dist.toFixed(1) };
+          }).sort((a, b) => a.distance - b.distance);
+
+          resultsDiv.innerHTML = sorted.map(p => `
+            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700/60 flex justify-between items-center text-xs">
+              <div>
+                <p class="font-bold text-white">${p.name}</p>
+                <p class="text-slate-400">${p.area} • <span class="text-emerald-400">À ~${p.distance} km</span></p>
+              </div>
+              <a href="tel:${p.phone}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg">
+                Appeler
+              </a>
+            </div>
+          `).join('');
+        },
+        () => {
+          resultsDiv.innerHTML = <p class="text-xs text-amber-400">Veuillez autoriser l'accès GPS dans les réglages de votre téléphone.</p>;
+        }
+      );
+    }
+
+    function getDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+    }
+  </script>
 </body>
 </html>
