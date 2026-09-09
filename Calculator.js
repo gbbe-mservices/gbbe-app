@@ -1,40 +1,53 @@
 const WAVE_PAYMENT_URL = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
-let currentOperator = 'wave';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const sourceNet = document.getElementById('sourceNet');
+  const payBtn = document.getElementById('payButton');
   const amountInput = document.getElementById('txAmount');
   const feesToggle = document.getElementById('payFeesToggle');
 
-  if (amountInput) {
-    amountInput.addEventListener('input', calculateDiscountOrFees);
-  }
-  if (feesToggle) {
-    feesToggle.addEventListener('change', calculateDiscountOrFees);
+  if (sourceNet) {
+    sourceNet.addEventListener('change', () => {
+      updateUI();
+      calculateTotal();
+    });
   }
 
-  // Ne pas calculer de montant par défaut au démarrage
-  resetCalculatorDisplay();
+  if (amountInput) {
+    amountInput.addEventListener('input', calculateTotal);
+  }
+
+  if (feesToggle) {
+    feesToggle.addEventListener('change', calculateTotal);
+  }
+
+  if (payBtn) {
+    payBtn.addEventListener('click', processTransaction);
+  }
+
+  calculateTotal();
 });
 
-function selectOperator(op) {
-  currentOperator = op;
-  const titles = { wave: 'Wave 🌊', momo: 'MTN Money 🟡', moov: 'Moov Money 🔵', om: 'Orange Money 🟠' };
-  document.getElementById('selectedOperatorTitle').textContent = "Transaction " + titles[op];
-  document.getElementById('stepNetwork').classList.add('hidden');
-  document.getElementById('stepForm').classList.remove('hidden');
+function updateUI() {
+  const source = document.getElementById('sourceNet').value;
+  const btn = document.getElementById('payButton');
+
+  if (source === 'wave') {
+    btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg text-slate-950 bg-sky-400 hover:bg-sky-300 shadow-sky-400/20";
+    btn.textContent = "Payer avec Wave 🌊";
+  } else if (source === 'om') {
+    btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg text-white bg-orange-500 hover:bg-orange-400 shadow-orange-500/20";
+    btn.textContent = "Payer avec Orange Money 🟠";
+  } else if (source === 'momo') {
+    btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg text-slate-950 bg-yellow-400 hover:bg-yellow-300 shadow-yellow-400/20";
+    btn.textContent = "Payer avec MTN MoMo 🟡";
+  } else if (source === 'moov') {
+    btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg text-white bg-blue-600 hover:bg-blue-500 shadow-blue-600/20";
+    btn.textContent = "Payer avec Moov Money 🔵";
+  }
 }
 
-function resetOperator() {
-  document.getElementById('stepNetwork').classList.remove('hidden');
-  document.getElementById('stepForm').classList.add('hidden');
-}
-
-function resetCalculatorDisplay() {
-  document.getElementById('feeDisplay').textContent = "0 FCFA";
-  document.getElementById('totalDisplay').textContent = "0 FCFA";
-}
-
-function calculateDiscountOrFees() {
+function calculateTotal() {
   const amountInput = document.getElementById('txAmount');
   const feesToggle = document.getElementById('payFeesToggle');
   const feeDisplay = document.getElementById('feeDisplay');
@@ -44,60 +57,79 @@ function calculateDiscountOrFees() {
 
   const rawVal = amountInput.value.trim();
   if (rawVal === "" || parseFloat(rawVal) <= 0) {
-    resetCalculatorDisplay();
+    feeDisplay.textContent = "0 FCFA";
+    totalDisplay.textContent = "0 FCFA";
     return;
   }
 
   const amount = parseFloat(rawVal);
   let total = amount;
-  let adjustmentText = "0 FCFA";
+  let text = "0 FCFA";
 
   if (feesToggle.checked) {
-    // Le client paye les frais (1% minimum 100 FCFA)
+    // Si coché : Ajout des frais (1% min 100 FCFA)
     const fees = Math.max(100, Math.round(amount * 0.01));
     total = amount + fees;
-    adjustmentText = "+" + fees.toLocaleString('fr-FR') + " FCFA (+1%)";
+    text = "+" + fees.toLocaleString('fr-FR') + " FCFA (+1%)";
   } else {
-    // Réduction de 1% si la case n'est pas cochée
+    // Sinon : Réduction de 1%
     const discount = Math.round(amount * 0.01);
     total = amount - discount;
-    adjustmentText = "-" + discount.toLocaleString('fr-FR') + " FCFA (-1%)";
+    text = "-" + discount.toLocaleString('fr-FR') + " FCFA (-1%)";
   }
 
-  feeDisplay.textContent = adjustmentText;
+  feeDisplay.textContent = text;
   totalDisplay.textContent = total.toLocaleString('fr-FR') + " FCFA";
 }
 
-function checkPrefix(phone, op) {
+function checkNetworkPrefix(network, phone) {
   if (!phone || phone.length !== 10) return false;
   const p = phone.substring(0, 2);
-  if (op === 'om') return ['07', '08', '09'].includes(p);
-  if (op === 'momo') return p === '05';
-  if (op === 'moov') return ['01', '02'].includes(p);
-  return ['01', '02', '05', '07', '08', '09'].includes(p);
+
+  if (network === 'om') return ['07', '08', '09'].includes(p);
+  if (network === 'momo') return p === '05';
+  if (network === 'moov') return ['01', '02'].includes(p);
+  if (network === 'wave') return ['01', '02', '05', '07', '08', '09'].includes(p);
+  return true;
 }
 
-function submitTransaction() {
-  const phone = document.getElementById('sourcePhone').value.trim();
+function processTransaction() {
+  const sourceNet = document.getElementById('sourceNet').value;
+  const sourcePhone = document.getElementById('sourcePhone').value.trim();
+  const destNet = document.getElementById('destNet').value;
+  const destPhone = document.getElementById('destPhone').value.trim();
   const amount = document.getElementById('txAmount').value;
-  const err = document.getElementById('sourceError');
 
-  err.classList.add('hidden');
+  const sourceErr = document.getElementById('sourceError');
+  const destErr = document.getElementById('destError');
 
-  if (!checkPrefix(phone, currentOperator)) {
-    err.textContent = "Numéro non conforme au réseau sélectionné.";
-    err.classList.remove('hidden');
-    return;
+  sourceErr.classList.add('hidden');
+  destErr.classList.add('hidden');
+
+  let hasError = false;
+
+  if (!checkNetworkPrefix(sourceNet, sourcePhone)) {
+    sourceErr.textContent = ⚠️ Le numéro saisi ne correspond pas au réseau ${sourceNet.toUpperCase()}.;
+    sourceErr.classList.remove('hidden');
+    hasError = true;
+  }
+
+  if (!checkNetworkPrefix(destNet, destPhone)) {
+    destErr.textContent = `⚠️ Le numéro saisi ne correspond pas au réseau ${destNet.toUpperCase()}.`;
+    destErr.classList.remove('hidden');
+    hasError = true;
   }
 
   if (!amount || amount < 250) {
-    alert("Montant minimum : 250 FCFA");
+    alert("Veuillez saisir un montant d'au moins 250 FCFA.");
     return;
   }
 
-  if (currentOperator === 'wave') {
+  if (hasError) return;
+
+  if (sourceNet === 'wave') {
     window.location.href = WAVE_PAYMENT_URL;
   } else {
-    alert("Transaction de " + amount + " FCFA transmise vers " + currentOperator.toUpperCase());
+    alert(`Transaction de ${amount} FCFA enregistrée.\nRedirection vers le guichet de paiement ${sourceNet.toUpperCase()}...)`;
   }
 }
