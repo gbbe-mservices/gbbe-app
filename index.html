@@ -1,204 +1,139 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GBBE-MULTISERVICES.CI — Guichet Automatisé</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
-  <link rel="stylesheet" href="./style.css?v=7.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion — GBBE-MULTISERVICES.CI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md space-y-6">
+    <div class="text-center space-y-1">
+      <h1 class="text-xl font-bold text-slate-900">GBBE-MULTISERVICES.CI</h1>
+      <p id="form-title" class="text-xs text-slate-500">Connectez-vous à votre espace</p>
+    </div>
 
-  <header class="navbar">
-    <div class="brand">
-      <div class="brand-logo"><i class="bi bi-lightning-charge-fill"></i></div>
+    <!-- ÉTAPE 1 : FORMULAIRE IDENTIFIANTS -->
+    <div id="step-credentials" class="space-y-4">
       <div>
-        <span class="brand-name">GBBE-MULTISERVICES.CI</span>
-        <span class="brand-sub">Guichet Automatisé</span>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Numéro de téléphone</label>
+        <input type="tel" id="phone" placeholder="Ex: 0707070707" maxlength="10" class="w-full border rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
       </div>
-    </div>
-    <div class="status-pill">
-      <span class="status-dot"></span> Service Actif
-    </div>
-  </header>
-
-  <!-- ESPACE UTILISATEUR CONNECTÉ -->
-  <div id="userHeader" style="max-width: 1100px; margin: 15px auto 0; padding: 12px 20px; background: #0f172a; color: #ffffff; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <i class="bi bi-person-circle" style="font-size: 1.5rem; color: #38bdf8;"></i>
       <div>
-        <span style="font-size: 0.75rem; color: #94a3b8; display: block; line-height: 1;">Espace Client</span>
-        <strong id="userNameDisplay" style="font-size: 0.95rem; font-weight: 700;">Bruno Noura</strong>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Mot de passe</label>
+        <input type="password" id="password" placeholder="••••••••" class="w-full border rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
       </div>
-    </div>
-    <button onclick="localStorage.removeItem('gbbe_user'); window.location.reload();" style="background: #ef4444; color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-      Déconnexion
-    </button>
-  </div>
+      <p id="error-msg" class="text-xs text-red-500 font-semibold hidden"></p>
 
-  <main class="main-container">
-    <div class="checkout-grid">
-      
-      <!-- Section Formulaire -->
-      <section class="card-box form-section">
-        <h2>Passer une transaction</h2>
-        <p class="subtitle">Sélectionnez les réseaux et saisissez les informations de transfert</p>
+      <button onclick="handleLoginOrRegister()" id="main-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition">
+        Se connecter
+      </button>
 
-        <form id="transfer-form" onsubmit="return false;">
-          
-          <div class="selection-grid">
-            <!-- Source -->
-            <div class="select-block">
-              <label><i class="bi bi-wallet2"></i> Réseau Source (Débit)</label>
-              <select id="source-network">
-                <option value="Wave" selected>Wave</option>
-                <option value="Orange">Orange Money</option>
-                <option value="MTN">MTN MoMo</option>
-                <option value="Moov">Moov Money</option>
-              </select>
-              <input type="tel" id="source-number" placeholder="Ex: 0707070707" required />
-            </div>
-
-            <div class="arrow-divider">
-              <i class="bi bi-arrow-right"></i>
-            </div>
-
-            <!-- Destination -->
-            <div class="select-block">
-              <label><i class="bi bi-person-down"></i> Réseau Destination (Crédit)</label>
-              <select id="dest-network">
-                <option value="Wave">Wave</option>
-                <option value="Orange" selected>Orange Money</option>
-                <option value="MTN">MTN MoMo</option>
-                <option value="Moov">Moov Money</option>
-              </select>
-              <input type="tel" id="dest-number" placeholder="Ex: 0505050505" required />
-            </div>
-          </div>
-
-          <!-- Montant -->
-          <div class="form-group">
-            <label for="transfer-amount">Montant à transférer</label>
-            <div class="input-container">
-              <input type="number" id="transfer-amount" placeholder="50000" inputmode="numeric" />
-              <span class="currency-tag">FCFA</span>
-            </div>
-            <span class="help-text">Montant min: 250 FCFA — Max: 300 000 FCFA</span>
-          </div>
-
-          <!-- Frais -->
-          <div class="checkbox-card">
-            <label class="custom-checkbox">
-              <input type="checkbox" id="include-fees" checked>
-              <span class="checkmark"></span>
-              <span class="checkbox-label">Prendre les frais de service (1%) à ma charge</span>
-            </label>
-          </div>
-        </form>
-      </section>
-
-      <!-- Section Récapitulatif -->
-      <section class="card-box summary-section">
-        <h3>Résumé de la commande</h3>
-        
-        <div class="receipt-details">
-          <div class="receipt-line">
-            <span>Réseau Source</span>
-            <span id="summary-src-net" class="value">Wave</span>
-          </div>
-          <div class="receipt-line">
-            <span>Réseau Destinataire</span>
-            <span id="summary-dst-net" class="value">Orange Money</span>
-          </div>
-          <div class="divider"></div>
-          <div class="receipt-line">
-            <span>Montant à recevoir</span>
-            <span id="receipt-amount" class="value">0 FCFA</span>
-          </div>
-          <div class="receipt-line">
-            <span>Frais de service (1%)</span>
-            <span id="receipt-fee" class="value">0 FCFA</span>
-          </div>
-          <div class="divider"></div>
-          <div class="receipt-line total-line">
-            <span>Total à débiter</span>
-            <span id="receipt-total" class="total-value">0 FCFA</span>
-          </div>
-        </div>
-
-        <button type="button" id="btn-continue" class="action-btn">
-          <span>Procéder au paiement</span>
-          <i class="bi bi-arrow-right-short"></i>
+      <div class="text-center pt-2">
+        <button onclick="toggleMode()" id="toggle-mode-btn" class="text-xs text-blue-600 font-semibold hover:underline">
+          Pas encore de compte ? S'inscrire
         </button>
-
-        <div class="security-tag">
-          <i class="bi bi-shield-lock-fill"></i> Transaction 100% sécurisée
-        </div>
-      </section>
-
+      </div>
     </div>
-  </main>
 
-  <!-- Modale Standard (Wave / MTN / Moov) -->
-  <div class="modal-overlay" id="confirm-modal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <i class="bi bi-exclamation-circle-fill"></i>
-        <h3>Confirmation</h3>
+    <!-- ÉTAPE 2 : SAISIE CODE OTP -->
+    <div id="step-otp" class="space-y-4 hidden">
+      <div class="bg-blue-50 p-4 rounded-xl text-center text-xs text-blue-800">
+        Un code de validation à 4 chiffres a été généré. (Vérifiez les logs du serveur Render si vous testez).
       </div>
-      <p class="modal-body">
-        Vous allez envoyer <strong id="modal-amount">0 FCFA</strong> (<span id="modal-src">Wave</span>) vers le numéro <strong id="modal-dst-num">--</strong> (<span id="modal-dst">Orange</span>).
-      </p>
-      <p class="warning-text">* Les opérations validées ne peuvent pas être annulées.</p>
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="btn-cancel">Annuler</button>
-        <button type="button" class="btn-confirm" id="btn-confirm">Confirmer & Payer</button>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Entrez le code OTP reçu</label>
+        <input type="text" id="otp-code" placeholder="Ex: 4821" maxlength="6" class="w-full border rounded-xl p-3 text-center text-lg tracking-widest font-bold focus:ring-2 focus:ring-blue-500 outline-none">
       </div>
+      <p id="otp-error" class="text-xs text-red-500 font-semibold hidden"></p>
+
+      <button onclick="verifyOtp()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition">
+        Valider et accéder au guichet
+      </button>
     </div>
   </div>
 
-  <!-- Modale Orange Money (Code OTP) -->
-  <div class="modal-overlay" id="orange-modal">
-    <div class="modal-box orange-theme">
-      <div class="modal-header orange-header">
-        <i class="bi bi-phone-vibrate-fill"></i>
-        <h3>Paiement Orange Money</h3>
-      </div>
-      
-      <div class="om-instructions">
-        <div class="om-step">
-          <span class="step-num">1</span>
-          <p>Composez le <strong class="code-ussd">#144*82#</strong> sur votre téléphone Orange.</p>
-        </div>
-        <div class="om-step">
-          <span class="step-num">2</span>
-          <p>Entrez votre code secret pour générer un code d'autorisation temporaire.</p>
-        </div>
-        <div class="om-step">
-          <span class="step-num">3</span>
-          <p>Saisissez le code temporaire reçu ci-dessous pour valider :</p>
-        </div>
-      </div>
+  <script>
+    let isRegisterMode = false;
+    let pendingPhone = "";
 
-      <div class="om-input-group">
-        <label for="om-otp-code">Code d'autorisation (OTP)</label>
-        <input type="text" id="om-otp-code" placeholder="Ex: 4821" maxlength="6" inputmode="numeric" />
-      </div>
+    function toggleMode() {
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('form-title').textContent = isRegisterMode ? "Créer un nouveau compte" : "Connectez-vous à votre espace";
+      document.getElementById('main-btn').textContent = isRegisterMode ? "S'inscrire" : "Se connecter";
+      document.getElementById('toggle-mode-btn').textContent = isRegisterMode ? "Déjà un compte ? Se connecter" : "Pas encore de compte ? S'inscrire";
+    }
 
-      <p class="warning-text">* Ce code est à usage unique et expire après quelques minutes.</p>
-      
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="btn-orange-cancel">Annuler</button>
-        <button type="button" class="btn-orange-submit" id="btn-orange-confirm">Valider le paiement</button>
-      </div>
-    </div>
-  </div>
+    async function handleLoginOrRegister() {
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const err = document.getElementById('error-msg');
+      err.classList.add('hidden');
 
-  <script src="./app.js?v=7.0"></script>
+      if (!phone || phone.length < 10 || !password) {
+        err.textContent = "Veuillez remplir correctement tous les champs.";
+        err.classList.remove('hidden');
+        return;
+      }
+
+      const endpoint = isRegisterMode ? '/api/register' : '/api/login';
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, password })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          err.textContent = data.error || "Une erreur est survenue.";
+          err.classList.remove('hidden');
+          return;
+        }
+
+        if (isRegisterMode) {
+          alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+          toggleMode();
+        } else {
+          // Connexion réussie -> Passage à l'étape OTP
+          pendingPhone = phone;
+          document.getElementById('step-credentials').classList.add('hidden');
+          document.getElementById('step-otp').classList.remove('hidden');
+        }
+      } catch (e) {
+        err.textContent = "Erreur de connexion au serveur.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    async function verifyOtp() {
+      const code = document.getElementById('otp-code').value.trim();
+      const err = document.getElementById('otp-error');
+      err.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: pendingPhone, code })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          err.textContent = data.error;
+          err.classList.remove('hidden');
+          return;
+        }
+
+        // Sauvegarde de la session et redirection vers le guichet (index.html)
+        localStorage.setItem('gbbe_user', JSON.stringify({ phone: data.phone }));
+        window.location.href = '/';
+      } catch (e) {
+        err.textContent = "Erreur lors de la validation du code.";
+        err.classList.remove('hidden');
+      }
+    }
+  </script>
 </body>
 </html>
