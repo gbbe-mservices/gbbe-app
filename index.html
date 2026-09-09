@@ -24,7 +24,7 @@
       </span>
     </header>
 
-    <!-- CARTE BLANCHE DE TRANSACTION -->
+    <!-- CARTE PRINCIPALE -->
     <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-xl space-y-5">
       
       <div>
@@ -32,13 +32,13 @@
         <p class="text-xs text-slate-500">Sélectionnez les réseaux et saisissez les informations de transfert.</p>
       </div>
 
-      <!-- SÉLECTION RÉSEAUX -->
+      <!-- SÉLECTION DES RÉSEAUX -->
       <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-4">
         
         <!-- Réseau Source -->
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">💳 Réseau Source (Débit)</label>
-          <select id="sourceNet" onchange="updateUI()" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="sourceNet" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="wave">Wave</option>
             <option value="om">Orange Money</option>
             <option value="momo">MTN Mobile Money</option>
@@ -70,17 +70,17 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Montant à transférer (FCFA)</label>
           <div class="relative">
-            <input type="number" id="txAmount" oninput="runCalculator()" onkeyup="runCalculator()" placeholder="Ex: 50000" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16">
+            <input type="number" id="txAmount" placeholder="Ex: 50000" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16">
             <span class="absolute right-3 top-3.5 text-xs font-bold text-slate-400">FCFA</span>
           </div>
           <p class="text-[10px] text-slate-400 mt-1">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
         </div>
 
-        <!-- CALCULATEUR DYNAMIQUE (FRAIS OU RÉDUCTION) -->
+        <!-- CALCULATEUR DYNAMIQUE -->
         <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-100 space-y-2">
           <label class="flex items-center justify-between cursor-pointer">
             <span class="text-xs font-semibold text-slate-700">Prendre en charge les frais de service ?</span>
-            <input type="checkbox" id="payFeesToggle" onchange="runCalculator()" class="w-4 h-4 text-blue-600 rounded">
+            <input type="checkbox" id="payFeesToggle" class="w-4 h-4 text-blue-600 rounded">
           </label>
           <div class="text-xs border-t border-blue-100 pt-2 space-y-1">
             <div class="flex justify-between text-slate-500">
@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <!-- BOUTON DYNAMIQUE -->
+      <!-- BOUTON DYNAMIQUE AU NOM DU RÉSEAU SÉLECTIONNÉ -->
       <button type="button" id="payButton" onclick="processTransaction()" class="w-full py-4 bg-sky-400 hover:bg-sky-500 text-slate-950 font-bold rounded-2xl shadow-md transition-all">
         Payer avec Wave 🌊
       </button>
@@ -104,11 +104,38 @@
 
   </main>
 
-  <!-- LOGIQUE JS INTÉGRÉE (AUCUN BUG DE CHARGEMENT) -->
   <script>
     const WAVE_PAYMENT_URL = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
 
-    // Adaptation du bouton selon l'opérateur
+    // Attente du chargement DOM pour lier les événements
+    document.addEventListener('DOMContentLoaded', () => {
+      const sourceNet = document.getElementById('sourceNet');
+      const amountInput = document.getElementById('txAmount');
+      const payFeesToggle = document.getElementById('payFeesToggle');
+
+      // Écouteurs de saisie en temps réel
+      if (amountInput) {
+        amountInput.addEventListener('input', runCalculator);
+        amountInput.addEventListener('keyup', runCalculator);
+        amountInput.addEventListener('change', runCalculator);
+      }
+
+      if (payFeesToggle) {
+        payFeesToggle.addEventListener('change', runCalculator);
+      }
+
+      if (sourceNet) {
+        sourceNet.addEventListener('change', () => {
+          updateUI();
+          runCalculator();
+        });
+      }
+
+      updateUI();
+      runCalculator();
+    });
+
+    // Mise à jour de l'apparence et du libellé du bouton selon le réseau choisi
     function updateUI() {
       const source = document.getElementById('sourceNet').value;
       const btn = document.getElementById('payButton');
@@ -121,14 +148,14 @@
         btn.textContent = "Payer avec Orange Money 🟠";
       } else if (source === 'momo') {
         btn.className = "w-full py-4 rounded-2xl font-bold transition-all shadow-md text-slate-950 bg-yellow-400 hover:bg-yellow-500";
-        btn.textContent = "Payer avec MTN MoMo 🟡";
+        btn.textContent = "Payer avec MTN Mobile Money 🟡";
       } else if (source === 'moov') {
         btn.className = "w-full py-4 rounded-2xl font-bold transition-all shadow-md text-white bg-blue-600 hover:bg-blue-700";
         btn.textContent = "Payer avec Moov Money 🔵";
       }
     }
 
-    // Calcul direct du montant et des frais / réduction
+    // Calcul direct du montant
     function runCalculator() {
       const inputVal = document.getElementById('txAmount').value.trim();
       const isFeesChecked = document.getElementById('payFeesToggle').checked;
@@ -147,12 +174,10 @@
       let text = "0 FCFA";
 
       if (isFeesChecked) {
-        // Le client prend en charge les frais : +1% (min 100 FCFA)
         const fees = Math.max(100, Math.round(amount * 0.01));
         total = amount + fees;
         text = "+" + fees.toLocaleString('fr-FR') + " FCFA (+1%)";
       } else {
-        // Le client ne prend pas en charge les frais : Réduction de 1%
         const discount = Math.round(amount * 0.01);
         total = amount - discount;
         text = "-" + discount.toLocaleString('fr-FR') + " FCFA (-1%)";
@@ -174,7 +199,7 @@
       return true;
     }
 
-    // Soumission de la transaction
+    // Traitement de la transaction
     function processTransaction() {
       const sourceNet = document.getElementById('sourceNet').value;
       const sourcePhone = document.getElementById('sourcePhone').value.trim();
@@ -190,7 +215,6 @@
 
       let hasError = false;
 
-      // Vérification Orange sélectionné avec numéro MTN/Moov
       if (!checkNetworkPrefix(sourceNet, sourcePhone)) {
         sourceErr.textContent = ⚠️ Numéro non conforme au réseau ${sourceNet.toUpperCase()}.;
         sourceErr.classList.remove('hidden');
@@ -213,7 +237,7 @@
       if (sourceNet === 'wave') {
         window.location.href = WAVE_PAYMENT_URL;
       } else {
-        alert(Transaction de ${amount} FCFA validée.\nRedirection vers le réseau ${sourceNet.toUpperCase()}...);
+        alert(Transaction de ${amount} FCFA enregistrée.\nRedirection vers le guichet ${sourceNet.toUpperCase()}...);
       }
     }
   </script>
