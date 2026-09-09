@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     feesToggle.addEventListener('change', calculateDiscountOrFees);
   }
 
-  calculateDiscountOrFees();
+  // Ne pas calculer de montant par défaut au démarrage
+  resetCalculatorDisplay();
 });
 
 function selectOperator(op) {
@@ -28,6 +29,11 @@ function resetOperator() {
   document.getElementById('stepForm').classList.add('hidden');
 }
 
+function resetCalculatorDisplay() {
+  document.getElementById('feeDisplay').textContent = "0 FCFA";
+  document.getElementById('totalDisplay').textContent = "0 FCFA";
+}
+
 function calculateDiscountOrFees() {
   const amountInput = document.getElementById('txAmount');
   const feesToggle = document.getElementById('payFeesToggle');
@@ -36,22 +42,26 @@ function calculateDiscountOrFees() {
 
   if (!amountInput || !feeDisplay || !totalDisplay) return;
 
-  const amount = parseFloat(amountInput.value) || 0;
+  const rawVal = amountInput.value.trim();
+  if (rawVal === "" || parseFloat(rawVal) <= 0) {
+    resetCalculatorDisplay();
+    return;
+  }
+
+  const amount = parseFloat(rawVal);
   let total = amount;
   let adjustmentText = "0 FCFA";
 
-  if (amount > 0) {
-    if (feesToggle.checked) {
-      // Le client paye les frais (1% minimum 100 FCFA)
-      const fees = Math.max(100, Math.round(amount * 0.01));
-      total = amount + fees;
-      adjustmentText = "+" + fees.toLocaleString('fr-FR') + " FCFA (+1%)";
-    } else {
-      // Réduction de 1% si les frais ne sont pas cochés
-      const discount = Math.round(amount * 0.01);
-      total = amount - discount;
-      adjustmentText = "-" + discount.toLocaleString('fr-FR') + " FCFA (-1%)";
-    }
+  if (feesToggle.checked) {
+    // Le client paye les frais (1% minimum 100 FCFA)
+    const fees = Math.max(100, Math.round(amount * 0.01));
+    total = amount + fees;
+    adjustmentText = "+" + fees.toLocaleString('fr-FR') + " FCFA (+1%)";
+  } else {
+    // Réduction de 1% si la case n'est pas cochée
+    const discount = Math.round(amount * 0.01);
+    total = amount - discount;
+    adjustmentText = "-" + discount.toLocaleString('fr-FR') + " FCFA (-1%)";
   }
 
   feeDisplay.textContent = adjustmentText;
