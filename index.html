@@ -11,11 +11,11 @@
 
   <main class="max-w-md mx-auto space-y-6">
 
-    <!-- ÉTAPE 1 : CHOIX DU RÉSEAU (STYLE IMAGE) -->
+    <!-- ÉTAPE 1 : SELECTION DU MOYEN DE PAIEMENT -->
     <div id="stepNetwork" class="space-y-3">
       <h2 class="text-lg font-bold text-slate-900 mb-4 text-center">Sélectionnez le moyen de paiement</h2>
       
-      <button onclick="selectOperator('wave')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-sky-400 transition-all">
+      <button type="button" onclick="selectOperator('wave')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-sky-400 transition-all">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-sky-400 rounded-xl flex items-center justify-center text-white font-bold">🌊</div>
           <span class="font-bold text-slate-800">Wave</span>
@@ -23,7 +23,7 @@
         <span class="text-slate-400">›</span>
       </button>
 
-      <button onclick="selectOperator('momo')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-yellow-400 transition-all">
+      <button type="button" onclick="selectOperator('momo')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-yellow-400 transition-all">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center text-slate-950 font-bold">🟡</div>
           <span class="font-bold text-slate-800">MTN Money</span>
@@ -31,7 +31,7 @@
         <span class="text-slate-400">›</span>
       </button>
 
-      <button onclick="selectOperator('moov')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-blue-600 transition-all">
+      <button type="button" onclick="selectOperator('moov')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-blue-600 transition-all">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold">🔵</div>
           <span class="font-bold text-slate-800">Moov Money</span>
@@ -39,7 +39,7 @@
         <span class="text-slate-400">›</span>
       </button>
 
-      <button onclick="selectOperator('om')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-orange-500 transition-all">
+      <button type="button" onclick="selectOperator('om')" class="w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-orange-500 transition-all">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold">🟠</div>
           <span class="font-bold text-slate-800">Orange Money</span>
@@ -48,11 +48,11 @@
       </button>
     </div>
 
-    <!-- ÉTAPE 2 : CALCULATEUR ET FORMULAIRE -->
-    <div id="stepForm" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+    <!-- ÉTAPE 2 : FORMULAIRE & CALCULATEUR -->
+    <div id="stepForm" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4 hidden">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-bold text-slate-900" id="selectedOperatorTitle">Transaction Wave</h3>
-        <button onclick="resetOperator()" class="text-xs text-blue-600 font-semibold">Changer</button>
+        <button type="button" onclick="resetOperator()" class="text-xs text-blue-600 font-semibold">Changer</button>
       </div>
 
       <div>
@@ -62,11 +62,11 @@
       </div>
 
       <div>
-        <label class="block text-xs font-semibold text-slate-500 mb-1">Montant (FCFA)</label>
-        <input type="number" id="txAmount" placeholder="1000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-blue-500">
+        <label class="block text-xs font-semibold text-slate-500 mb-1">Montant à transférer (FCFA)</label>
+        <input type="number" id="txAmount" placeholder="Ex: 5000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-blue-500">
       </div>
 
-      <!-- OPTION : FRAIS / RÉDUCTION 1% -->
+      <!-- BLOC CALCULATEUR DYNAMIQUE -->
       <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
         <label class="flex items-center justify-between cursor-pointer">
           <span class="text-xs font-semibold text-slate-700">Prendre en charge les frais de service ?</span>
@@ -76,11 +76,11 @@
         <div class="text-xs space-y-1 border-t pt-2 border-slate-200">
           <div class="flex justify-between text-slate-500">
             <span>Ajustement / Frais :</span>
-            <span id="feeDisplay" class="font-semibold text-slate-800">-10 FCFA (-1%)</span>
+            <span id="feeDisplay" class="font-semibold text-slate-800">0 FCFA</span>
           </div>
           <div class="flex justify-between text-slate-900 font-bold text-sm pt-1">
             <span>Total à débiter :</span>
-            <span id="totalDisplay" class="text-blue-600">990 FCFA</span>
+            <span id="totalDisplay" class="text-blue-600">0 FCFA</span>
           </div>
         </div>
       </div>
@@ -90,20 +90,19 @@
       </button>
     </div>
 
-    <!-- ÉTAPE 3 : PHARMACIES DE GARDE (STYLE IMAGE) -->
+    <!-- ÉTAPE 3 : PHARMACIES DE GARDE (AFFICHAGE AUTOMATIQUE SANS GPS) -->
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-slate-900">Pharmacies de garde</h3>
-        <span class="text-xs bg-slate-100 px-2 py-1 rounded-full text-slate-500 font-bold">CI</span>
+        <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">En direct</span>
       </div>
 
-      <input type="text" id="pharmacySearch" placeholder="Nom de pharmacie, quartier..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none">
+      <input type="text" id="pharmacySearch" oninput="filterPharmacies()" placeholder="Rechercher une pharmacie, ville, quartier..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
 
-      <button onclick="locatePharmacies()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
-        📍 Activer la géolocalisation
-      </button>
-
-      <div id="pharmacyResults" class="space-y-2 text-xs"></div>
+      <!-- Liste automatique -->
+      <div id="pharmacyResults" class="space-y-3 pt-1 max-h-80 overflow-y-auto">
+        <!-- Rempli automatiquement par pharmacy.js -->
+      </div>
     </div>
 
   </main>
