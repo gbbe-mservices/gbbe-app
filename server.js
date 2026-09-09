@@ -76,7 +76,7 @@ app.post('/api/login', async (req, res) => {
       ON CONFLICT (phone) DO UPDATE SET code = $2, expires_at = $3
     `, [phone, otpCode, expiresAt]);
 
-    console.log([OTP pour ${phone}] : ${otpCode});
+   console.log(OTP pour ${phone} : ${otpCode});
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
