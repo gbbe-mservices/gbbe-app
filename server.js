@@ -97,7 +97,6 @@ app.post('/api/verify-otp', async (req, res) => {
   }
 });
 
-// Enregistrer une transaction avec le numéro de l'utilisateur connecté
 app.post('/api/transactions', async (req, res) => {
   const { userPhone, sourceNet, sourcePhone, destNet, destPhone, amount } = req.body;
   try {
@@ -111,7 +110,6 @@ app.post('/api/transactions', async (req, res) => {
   }
 });
 
-// Récupérer l'historique des transactions d'un utilisateur
 app.get('/api/transactions/:phone', async (req, res) => {
   const { phone } = req.params;
   try {
