@@ -126,7 +126,7 @@
         }
 
         localStorage.setItem('gbbe_user', JSON.stringify({ phone: data.phone }));
-        window.location.href = '/';
+        window.location.href = '/index.html';
       } catch (e) {
         err.textContent = "Erreur lors de la validation du code.";
         err.classList.remove('hidden');
