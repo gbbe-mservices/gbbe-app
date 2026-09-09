@@ -68,7 +68,17 @@
       </div>
       <p class="text-xs text-slate-400 mt-1.5">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
     </div>
-
+<!-- BLOC D'AFFICHAGE DU CALCULATEUR -->
+<div id="calculatorBox" class="bg-blue-50 border border-blue-200 p-4 rounded-2xl space-y-2 text-sm">
+  <div class="flex justify-between text-slate-600">
+    <span>Frais de transaction :</span>
+    <strong id="feeDisplay" class="text-slate-900">100 FCFA</strong>
+  </div>
+  <div class="flex justify-between text-slate-900 font-bold border-t border-blue-200 pt-2 text-base">
+    <span>Total à débiter :</span>
+    <strong id="totalDisplay" class="text-blue-600">5 100 FCFA</strong>
+  </div>
+</div>
     <button type="button" id="payButton" class="w-full py-4 rounded-xl font-bold text-base transition-all shadow-md bg-sky-400 hover:bg-sky-500 text-slate-950">
       Payer avec Wave 🌊
     </button>
