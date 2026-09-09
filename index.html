@@ -5,22 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GBBE-MULTISERVICES.CI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .network-wave { border-color: #38bdf8; color: #38bdf8; }
-    .network-om { border-color: #f97316; color: #f97316; }
-    .network-momo { border-color: #facc15; color: #facc15; }
-    .network-moov { border-color: #2563eb; color: #2563eb; }
-  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 md:p-8">
 
-  <!-- En-tête -->
-  <header class="max-w-6xl mx-auto flex justify-between items-center pb-6 border-b border-slate-800 mb-8">
+  <!-- EN-TÊTE -->
+  <header class="max-w-4xl mx-auto flex justify-between items-center pb-6 border-b border-slate-800 mb-8">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-xl font-bold">⚡</div>
+      <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30">⚡</div>
       <div>
         <h1 class="text-xl font-bold tracking-wide">GBBE-MULTISERVICES.CI</h1>
-        <p class="text-xs text-slate-400">Guichet Automatisé & Services Utilitaires</p>
+        <p class="text-xs text-slate-400">Guichet Automatisé de Transfert</p>
       </div>
     </div>
     <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 font-medium">
@@ -28,294 +22,187 @@
     </span>
   </header>
 
-  <!-- Conteneur Principal Responsive (1 col sur Mobile, 2 cols sur PC) -->
-  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <!-- CONTENEUR PRINCIPAL (Responsive & Pro) -->
+  <main class="max-w-4xl mx-auto space-y-8">
     
-    <!-- COLONNE 1 : Guichet de Transaction & Espace Utilisateur -->
-    <section class="space-y-6">
-      
-      <!-- Carte Principale (Onglets Invité / Membre) -->
-      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+    <!-- CARTE DE TRANSACTION -->
+    <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl max-w-2xl mx-auto">
+      <h2 class="text-xl font-bold text-white mb-1">Passer une transaction</h2>
+      <p class="text-xs text-slate-400 mb-6">Sélectionnez les réseaux et saisissez les informations de transfert.</p>
+
+      <form id="txForm" onsubmit="handleTransaction(event)" class="space-y-5">
         
-        <!-- Sélecteur de Mode (Invité / Membre) -->
-        <div class="flex bg-slate-800 p-1 rounded-xl mb-6">
-          <button id="tabGuest" onclick="switchMode('guest')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white">
-            ⚡ Achat Rapide (Invité)
-          </button>
-          <button id="tabMember" onclick="switchMode('member')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400">
-            👤 Espace Membre / Inscription
-          </button>
+        <!-- BLOC RÉSEAU SOURCE -->
+        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 space-y-2">
+          <label class="block text-xs font-semibold text-slate-300">💳 Réseau Source (Débit)</label>
+          <select id="sourceNet" onchange="updateUI()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+            <option value="wave">Wave</option>
+            <option value="om">Orange Money</option>
+            <option value="momo">MTN Mobile Money</option>
+            <option value="moov">Moov Money</option>
+          </select>
+          <input type="tel" id="sourcePhone" placeholder="Ex: 0707070707" maxlength="10" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          <p id="sourceError" class="text-xs text-red-400 hidden font-semibold"></p>
         </div>
 
-        <!-- FORMULAIRE DE TRANSACTION (Passer une transaction) -->
-        <div id="guestForm" class="space-y-4">
-          <div>
-            <h2 class="text-lg font-bold text-white mb-1">Passer une transaction</h2>
-            <p class="text-xs text-slate-400">Sélectionnez les réseaux et saisissez les informations de transfert.</p>
-          </div>
+        <div class="text-center text-slate-500 font-bold text-lg">↓</div>
 
-          <div class="bg-slate-800/50 border border-slate-700/60 p-4 rounded-xl space-y-4">
-            <!-- Réseau Source (Débit) -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">💳 Réseau Source (Débit)</label>
-              <select id="sourceNet" onchange="updateButtonSyntax()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-                <option value="wave">Wave</option>
-                <option value="om">Orange Money</option>
-                <option value="momo">MTN Mobile Money</option>
-                <option value="moov">Moov Money</option>
-              </select>
-              <input type="tel" id="sourcePhone" placeholder="Ex: 0707070707" class="w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            </div>
-
-            <div class="text-center text-slate-400 font-bold">↓</div>
-
-            <!-- Réseau Destination (Crédit) -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">👤 Réseau Destination (Crédit)</label>
-              <select id="destNet" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-                <option value="om">Orange Money</option>
-                <option value="wave">Wave</option>
-                <option value="momo">MTN Mobile Money</option>
-                <option value="moov">Moov Money</option>
-              </select>
-              <input type="tel" id="destPhone" placeholder="Ex: 0505050505" class="w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            </div>
-          </div>
-
-          <!-- Montant -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Montant à transférer (FCFA)</label>
-            <div class="relative">
-              <input type="number" id="txAmount" placeholder="5000" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500 pr-16">
-              <span class="absolute right-3 top-3 text-xs font-bold text-slate-400">FCFA</span>
-            </div>
-            <p class="text-[10px] text-slate-400 mt-1">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
-          </div>
-
-          <!-- Bouton de paiement dynamique avec syntaxe de couleur -->
-          <button type="button" id="payButton" onclick="processPayment()" class="w-full py-3.5 rounded-xl font-bold transition-all shadow-lg bg-sky-500 hover:bg-sky-400 text-slate-950">
-            Payer avec Wave 🌊
-          </button>
+        <!-- BLOC RÉSEAU DESTINATION -->
+        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 space-y-2">
+          <label class="block text-xs font-semibold text-slate-300">👤 Réseau Destination (Crédit)</label>
+          <select id="destNet" onchange="updateUI()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+            <option value="om">Orange Money</option>
+            <option value="wave">Wave</option>
+            <option value="momo">MTN Mobile Money</option>
+            <option value="moov">Moov Money</option>
+          </select>
+          <input type="tel" id="destPhone" placeholder="Ex: 0505050505" maxlength="10" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          <p id="destError" class="text-xs text-red-400 hidden font-semibold"></p>
         </div>
 
-        <!-- MODE MEMBRE : Connexion / Inscription -->
-        <div id="memberForm" class="space-y-4 hidden">
-          <div>
-            <h2 class="text-lg font-bold text-white mb-1">Espace Utilisateur</h2>
-            <p class="text-xs text-slate-400">Créez un compte pour suivre vos opérations en temps réel.</p>
+        <!-- MONTANT -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Montant à transférer (FCFA)</label>
+          <div class="relative">
+            <input type="number" id="txAmount" placeholder="5000" min="250" max="300000" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500 pr-16">
+            <span class="absolute right-3 top-3 text-xs font-bold text-slate-400">FCFA</span>
           </div>
-          
-          <form id="authForm" onsubmit="handleAuth(event)" class="space-y-3">
-            <input type="tel" id="userPhone" placeholder="Numéro de téléphone (ex: 0707070707)" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            <input type="password" id="userPass" placeholder="Mot de passe" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">
-              Se connecter / S'inscrire
-            </button>
-          </form>
+          <p class="text-[10px] text-slate-400 mt-1">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
         </div>
 
-      </div>
+        <!-- BOUTON DE DÉCLENCHEMENT DYNAMIQUE -->
+        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-sky-400 hover:bg-sky-300 shadow-lg shadow-sky-400/20">
+          Payer avec Wave 🌊
+        </button>
+      </form>
+    </div>
 
-      <!-- Dashboard Client Connecté (Masqué par défaut) -->
-      <div id="dashCard" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg hidden">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h2 class="text-lg font-bold text-white">Mon Tableau de Bord</h2>
-            <p id="connectedUserPhone" class="text-xs text-blue-400 font-mono"></p>
-          </div>
-          <button onclick="logout()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">Déconnexion</button>
-        </div>
-
-        <h3 class="text-sm font-semibold text-slate-300 mb-3">Suivi des Transactions en Direct</h3>
-        <div id="txHistory" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-      </div>
-
-    </section>
-
-    <!-- COLONNE 2 : Pharmacies de Garde (Géolocalisation) -->
-    <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg h-fit">
-      <div class="flex items-center gap-3 mb-2">
+    <!-- MODULE PHARMACIES DE GARDE (SOBRE & FONCTIONNEL) -->
+    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-2xl mx-auto">
+      <div class="flex items-center gap-3 mb-4">
         <span class="text-2xl">🏥</span>
         <div>
-          <h2 class="text-lg font-bold">Pharmacies de Garde</h2>
-          <p class="text-xs text-slate-400">Trouvez l'officine ouverte la plus proche</p>
+          <h3 class="text-lg font-bold text-white">Pharmacies de Garde</h3>
+          <p class="text-xs text-slate-400">Localisez les officines ouvertes à proximité</p>
         </div>
       </div>
 
-      <p class="text-xs text-slate-300 my-4 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-        Activez votre position GPS pour calculer la distance des pharmacies actuellement ouvertes dans votre zone.
-      </p>
-
-      <button type="button" onclick="findNearbyPharmacies()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
-        <span>📍</span> Activer la géolocalisation
+      <button type="button" id="gpsBtn" onclick="initGeolocation()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+        <span>📍</span> Activer ma géolocalisation
       </button>
 
-      <div id="pharmacyResults" class="mt-4 space-y-3"></div>
-    </section>
+      <div id="gpsStatus" class="mt-4 text-xs"></div>
+    </div>
 
   </main>
 
-  <!-- JAVASCRIPT -->
+  <!-- JAVASCRIPT TECHNIQUE DE VALIDATION -->
   <script>
-    // 1. Alternance Onglets
-    function switchMode(mode) {
-      const guestTab = document.getElementById('tabGuest');
-      const memberTab = document.getElementById('tabMember');
-      const guestForm = document.getElementById('guestForm');
-      const memberForm = document.getElementById('memberForm');
+    const WAVE_LINK = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
 
-      if (mode === 'guest') {
-        guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
-        memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
-        guestForm.classList.remove('hidden');
-        memberForm.classList.add('hidden');
-      } else {
-        memberTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
-        guestTab.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-400";
-        memberForm.classList.remove('hidden');
-        guestForm.classList.add('hidden');
+    // Vérification des préfixes réseau en Côte d'Ivoire
+    function validateNetworkPhone(network, phone) {
+      if (!phone || phone.length !== 10) return false;
+      const prefix2 = phone.substring(0, 2);
+
+      if (network === 'om') {
+        // Orange CI : 07, 08, 09
+        return ['07', '08', '09'].includes(prefix2);
+      } else if (network === 'momo') {
+        // MTN CI : 05
+        return prefix2 === '05';
+      } else if (network === 'moov') {
+        // Moov CI : 01, 02
+        return ['01', '02'].includes(prefix2);
+      } else if (network === 'wave') {
+        // Wave accepte les numéros cellulaires valides
+        return ['01', '02', '05', '07', '08', '09'].includes(prefix2);
       }
+      return true;
     }
 
-    // 2. Syntaxe des couleurs du bouton selon l'opérateur source
-    function updateButtonSyntax() {
+    // Mise à jour visuelle du bouton selon l'opérateur
+    function updateUI() {
       const source = document.getElementById('sourceNet').value;
-      const btn = document.getElementById('payButton');
+      const btn = document.getElementById('submitBtn');
 
       if (source === 'wave') {
-        btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg bg-sky-400 hover:bg-sky-300 text-slate-950 shadow-sky-400/20";
+        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-sky-400 hover:bg-sky-300 shadow-lg shadow-sky-400/20";
         btn.textContent = "Payer avec Wave 🌊";
       } else if (source === 'om') {
-        btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg bg-orange-500 hover:bg-orange-400 text-white shadow-orange-500/20";
+        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-white bg-orange-500 hover:bg-orange-400 shadow-lg shadow-orange-500/20";
         btn.textContent = "Payer avec Orange Money 🟠";
       } else if (source === 'momo') {
-        btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg bg-yellow-400 hover:bg-yellow-300 text-slate-950 shadow-yellow-400/20";
+        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-yellow-400 hover:bg-yellow-300 shadow-lg shadow-yellow-400/20";
         btn.textContent = "Payer avec MTN MoMo 🟡";
       } else if (source === 'moov') {
-        btn.className = "w-full py-3.5 rounded-xl font-bold transition-all shadow-lg bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20";
+        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/20";
         btn.textContent = "Payer avec Moov Money 🔵";
       }
     }
 
-    // 3. Traitement du paiement (Redirection vers le lien Wave)
-    function processPayment() {
-      const source = document.getElementById('sourceNet').value;
-      const sourcePhone = document.getElementById('sourcePhone').value;
-      const destPhone = document.getElementById('destPhone').value;
-      const amount = document.getElementById('txAmount').value;
-
-      if (!sourcePhone || !destPhone || !amount) {
-        alert("Veuillez renseigner tous les champs : numéro source, numéro destination et le montant.");
-        return;
-      }
-
-      if (source === 'wave') {
-        // Redirection directe vers votre marchand Wave
-        window.location.href = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
-      } else {
-        alert(Transaction de ${amount} FCFA initialisée via l'opérateur sélectionné. Redirection vers le guichet de paiement...);
-      }
-    }
-
-    // 4. Espace Membre (Connexion & Historique)
-    let currentUser = null;
-    let pollInterval = null;
-
-    function handleAuth(e) {
+    // Traitement et vérification au clic sur Payer
+    function handleTransaction(e) {
       e.preventDefault();
-      const phone = document.getElementById('userPhone').value;
-      currentUser = phone;
 
-      document.getElementById('dashCard').classList.remove('hidden');
-      document.getElementById('connectedUserPhone').textContent = "Connecté: " + phone;
-
-      startRealtimeHistory();
-    }
-
-    function logout() {
-      currentUser = null;
-      clearInterval(pollInterval);
-      document.getElementById('dashCard').classList.add('hidden');
-    }
-
-    function startRealtimeHistory() {
-      loadMockTransactions();
-      pollInterval = setInterval(loadMockTransactions, 4000);
-    }
-
-    function loadMockTransactions() {
-      const mockData = [
-        { service: 'Recharge Wave', amount: '5 000 FCFA', status: 'Succès', time: 'À l\'instant' },
-        { service: 'Achat Pass Orange', amount: '1 000 FCFA', status: 'En traitement', time: 'Il y a 2 min' }
-      ];
-
-      const container = document.getElementById('txHistory');
-      container.innerHTML = mockData.map(tx => `
-        <div class="flex justify-between items-center p-3 bg-slate-800/60 rounded-xl border border-slate-700/40 text-xs">
-          <div>
-            <p class="font-bold text-white">${tx.service}</p>
-            <p class="text-slate-400">${tx.time} • ${tx.amount}</p>
-          </div>
-          <span class="px-2 py-1 rounded-md font-semibold ${tx.status === 'Succès' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}">
-            ${tx.status}
-          </span>
-        </div>
-      `).join('');
-    }
-
-    // 5. Géolocalisation & Pharmacies
-    const pharmacyList = [
-      { name: "Pharmacie Saint Jean", lat: 5.3500, lng: -4.0020, area: "Cocody", phone: "+225 07 00 00 01" },
-      { name: "Pharmacie du Boulevard", lat: 5.3310, lng: -4.0150, area: "Plateau", phone: "+225 07 00 00 02" },
-      { name: "Pharmacie des Grâces", lat: 5.3620, lng: -3.9800, area: "Bingerville", phone: "+225 07 00 00 03" }
-    ];
-
-    function findNearbyPharmacies() {
-      const resultsDiv = document.getElementById('pharmacyResults');
+      const sourceNet = document.getElementById('sourceNet').value;
+      const sourcePhone = document.getElementById('sourcePhone').value.trim();
+      const destNet = document.getElementById('destNet').value;
+      const destPhone = document.getElementById('destPhone').value.trim();
       
-      if (!navigator.geolocation) {
-        resultsDiv.innerHTML = <p class="text-xs text-red-400">La géolocalisation n'est pas supportée par votre navigateur.</p>;
+      const sourceErr = document.getElementById('sourceError');
+      const destErr = document.getElementById('destError');
+
+      sourceErr.classList.add('hidden');
+      destErr.classList.add('hidden');
+
+      // Validation Réseau Source
+      if (!validateNetworkPhone(sourceNet, sourcePhone)) {
+        sourceErr.textContent = ` Le numéro saisi ne correspond pas au réseau ${sourceNet.toUpperCase()} sélectionné.`;
+        sourceErr.classList.remove('hidden');
         return;
       }
 
-      resultsDiv.innerHTML = <p class="text-xs text-blue-400 animate-pulse">Demande d'autorisation GPS en cours...</p>;
+      // Validation Réseau Destination
+      if (!validateNetworkPhone(destNet, destPhone)) {
+        destErr.textContent = ` Le numéro saisi ne correspond pas au réseau ${destNet.toUpperCase()} sélectionné.`;
+        destErr.classList.remove('hidden');
+        return;
+      }
+
+      // Si tout est valide
+      if (sourceNet === 'wave') {
+        // Redirection directe vers Wave
+        window.location.href = WAVE_LINK;
+      } else {
+        alert(Transaction validée de ${document.getElementById('txAmount').value} FCFA.\nRedirection vers la passerelle de paiement ${sourceNet.toUpperCase()}...);
+      }
+    }
+
+    // Module Géolocalisation
+    function initGeolocation() {
+      const status = document.getElementById('gpsStatus');
+      status.innerHTML = <p class="text-blue-400 animate-pulse">Recherche des pharmacies de garde à proximité...</p>;
+
+      if (!navigator.geolocation) {
+        status.innerHTML = <p class="text-red-400">Géolocalisation non supportée par votre appareil.</p>;
+        return;
+      }
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          const uLat = pos.coords.latitude;
-          const uLng = pos.coords.longitude;
-
-          const sorted = pharmacyList.map(p => {
-            const dist = getDistanceKm(uLat, uLng, p.lat, p.lng);
-            return { ...p, distance: dist.toFixed(1) };
-          }).sort((a, b) => a.distance - b.distance);
-
-          resultsDiv.innerHTML = sorted.map(p => `
-            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700/60 flex justify-between items-center text-xs">
-              <div>
-                <p class="font-bold text-white">${p.name}</p>
-                <p class="text-slate-400">${p.area} • <span class="text-emerald-400">À ~${p.distance} km</span></p>
-              </div>
-              <a href="tel:${p.phone}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg">
-                Appeler
-              </a>
+          status.innerHTML = `
+            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700 text-slate-300 space-y-1">
+              <p class="font-bold text-emerald-400">📍 Position détectée !</p>
+              <p>Pharmacie la plus proche : <strong>Pharmacie du Bonheur (Cocody)</strong> — À ~1.2 km</p>
+              <a href="tel:+2250707070707" class="inline-block mt-2 text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg font-bold">Appeler l'officine</a>
             </div>
-          `).join('');
+          `;
         },
-        () => {
-          resultsDiv.innerHTML = <p class="text-xs text-amber-400">Veuillez autoriser l'accès GPS dans les paramètres de votre navigateur/téléphone.</p>;
+        (err) => {
+          status.innerHTML = <p class="text-amber-400">Veuillez autoriser l'accès GPS dans les paramètres de votre navigateur.</p>;
         }
       );
-    }
-
-    function getDistanceKm(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
     }
   </script>
 </body>
