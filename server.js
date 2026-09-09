@@ -13,7 +13,6 @@ const pool = new Pool({
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// Initialisation des tables PostgreSQL
 async function initDB() {
   try {
     await pool.query(`
@@ -32,6 +31,7 @@ async function initDB() {
 
       CREATE TABLE IF NOT EXISTS transactions (
         id SERIAL PRIMARY KEY,
+        user_phone VARCHAR(15),
         source_net VARCHAR(20),
         source_phone VARCHAR(15),
         dest_net VARCHAR(20),
@@ -47,7 +47,6 @@ async function initDB() {
 }
 initDB();
 
-// --- INSCRIPTION ---
 app.post('/api/register', async (req, res) => {
   const { phone, password } = req.body;
   try {
@@ -55,7 +54,6 @@ app.post('/api/register', async (req, res) => {
     if (existing.rows.length > 0) {
       return res.status(400).json({ success: false, error: "Ce numéro est déjà inscrit." });
     }
-
     await pool.query('INSERT INTO users (phone, password) VALUES ($1, $2)', [phone, password]);
     res.json({ success: true });
   } catch (err) {
@@ -63,7 +61,6 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// --- CONNEXION (Étape 1 : Mot de passe + Génération OTP) ---
 app.post('/api/login', async (req, res) => {
   const { phone, password } = req.body;
   try {
@@ -71,10 +68,8 @@ app.post('/api/login', async (req, res) => {
     if (userRes.rows.length === 0) {
       return res.status(401).json({ success: false, error: "Numéro ou mot de passe incorrect." });
     }
-
-    // Générer un code OTP à 4 chiffres
     const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // Valide 5 minutes
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     await pool.query(`
       INSERT INTO otps (phone, code, expires_at) VALUES ($1, $2, $3)
@@ -82,40 +77,46 @@ app.post('/api/login', async (req, res) => {
     `, [phone, otpCode, expiresAt]);
 
     console.log([OTP pour ${phone}] : ${otpCode});
-
-    res.json({ success: true, message: "Code OTP généré avec succès." });
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// --- VALIDATION OTP (Étape 2 : Connexion finale) ---
 app.post('/api/verify-otp', async (req, res) => {
   const { phone, code } = req.body;
   try {
     const otpRes = await pool.query('SELECT * FROM otps WHERE phone = $1 AND code = $2 AND expires_at > NOW()', [phone, code]);
-    
     if (otpRes.rows.length === 0) {
       return res.status(400).json({ success: false, error: "Code OTP invalide ou expiré." });
     }
-
     await pool.query('DELETE FROM otps WHERE phone = $1', [phone]);
-
-    res.json({ success: true, phone, message: "Authentification réussie !" });
+    res.json({ success: true, phone });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// Enregistrement de transaction
+// Enregistrer une transaction avec le numéro de l'utilisateur connecté
 app.post('/api/transactions', async (req, res) => {
-  const { sourceNet, sourcePhone, destNet, destPhone, amount } = req.body;
+  const { userPhone, sourceNet, sourcePhone, destNet, destPhone, amount } = req.body;
   try {
     await pool.query(
-      INSERT INTO transactions (source_net, source_phone, dest_net, dest_phone, amount) VALUES ($1, $2, $3, $4, $5),
-      [sourceNet, sourcePhone, destNet, destPhone, amount]
+      INSERT INTO transactions (user_phone, source_net, source_phone, dest_net, dest_phone, amount) VALUES ($1, $2, $3, $4, $5, $6),
+      [userPhone, sourceNet, sourcePhone, destNet, destPhone, amount]
     );
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Récupérer l'historique des transactions d'un utilisateur
+app.get('/api/transactions/:phone', async (req, res) => {
+  const { phone } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM transactions WHERE user_phone = $1 ORDER BY created_at DESC', [phone]);
+    res.json({ success: true, transactions: result.rows });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -126,5 +127,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Serveur GBBE-MULTISERVICES actif sur le port " + PORT);
+  console.log("Serveur actif sur le port " + PORT);
 });
