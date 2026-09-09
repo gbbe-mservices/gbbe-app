@@ -3,15 +3,45 @@ const WAVE_PAYMENT_URL = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
 document.addEventListener('DOMContentLoaded', () => {
   const sourceNet = document.getElementById('sourceNet');
   const payBtn = document.getElementById('payButton');
+  const amountInput = document.getElementById('txAmount');
 
   if (sourceNet) {
-    sourceNet.addEventListener('change', updateCalculatorUI);
+    sourceNet.addEventListener('change', () => {
+      updateCalculatorUI();
+      calculateTotal();
+    });
+  }
+
+  if (amountInput) {
+    amountInput.addEventListener('input', calculateTotal);
   }
 
   if (payBtn) {
     payBtn.addEventListener('click', handlePaymentSubmit);
   }
+
+  calculateTotal();
 });
+
+// Calcul des frais et du total en temps réel
+function calculateTotal() {
+  const amountInput = document.getElementById('txAmount');
+  const feeDisplay = document.getElementById('feeDisplay');
+  const totalDisplay = document.getElementById('totalDisplay');
+
+  if (!amountInput || !feeDisplay || !totalDisplay) return;
+
+  const amount = parseFloat(amountInput.value) || 0;
+  
+  // Exemple de règle de calcul : 1% de frais (minimum 100 FCFA)
+  let fees = Math.round(amount * 0.01);
+  if (amount > 0 && fees < 100) fees = 100;
+
+  const total = amount + fees;
+
+  feeDisplay.textContent = fees.toLocaleString('fr-FR') + " FCFA";
+  totalDisplay.textContent = total.toLocaleString('fr-FR') + " FCFA";
+}
 
 function updateCalculatorUI() {
   const source = document.getElementById('sourceNet').value;
