@@ -27,6 +27,20 @@
     </div>
   </header>
 
+  <!-- ESPACE UTILISATEUR CONNECTÉ -->
+  <div id="userHeader" style="max-width: 1100px; margin: 15px auto 0; padding: 12px 20px; background: #0f172a; color: #ffffff; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <i class="bi bi-person-circle" style="font-size: 1.5rem; color: #38bdf8;"></i>
+      <div>
+        <span style="font-size: 0.75rem; color: #94a3b8; display: block; line-height: 1;">Espace Client</span>
+        <strong id="userNameDisplay" style="font-size: 0.95rem; font-weight: 700;">Bruno Noura</strong>
+      </div>
+    </div>
+    <button onclick="localStorage.removeItem('gbbe_user'); window.location.reload();" style="background: #ef4444; color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      Déconnexion
+    </button>
+  </div>
+
   <main class="main-container">
     <div class="checkout-grid">
       
