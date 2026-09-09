@@ -63,7 +63,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// --- CONNEXION (Étape 1 : Vérifie le mot de passe et envoie l'OTP) ---
+// --- CONNEXION (Étape 1 : Mot de passe + Génération OTP) ---
 app.post('/api/login', async (req, res) => {
   const { phone, password } = req.body;
   try {
@@ -72,27 +72,24 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ success: false, error: "Numéro ou mot de passe incorrect." });
     }
 
-    // Générer un code OTP à 4 ou 6 chiffres (ex: 4821)
+    // Générer un code OTP à 4 chiffres
     const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // Expire dans 5 minutes
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // Valide 5 minutes
 
-    // Enregistrer ou mettre à jour l'OTP dans la base
     await pool.query(`
       INSERT INTO otps (phone, code, expires_at) VALUES ($1, $2, $3)
       ON CONFLICT (phone) DO UPDATE SET code = $2, expires_at = $3
     `, [phone, otpCode, expiresAt]);
 
-    // TODO: Intégrer ici une API SMS (ex: Twilio, Orange API, etc.) pour envoyer le code.
-    // Pour l'instant, on l'affiche dans les logs du serveur Render pour les tests :
     console.log([OTP pour ${phone}] : ${otpCode});
 
-    res.json({ success: true, message: "Code OTP envoyé (vérifiez les logs du serveur pour le test)" });
+    res.json({ success: true, message: "Code OTP généré avec succès." });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// --- VALIDATION OTP (Étape 2 : Connecte définitivement l'utilisateur) ---
+// --- VALIDATION OTP (Étape 2 : Connexion finale) ---
 app.post('/api/verify-otp', async (req, res) => {
   const { phone, code } = req.body;
   try {
@@ -102,7 +99,6 @@ app.post('/api/verify-otp', async (req, res) => {
       return res.status(400).json({ success: false, error: "Code OTP invalide ou expiré." });
     }
 
-    // Nettoyer l'OTP utilisé
     await pool.query('DELETE FROM otps WHERE phone = $1', [phone]);
 
     res.json({ success: true, phone, message: "Authentification réussie !" });
