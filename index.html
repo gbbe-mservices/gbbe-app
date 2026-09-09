@@ -5,205 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GBBE-MULTISERVICES.CI</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 md:p-8">
+<body class="bg-slate-900 text-slate-800 min-h-screen p-4 md:p-8 font-sans">
 
   <!-- EN-TÊTE -->
-  <header class="max-w-4xl mx-auto flex justify-between items-center pb-6 border-b border-slate-800 mb-8">
+  <header class="max-w-2xl mx-auto flex justify-between items-center pb-6 mb-6">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30">⚡</div>
+      <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold shadow-md">⚡</div>
       <div>
-        <h1 class="text-xl font-bold tracking-wide">GBBE-MULTISERVICES.CI</h1>
-        <p class="text-xs text-slate-400">Guichet Automatisé de Transfert</p>
+        <h1 class="text-xl font-bold text-white tracking-wide">GBBE-MULTISERVICES.CI</h1>
+        <p class="text-xs text-slate-400">Guichet Automatisé</p>
       </div>
     </div>
-    <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 font-medium">
-      ● Service Actif
+    <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3.5 py-1.5 rounded-full border border-emerald-500/20 font-medium flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Service Actif
     </span>
   </header>
 
-  <!-- CONTENEUR PRINCIPAL (Responsive & Pro) -->
-  <main class="max-w-4xl mx-auto space-y-8">
+  <!-- CARTE PRINCIPALE DE TRANSACTION -->
+  <main class="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
     
-    <!-- CARTE DE TRANSACTION -->
-    <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl max-w-2xl mx-auto">
-      <h2 class="text-xl font-bold text-white mb-1">Passer une transaction</h2>
-      <p class="text-xs text-slate-400 mb-6">Sélectionnez les réseaux et saisissez les informations de transfert.</p>
-
-      <form id="txForm" onsubmit="handleTransaction(event)" class="space-y-5">
-        
-        <!-- BLOC RÉSEAU SOURCE -->
-        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 space-y-2">
-          <label class="block text-xs font-semibold text-slate-300">💳 Réseau Source (Débit)</label>
-          <select id="sourceNet" onchange="updateUI()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            <option value="wave">Wave</option>
-            <option value="om">Orange Money</option>
-            <option value="momo">MTN Mobile Money</option>
-            <option value="moov">Moov Money</option>
-          </select>
-          <input type="tel" id="sourcePhone" placeholder="Ex: 0707070707" maxlength="10" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-          <p id="sourceError" class="text-xs text-red-400 hidden font-semibold"></p>
-        </div>
-
-        <div class="text-center text-slate-500 font-bold text-lg">↓</div>
-
-        <!-- BLOC RÉSEAU DESTINATION -->
-        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 space-y-2">
-          <label class="block text-xs font-semibold text-slate-300">👤 Réseau Destination (Crédit)</label>
-          <select id="destNet" onchange="updateUI()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-            <option value="om">Orange Money</option>
-            <option value="wave">Wave</option>
-            <option value="momo">MTN Mobile Money</option>
-            <option value="moov">Moov Money</option>
-          </select>
-          <input type="tel" id="destPhone" placeholder="Ex: 0505050505" maxlength="10" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
-          <p id="destError" class="text-xs text-red-400 hidden font-semibold"></p>
-        </div>
-
-        <!-- MONTANT -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Montant à transférer (FCFA)</label>
-          <div class="relative">
-            <input type="number" id="txAmount" placeholder="5000" min="250" max="300000" required class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500 pr-16">
-            <span class="absolute right-3 top-3 text-xs font-bold text-slate-400">FCFA</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-1">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
-        </div>
-
-        <!-- BOUTON DE DÉCLENCHEMENT DYNAMIQUE -->
-        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-sky-400 hover:bg-sky-300 shadow-lg shadow-sky-400/20">
-          Payer avec Wave 🌊
-        </button>
-      </form>
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900 mb-1">Passer une transaction</h2>
+      <p class="text-sm text-slate-500">Sélectionnez les réseaux et saisissez les informations de transfert</p>
     </div>
 
-    <!-- MODULE PHARMACIES DE GARDE (SOBRE & FONCTIONNEL) -->
-    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-2xl mx-auto">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-2xl">🏥</span>
-        <div>
-          <h3 class="text-lg font-bold text-white">Pharmacies de Garde</h3>
-          <p class="text-xs text-slate-400">Localisez les officines ouvertes à proximité</p>
-        </div>
+    <!-- SÉLECTION DES RÉSEAUX -->
+    <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200/80 space-y-4">
+      
+      <!-- Réseau Source -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 mb-1.5">💳 Réseau Source (Débit)</label>
+        <select id="sourceNet" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="wave">Wave</option>
+          <option value="om">Orange Money</option>
+          <option value="momo">MTN Mobile Money</option>
+          <option value="moov">Moov Money</option>
+        </select>
+        <input type="tel" id="sourcePhone" placeholder="Ex: 0707070707" maxlength="10" class="w-full mt-2 bg-white border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <p id="sourceError" class="text-xs text-red-500 font-semibold mt-1 hidden"></p>
       </div>
 
-      <button type="button" id="gpsBtn" onclick="initGeolocation()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-        <span>📍</span> Activer ma géolocalisation
-      </button>
+      <div class="text-center text-slate-400 font-bold text-lg">↓</div>
 
-      <div id="gpsStatus" class="mt-4 text-xs"></div>
+      <!-- Réseau Destination -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 mb-1.5">👤 Réseau Destination (Crédit)</label>
+        <select id="destNet" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="om">Orange Money</option>
+          <option value="wave">Wave</option>
+          <option value="momo">MTN Mobile Money</option>
+          <option value="moov">Moov Money</option>
+        </select>
+        <input type="tel" id="destPhone" placeholder="Ex: 0505050505" maxlength="10" class="w-full mt-2 bg-white border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <p id="destError" class="text-xs text-red-500 font-semibold mt-1 hidden"></p>
+      </div>
+
     </div>
+
+    <!-- MONTANT -->
+    <div>
+      <label class="block text-xs font-semibold text-slate-500 mb-1.5">Montant à transférer</label>
+      <div class="relative">
+        <input type="number" id="txAmount" placeholder="5000" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3.5 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16">
+        <span class="absolute right-4 top-3.5 text-sm font-bold text-slate-400">FCFA</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1.5">Montant min: 250 FCFA — Max: 300 000 FCFA</p>
+    </div>
+
+    <!-- BOUTON D'ACTION PRINCIPAL -->
+    <button type="button" id="payButton" class="w-full py-4 rounded-xl font-bold text-base transition-all shadow-md bg-sky-400 hover:bg-sky-500 text-slate-950">
+      Payer avec Wave 🌊
+    </button>
 
   </main>
 
-  <!-- JAVASCRIPT TECHNIQUE DE VALIDATION -->
-  <script>
-    const WAVE_LINK = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
+  <!-- MODULE PHARMACIES DE GARDE -->
+  <section class="max-w-2xl mx-auto bg-slate-800/80 border border-slate-700/60 rounded-3xl p-6 mt-6 text-white space-y-4">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">🏥</span>
+      <div>
+        <h3 class="text-lg font-bold">Pharmacies de Garde</h3>
+        <p class="text-xs text-slate-400">Trouvez l'officine ouverte la plus proche</p>
+      </div>
+    </div>
 
-    // Vérification des préfixes réseau en Côte d'Ivoire
-    function validateNetworkPhone(network, phone) {
-      if (!phone || phone.length !== 10) return false;
-      const prefix2 = phone.substring(0, 2);
+    <button type="button" id="gpsBtn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
+      <span>📍</span> Activer la géolocalisation
+    </button>
 
-      if (network === 'om') {
-        // Orange CI : 07, 08, 09
-        return ['07', '08', '09'].includes(prefix2);
-      } else if (network === 'momo') {
-        // MTN CI : 05
-        return prefix2 === '05';
-      } else if (network === 'moov') {
-        // Moov CI : 01, 02
-        return ['01', '02'].includes(prefix2);
-      } else if (network === 'wave') {
-        // Wave accepte les numéros cellulaires valides
-        return ['01', '02', '05', '07', '08', '09'].includes(prefix2);
-      }
-      return true;
-    }
+    <div id="pharmacyResults" class="space-y-2 pt-2"></div>
+  </section>
 
-    // Mise à jour visuelle du bouton selon l'opérateur
-    function updateUI() {
-      const source = document.getElementById('sourceNet').value;
-      const btn = document.getElementById('submitBtn');
-
-      if (source === 'wave') {
-        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-sky-400 hover:bg-sky-300 shadow-lg shadow-sky-400/20";
-        btn.textContent = "Payer avec Wave 🌊";
-      } else if (source === 'om') {
-        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-white bg-orange-500 hover:bg-orange-400 shadow-lg shadow-orange-500/20";
-        btn.textContent = "Payer avec Orange Money 🟠";
-      } else if (source === 'momo') {
-        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-slate-950 bg-yellow-400 hover:bg-yellow-300 shadow-lg shadow-yellow-400/20";
-        btn.textContent = "Payer avec MTN MoMo 🟡";
-      } else if (source === 'moov') {
-        btn.className = "w-full py-4 rounded-xl font-bold transition-all text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/20";
-        btn.textContent = "Payer avec Moov Money 🔵";
-      }
-    }
-
-    // Traitement et vérification au clic sur Payer
-    function handleTransaction(e) {
-      e.preventDefault();
-
-      const sourceNet = document.getElementById('sourceNet').value;
-      const sourcePhone = document.getElementById('sourcePhone').value.trim();
-      const destNet = document.getElementById('destNet').value;
-      const destPhone = document.getElementById('destPhone').value.trim();
-      
-      const sourceErr = document.getElementById('sourceError');
-      const destErr = document.getElementById('destError');
-
-      sourceErr.classList.add('hidden');
-      destErr.classList.add('hidden');
-
-      // Validation Réseau Source
-      if (!validateNetworkPhone(sourceNet, sourcePhone)) {
-        sourceErr.textContent = ` Le numéro saisi ne correspond pas au réseau ${sourceNet.toUpperCase()} sélectionné.`;
-        sourceErr.classList.remove('hidden');
-        return;
-      }
-
-      // Validation Réseau Destination
-      if (!validateNetworkPhone(destNet, destPhone)) {
-        destErr.textContent = ` Le numéro saisi ne correspond pas au réseau ${destNet.toUpperCase()} sélectionné.`;
-        destErr.classList.remove('hidden');
-        return;
-      }
-
-      // Si tout est valide
-      if (sourceNet === 'wave') {
-        // Redirection directe vers Wave
-        window.location.href = WAVE_LINK;
-      } else {
-        alert(Transaction validée de ${document.getElementById('txAmount').value} FCFA.\nRedirection vers la passerelle de paiement ${sourceNet.toUpperCase()}...);
-      }
-    }
-
-    // Module Géolocalisation
-    function initGeolocation() {
-      const status = document.getElementById('gpsStatus');
-      status.innerHTML = <p class="text-blue-400 animate-pulse">Recherche des pharmacies de garde à proximité...</p>;
-
-      if (!navigator.geolocation) {
-        status.innerHTML = <p class="text-red-400">Géolocalisation non supportée par votre appareil.</p>;
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          status.innerHTML = `
-            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700 text-slate-300 space-y-1">
-              <p class="font-bold text-emerald-400">📍 Position détectée !</p>
-              <p>Pharmacie la plus proche : <strong>Pharmacie du Bonheur (Cocody)</strong> — À ~1.2 km</p>
-              <a href="tel:+2250707070707" class="inline-block mt-2 text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg font-bold">Appeler l'officine</a>
-            </div>
-          `;
-        },
-        (err) => {
-          status.innerHTML = <p class="text-amber-400">Veuillez autoriser l'accès GPS dans les paramètres de votre navigateur.</p>;
-        }
-      );
-    }
-  </script>
+  <!-- CONNEXION AU FICHIER LOGIQUE JS -->
+  <script src="app.js"></script>
 </body>
 </html>
