@@ -1,10 +1,19 @@
 const WAVE_PAYMENT_URL = "https://pay.wave.com/m/M_ci_QJOfA_vl3LNC/c/ci/";
 
+// Initialisation au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
   const sourceNet = document.getElementById('sourceNet');
   const payBtn = document.getElementById('payButton');
   const amountInput = document.getElementById('txAmount');
 
+  // Écouteur pour la modification du montant (clavier + flèches)
+  if (amountInput) {
+    amountInput.addEventListener('input', calculateTotal);
+    amountInput.addEventListener('keyup', calculateTotal);
+    amountInput.addEventListener('change', calculateTotal);
+  }
+
+  // Écouteur pour la modification du réseau
   if (sourceNet) {
     sourceNet.addEventListener('change', () => {
       updateCalculatorUI();
@@ -12,18 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (amountInput) {
-    amountInput.addEventListener('input', calculateTotal);
-  }
-
+  // Écouteur pour le bouton de paiement
   if (payBtn) {
     payBtn.addEventListener('click', handlePaymentSubmit);
   }
 
+  // Calcul initial
   calculateTotal();
 });
 
-// Calcul des frais et du total en temps réel
+// Calcul dynamique des frais et du montant total
 function calculateTotal() {
   const amountInput = document.getElementById('txAmount');
   const feeDisplay = document.getElementById('feeDisplay');
@@ -33,9 +40,11 @@ function calculateTotal() {
 
   const amount = parseFloat(amountInput.value) || 0;
   
-  // Exemple de règle de calcul : 1% de frais (minimum 100 FCFA)
-  let fees = Math.round(amount * 0.01);
-  if (amount > 0 && fees < 100) fees = 100;
+  let fees = 0;
+  if (amount > 0) {
+    // Règle de frais : 1% du montant avec un minimum de 100 FCFA
+    fees = Math.max(100, Math.round(amount * 0.01));
+  }
 
   const total = amount + fees;
 
@@ -43,9 +52,12 @@ function calculateTotal() {
   totalDisplay.textContent = total.toLocaleString('fr-FR') + " FCFA";
 }
 
+// Adaptation visuelle du bouton selon l'opérateur
 function updateCalculatorUI() {
   const source = document.getElementById('sourceNet').value;
   const btn = document.getElementById('payButton');
+
+  if (!btn) return;
 
   if (source === 'wave') {
     btn.className = "w-full py-4 rounded-xl font-bold text-base transition-all shadow-md bg-sky-400 hover:bg-sky-500 text-slate-950";
@@ -62,6 +74,7 @@ function updateCalculatorUI() {
   }
 }
 
+// Vérification des préfixes réseau CI
 function checkNetworkPrefix(network, phone) {
   if (!phone || phone.length !== 10) return false;
   const prefix = phone.substring(0, 2);
@@ -73,6 +86,7 @@ function checkNetworkPrefix(network, phone) {
   return true;
 }
 
+// Soumission et validation de la transaction
 function handlePaymentSubmit() {
   const sourceNet = document.getElementById('sourceNet').value;
   const sourcePhone = document.getElementById('sourcePhone').value.trim();
