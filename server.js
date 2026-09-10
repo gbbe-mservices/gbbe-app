@@ -96,20 +96,15 @@ app.post('/api/verify-otp', async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 app.post('/api/transactions', async (req, res) => {
   const { userPhone, sourceNet, sourcePhone, destNet, destPhone, amount } = req.body;
   try {
-    await pool.query(
-      INSERT INTO transactions (user_phone, source_net, source_phone, dest_net, dest_phone, amount) VALUES ($1, $2, $3, $4, $5, $6),
-      [userPhone, sourceNet, sourcePhone, destNet, destPhone, amount]
-    );
+    await pool.query('INSERT INTO transactions (user_phone, source_net, source_phone, dest_net, dest_phone, amount) VALUES ($1, $2, $3, $4, $5, $6)', [userPhone, sourceNet, sourcePhone, destNet, destPhone, amount]);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 app.get('/api/transactions/:phone', async (req, res) => {
   const { phone } = req.params;
   try {
