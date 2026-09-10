@@ -1,0 +1,546 @@
+[01:11, 10/09/2026] Nobru: <!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBBE-MULTISERVICES.CI — Transferts entre réseaux mobile money</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="demo-banner">
+  <strong>Mode démonstration</strong> — aucune transaction réelle n'est effectuée sur ce site.
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#F2…
+[03:20, 10/09/2026] Nobru: Style 
+
+/* ==========================================================================
+   GBBE-MULTISERVICES.CI — feuille de style partagée
+   ========================================================================== */
+
+:root {
+  --bg: #F7F5F0;
+  --bg-raised: #FFFFFF;
+  --ink: #1B2430;
+  --ink-soft: #5B6472;
+  --accent: #0F6B4C;
+  --accent-soft: #E4EFE9;
+  --accent-dark: #0B5138;
+  --line: #DCD7CC;
+  --warn: #B3452C;
+  --warn-soft: #F5E6E1;
+  --radius-card: 18px;
+  --radius-field: 12px;
+  --shadow-card: 0 1px 2px rgba(27, 36, 48, 0.04), 0 8px 24px rgba(27, 36, 48, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Sora', 'Inter', sans-serif;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+a { color: var(--accent-dark); }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* --- Bandeau mode démo --------------------------------------------------- */
+
+.demo-banner {
+  background: var(--ink);
+  color: #F2EFE7;
+  text-align: center;
+  font-size: 13px;
+  padding: 8px 16px;
+  letter-spacing: 0.01em;
+}
+
+.demo-banner strong { color: #FFFFFF; }
+
+/* --- En-tête -------------------------------------------------------------- */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-mark svg { width: 20px; height: 20px; }
+
+.brand-name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.brand-tag {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* --- Contenu générique ----------------------------------------------------- */
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* --- Accueil ---------------------------------------------------------------- */
+
+.hero {
+  padding: 56px 0 40px;
+}
+
+.hero-eyebrow {
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.15;
+  max-width: 18ch;
+}
+
+.hero p {
+  color: var(--ink-soft);
+  font-size: 17px;
+  max-width: 48ch;
+  margin-top: 18px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 24px;
+  border-radius: var(--radius-field);
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--accent-dark); }
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.btn-secondary:hover { border-color: var(--ink-soft); }
+
+.network-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.network-chip {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-raised);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.how-it-works {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.how-it-works h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.step {
+  padding-left: 20px;
+  border-left: 2px solid var(--line);
+}
+
+.step-num {
+  font-family: 'Sora', sans-serif;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.step h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.step p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* --- Connexion --------------------------------------------------------------- */
+
+.auth-wrap {
+  min-height: calc(100vh - 90px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px 32px;
+}
+
+.auth-card h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.auth-card .sub {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 28px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-field);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 15px;
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  background: var(--bg-raised);
+}
+
+.field-error {
+  border-color: var(--warn) !important;
+}
+
+.error-text {
+  color: var(--warn);
+  font-size: 13px;
+  margin-top: 6px;
+  display: none;
+}
+
+.error-text.show { display: block; }
+
+.auth-submit {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+}
+
+.auth-foot {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 20px;
+}
+
+/* --- Espace client ------------------------------------------------------------ */
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ink);
+  color: #F2EFE7;
+  padding: 18px 24px;
+  border-radius: var(--radius-card);
+  margin-top: 24px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  flex-shrink: 0;
+}
+
+.dash-user-label {
+  font-size: 12px;
+  color: #B8BFC9;
+}
+
+.dash-user-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(242, 239, 231, 0.3);
+  color: #F2EFE7;
+  padding: 9px 16px;
+  border-radius: var(--radius-field);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-logout:hover { border-color: #F2EFE7; }
+
+.tx-card {
+  margin-top: 24px;
+  padding: 32px;
+}
+
+.tx-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.tx-card .sub {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.tx-flow {
+  margin-top: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  background: var(--bg);
+}
+
+.tx-side-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+.tx-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0 4px 19px;
+}
+
+.tx-connector-line {
+  width: 2px;
+  height: 28px;
+  background: var(--line);
+  position: relative;
+}
+
+.tx-connector-line::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--line);
+  margin-top: 4px;
+}
+
+.tx-flow.filled .tx-connector-line,
+.tx-flow.filled .tx-connector-line::after {
+  background: var(--accent);
+  border-top-color: var(--accent);
+}
+
+.tx-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.amount-field input {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  padding: 16px;
+}
+
+.amount-hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+.tx-submit {
+  margin-top: 24px;
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+}
+
+.tx-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* --- Responsive ---------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 30px; }
+  .steps { grid-template-columns: 1fr; }
+  .tx-row { grid-template-columns: 1fr; }
+  .dash-header { border-radius: 14px; }
+}
+
+/* --- Accessibilité --------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
