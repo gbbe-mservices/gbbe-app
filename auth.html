@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - GBBE-MULTISERVICES.CI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">GBBE-MULTISERVICES.CI</h1>
+        
+        <!-- Onglets -->
+        <div class="flex border-b mb-6">
+            <button id="tab-login" onclick="switchTab('login')" class="flex-1 pb-2 font-semibold text-blue-600 border-b-2 border-blue-600">Connexion</button>
+            <button id="tab-register" onclick="switchTab('register')" class="flex-1 pb-2 font-semibold text-gray-400">Inscription</button>
+        </div>
+
+        <!-- Formulaire de Connexion / Inscription -->
+        <div id="auth-form-container">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Numéro de téléphone</label>
+                <input type="text" id="phone" placeholder="Ex: 0700000000" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
+                <input type="password" id="password" placeholder="****" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button id="action-btn" onclick="handleSubmit()" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Se connecter</button>
+        </div>
+
+        <!-- Section OTP (Cachée par défaut) -->
+        <div id="otp-container" class="hidden">
+            <p class="text-sm text-gray-600 mb-4 text-center">Un code de validation (OTP) a été généré. Regardez les logs de votre serveur pour le récupérer.</p>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Code OTP à 4 chiffres</label>
+                <input type="text" id="otp-code" maxlength="4" placeholder="Ex: 1234" class="w-full text-center tracking-widest text-2xl px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button onclick="verifyOtp()" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition">Valider le code</button>
+        </div>
+
+        <p id="error-msg" class="text-red-500 text-sm mt-4 text-center"></p>
+    </div>
+
+    <script>
+        let currentMode = 'login';
+
+        function switchTab(mode) {
+            currentMode = mode;
+            const btn = document.getElementById('action-btn');
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            document.getElementById('error-msg').innerText = '';
+
+            if (mode === 'login') {
+                tabLogin.className = "flex-1 pb-2 font-semibold text-blue-600 border-b-2 border-blue-600";
+                tabRegister.className = "flex-1 pb-2 font-semibold text-gray-400";
+                btn.innerText = "Se connecter";
+            } else {
+                tabRegister.className = "flex-1 pb-2 font-semibold text-blue-600 border-b-2 border-blue-600";
+                tabLogin.className = "flex-1 pb-2 font-semibold text-gray-400";
+                btn.innerText = "S'inscrire";
+            }
+        }
+
+        async function handleSubmit() {
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            if (!phone || !password) {
+                errorMsg.innerText = "Veuillez remplir tous les champs.";
+                return;
+            }
+
+            const endpoint = currentMode === 'login' ? '/api/login' : '/api/register';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (currentMode === 'login') {
+                        document.getElementById('auth-form-container').classList.add('hidden');
+                        document.getElementById('otp-container').classList.remove('hidden');
+                    } else {
+                        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+                        switchTab('login');
+                    }
+                } else {
+                    errorMsg.innerText = data.error || "Une erreur est survenue.";
+                }
+            } catch (err) {
+                errorMsg.innerText = "Erreur de connexion au serveur.";
+            }
+        }
+
+        async function verifyOtp() {
+            const phone = document.getElementById('phone').value;
+            const code = document.getElementById('otp-code').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            try {
+                const res = await fetch('/api/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, code })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('userPhone', data.phone);
+                    window.location.href = '/index.html';
+                } else {
+                    errorMsg.innerText = data.error || "Code OTP invalide.";
+                }
+            } catch (err) {
+                errorMsg.innerText = "Erreur lors de la vérification.";
+            }
+        }
+    </script>
+</body>
+</html>
