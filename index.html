@@ -1,72 +1,134 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GBBE-MULTISERVICES.CI — Transferts entre réseaux mobile money</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guichet - GBBE-MULTISERVICES.CI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-bold text-blue-600">GBBE-MULTISERVICES.CI</h1>
+            <button onclick="logout()" class="text-red-500 text-sm font-semibold hover:underline">Déconnexion</button>
+        </div>
 
-<div class="demo-banner">
-  <strong>Mode démonstration</strong> — aucune transaction réelle n'est effectuée sur ce site.
-</div>
+        <h2 class="text-lg font-semibold mb-4">Effectuer un transfert</h2>
+        
+        <div class="space-y-4 mb-8">
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Réseau source (À débiter)</label>
+                <select id="sourceNet" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="Orange Money">Orange Money</option>
+                    <option value="MTN Money">MTN Money</option>
+                    <option value="Moov Money">Moov Money</option>
+                    <option value="Wave">Wave</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Numéro expéditeur</label>
+                <input type="text" id="sourcePhone" placeholder="Ex: 0700000000" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Réseau destination (À créditer)</label>
+                <select id="destNet" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="Orange Money">Orange Money</option>
+                    <option value="MTN Money">MTN Money</option>
+                    <option value="Moov Money">Moov Money</option>
+                    <option value="Wave">Wave</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Numéro destinataire</label>
+                <input type="text" id="destPhone" placeholder="Ex: 0500000000" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Montant (FCFA)</label>
+                <input type="number" id="amount" placeholder="Ex: 5000" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <button onclick="submitTransaction()" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Valider le transfert</button>
+            <p id="tx-msg" class="text-center text-sm mt-2"></p>
+        </div>
 
-<header class="site-header">
-  <div class="brand">
-    <div class="brand-mark">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#F2EFE7"/></svg>
+        <h2 class="text-lg font-semibold mb-2">Historique de vos transactions</h2>
+        <div id="history-container" class="space-y-2 border-t pt-4">
+            <p class="text-gray-500 text-sm">Chargement des transactions...</p>
+        </div>
     </div>
-    <div>
-      <div class="brand-name">GBBE-MULTISERVICES.CI</div>
-      <div class="brand-tag">Guichet automatisé</div>
-    </div>
-  </div>
-  <div class="status-pill"><span class="status-dot"></span> Service actif</div>
-</header>
 
-<main class="page">
+    <script>
+        const userPhone = localStorage.getItem('userPhone');
+        if (!userPhone) {
+            window.location.href = '/auth.html';
+        }
 
-  <section class="hero">
-    <div class="hero-eyebrow">Transferts entre réseaux mobile money</div>
-    <h1>Envoyez de l'argent d'un réseau à l'autre, sans détour.</h1>
-    <p>GBBE-MULTISERVICES.CI relie les principaux réseaux mobile money de Côte d'Ivoire pour que vos proches reçoivent leur argent, même s'ils n'utilisent pas le même opérateur que vous.</p>
-    <div class="hero-actions">
-      <a href="login.html" class="btn btn-primary">Se connecter</a>
-      <a href="#comment-ca-marche" class="btn btn-secondary">Comment ça marche</a>
-    </div>
-    <div class="network-row">
-      <span class="network-chip">Orange Money</span>
-      <span class="network-chip">MTN Money</span>
-      <span class="network-chip">Moov Money</span>
-      <span class="network-chip">Wave</span>
-    </div>
-  </section>
+        async function submitTransaction() {
+            const sourceNet = document.getElementById('sourceNet').value;
+            const sourcePhone = document.getElementById('sourcePhone').value;
+            const destNet = document.getElementById('destNet').value;
+            const destPhone = document.getElementById('destPhone').value;
+            const amount = document.getElementById('amount').value;
+            const msg = document.getElementById('tx-msg');
 
-  <section class="how-it-works" id="comment-ca-marche">
-    <h2>Comment ça marche</h2>
-    <div class="steps">
-      <div class="step">
-        <span class="step-num">01</span>
-        <h3>Choisissez les réseaux</h3>
-        <p>Indiquez le réseau à débiter et le réseau à créditer.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">02</span>
-        <h3>Saisissez le montant</h3>
-        <p>Renseignez les numéros et le montant à transférer.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">03</span>
-        <h3>Suivez le statut</h3>
-        <p>Retrouvez l'état de chaque transaction depuis votre espace client.</p>
-      </div>
-    </div>
-  </section>
+            if (!sourcePhone || !destPhone || !amount) {
+                msg.innerText = "Veuillez remplir tous les champs.";
+                msg.className = "text-center text-sm mt-2 text-red-500";
+                return;
+            }
 
-</main>
+            try {
+                const res = await fetch('/api/transactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userPhone, sourceNet, sourcePhone, destNet, destPhone, amount })
+                });
+                const data = await res.json();
 
+                if (data.success) {
+                    msg.innerText = "Transaction effectuée avec succès !";
+                    msg.className = "text-center text-sm mt-2 text-green-600";
+                    loadHistory();
+                } else {
+                    msg.innerText = data.error || "Erreur lors de la transaction.";
+                    msg.className = "text-center text-sm mt-2 text-red-500";
+                }
+            } catch (err) {
+                msg.innerText = "Erreur de connexion au serveur.";
+                msg.className = "text-center text-sm mt-2 text-red-500";
+            }
+        }
+
+        async function loadHistory() {
+            const container = document.getElementById('history-container');
+            try {
+                const res = await fetch(/api/transactions/${userPhone});
+                const data = await res.json();
+
+                if (data.success && data.transactions.length > 0) {
+                    container.innerHTML = data.transactions.map(tx => `
+                        <div class="bg-gray-50 p-3 rounded-lg border text-sm flex justify-between items-center">
+                            <div>
+                                <span class="font-bold">${tx.source_net} (${tx.source_phone})</span> ➡️ 
+                                <span class="font-bold">${tx.dest_net} (${tx.dest_phone})</span>
+                                <div class="text-gray-500 text-xs">${new Date(tx.created_at).toLocaleString()}</div>
+                            </div>
+                            <div class="font-bold text-blue-600">${tx.amount} FCFA</div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p class="text-gray-500 text-sm">Aucune transaction enregistrée pour le moment.</p>';
+                }
+            } catch (err) {
+                container.innerHTML = '<p class="text-red-500 text-sm">Impossible de charger l\'historique.</p>';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('userPhone');
+            window.location.href = '/auth.html';
+        }
+
+        loadHistory();
+    </script>
 </body>
 </html>
