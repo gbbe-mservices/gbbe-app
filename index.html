@@ -1,199 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GBBE-MULTISERVICES.CI — Espace Client</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBBE-MULTISERVICES.CI — Transferts entre réseaux mobile money</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-slate-100 min-h-screen p-4 md:p-8">
-  <div class="max-w-4xl mx-auto space-y-6">
-    
-    <!-- En-tête -->
-    <header class="bg-white p-4 rounded-2xl shadow-sm flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="bg-blue-600 text-white p-2.5 rounded-xl font-bold">⚡</div>
-        <div>
-          <h1 class="text-base font-extrabold text-slate-900">GBBE-MULTISERVICES.CI</h1>
-          <p class="text-xs text-slate-500">Espace Client Sécurisé</p>
-        </div>
-      </div>
-      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-        ● Service Actif
-      </span>
-    </header>
+<body>
 
-    <!-- Barre Utilisateur -->
-    <div class="bg-slate-900 text-white p-4 rounded-2xl flex items-center justify-between shadow-lg">
-      <div class="flex items-center space-x-3">
-        <div class="bg-slate-800 p-2.5 rounded-xl text-blue-400 font-bold">👤</div>
-        <div>
-          <p class="text-xs text-slate-400">Client connecté</p>
-          <p id="user-phone-display" class="text-sm font-bold tracking-wide">Chargement...</p>
-        </div>
-      </div>
-      <button onclick="logout()" class="px-4 py-2 bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold rounded-xl transition">
-        Déconnexion
-      </button>
+<div class="demo-banner">
+  <strong>Mode démonstration</strong> — aucune transaction réelle n'est effectuée sur ce site.
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#F2EFE7"/></svg>
     </div>
-
-    <!-- Section Transaction -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 class="text-sm font-extrabold text-slate-900">Passer une transaction</h2>
-        
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Réseau Source</label>
-            <select id="source-net" onchange="calculateFees()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs mb-2 outline-none">
-              <option value="Wave">Wave</option>
-              <option value="Orange Money">Orange Money</option>
-              <option value="MTN MoMo">MTN MoMo</option>
-            </select>
-            <input type="tel" id="source-phone" placeholder="Numéro débiteur" maxlength="10" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs outline-none">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Réseau Destination</label>
-            <select id="dest-net" onchange="calculateFees()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs mb-2 outline-none">
-              <option value="Orange Money">Orange Money</option>
-              <option value="Wave">Wave</option>
-              <option value="MTN MoMo">MTN MoMo</option>
-            </select>
-            <input type="tel" id="dest-phone" placeholder="Numéro destinataire" maxlength="10" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs outline-none">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Montant (FCFA)</label>
-            <input type="number" id="amount" placeholder="50000" oninput="calculateFees()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold outline-none">
-          </div>
-        </div>
-      </div>
-
-      <!-- Résumé -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col justify-between space-y-4">
-        <div>
-          <h2 class="text-sm font-extrabold text-slate-900 mb-4">Résumé de la commande</h2>
-          <div class="space-y-2 text-xs divide-y divide-slate-100">
-            <div class="flex justify-between pt-2"><span class="text-slate-500">Source</span><span id="summary-source" class="font-bold">Wave</span></div>
-            <div class="flex justify-between pt-2"><span class="text-slate-500">Destination</span><span id="summary-dest" class="font-bold">Orange Money</span></div>
-            <div class="flex justify-between pt-2"><span class="text-slate-500">Montant</span><span id="summary-amount" class="font-bold">0 FCFA</span></div>
-            <div class="flex justify-between pt-2"><span class="text-slate-500">Frais (1%)</span><span id="summary-fees" class="font-bold">0 FCFA</span></div>
-            <div class="flex justify-between pt-3 text-sm font-extrabold text-slate-900"><span>Total</span><span id="summary-total" class="text-blue-600">0 FCFA</span></div>
-          </div>
-        </div>
-
-        <button onclick="submitTransaction()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-lg">
-          Procéder au paiement →
-        </button>
-      </div>
+    <div>
+      <div class="brand-name">GBBE-MULTISERVICES.CI</div>
+      <div class="brand-tag">Guichet automatisé</div>
     </div>
-
-    <!-- Historique des transactions du client -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
-      <h2 class="text-sm font-extrabold text-slate-900">Mon historique de transactions</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="border-b text-slate-400">
-              <th class="pb-2">Date</th>
-              <th class="pb-2">De</th>
-              <th class="pb-2">Vers</th>
-              <th class="pb-2">Montant</th>
-            </tr>
-          </thead>
-          <tbody id="history-list">
-            <tr><td colspan="4" class="py-4 text-center text-slate-400">Chargement de l'historique...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
   </div>
+  <div class="status-pill"><span class="status-dot"></span> Service actif</div>
+</header>
 
-  <script>
-    const userSession = JSON.parse(localStorage.getItem('gbbe_user'));
-    if (!userSession || !userSession.phone) {
-      window.location.href = '/auth.html';
-    } else {
-      document.getElementById('user-phone-display').textContent = "Numéro : " + userSession.phone;
-      loadHistory(userSession.phone);
-    }
+<main class="page">
 
-    function logout() {
-      localStorage.removeItem('gbbe_user');
-      window.location.href = '/auth.html';
-    }
+  <section class="hero">
+    <div class="hero-eyebrow">Transferts entre réseaux mobile money</div>
+    <h1>Envoyez de l'argent d'un réseau à l'autre, sans détour.</h1>
+    <p>GBBE-MULTISERVICES.CI relie les principaux réseaux mobile money de Côte d'Ivoire pour que vos proches reçoivent leur argent, même s'ils n'utilisent pas le même opérateur que vous.</p>
+    <div class="hero-actions">
+      <a href="login.html" class="btn btn-primary">Se connecter</a>
+      <a href="#comment-ca-marche" class="btn btn-secondary">Comment ça marche</a>
+    </div>
+    <div class="network-row">
+      <span class="network-chip">Orange Money</span>
+      <span class="network-chip">MTN Money</span>
+      <span class="network-chip">Moov Money</span>
+      <span class="network-chip">Wave</span>
+    </div>
+  </section>
 
-    function calculateFees() {
-      const amt = parseFloat(document.getElementById('amount').value) || 0;
-      const fees = amt * 0.01;
-      const total = amt + fees;
-      document.getElementById('summary-amount').textContent = amt.toLocaleString() + " FCFA";
-      document.getElementById('summary-fees').textContent = fees.toLocaleString() + " FCFA";
-      document.getElementById('summary-total').textContent = total.toLocaleString() + " FCFA";
-      document.getElementById('summary-source').textContent = document.getElementById('source-net').value;
-      document.getElementById('summary-dest').textContent = document.getElementById('dest-net').value;
-    }
+  <section class="how-it-works" id="comment-ca-marche">
+    <h2>Comment ça marche</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h3>Choisissez les réseaux</h3>
+        <p>Indiquez le réseau à débiter et le réseau à créditer.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h3>Saisissez le montant</h3>
+        <p>Renseignez les numéros et le montant à transférer.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h3>Suivez le statut</h3>
+        <p>Retrouvez l'état de chaque transaction depuis votre espace client.</p>
+      </div>
+    </div>
+  </section>
 
-    async function loadHistory(phone) {
-      try {
-        const res = await fetch(/api/transactions/${phone});
-        const data = await res.json();
-        const tbody = document.getElementById('history-list');
-        if (data.success && data.transactions.length > 0) {
-          tbody.innerHTML = data.transactions.map(tx => `
-            <tr class="border-b border-slate-50">
-              <td class="py-2.5 text-slate-500">${new Date(tx.created_at).toLocaleString()}</td>
-              <td class="py-2.5 font-medium">${tx.source_net} (${tx.source_phone})</td>
-              <td class="py-2.5 font-medium">${tx.dest_net} (${tx.dest_phone})</td>
-              <td class="py-2.5 font-bold text-blue-600">${Number(tx.amount).toLocaleString()} FCFA</td>
-            </tr>
-          `).join('');
-        } else {
-          tbody.innerHTML = <tr><td colspan="4" class="py-4 text-center text-slate-400">Aucune transaction enregistrée pour l'instant.</td></tr>;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
+</main>
 
-    async function submitTransaction() {
-      const sourceNet = document.getElementById('source-net').value;
-      const sourcePhone = document.getElementById('source-phone').value;
-      const destNet = document.getElementById('dest-net').value;
-      const destPhone = document.getElementById('dest-phone').value;
-      const amount = document.getElementById('amount').value;
-
-      if (!sourcePhone || !destPhone || !amount) {
-        alert("Veuillez remplir tous les champs.");
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/transactions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userPhone: userSession.phone,
-            sourceNet, sourcePhone, destNet, destPhone, amount
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert("Transaction effectuée avec succès !");
-          document.getElementById('amount').value = '';
-          document.getElementById('source-phone').value = '';
-          document.getElementById('dest-phone').value = '';
-          calculateFees();
-          loadHistory(userSession.phone);
-        } else {
-          alert("Erreur : " + data.error);
-        }
-      } catch (e) {
-        alert("Erreur de communication avec le serveur.");
-      }
-    }
-  </script>
 </body>
 </html>
